@@ -1,0 +1,182 @@
+<!DOCTYPE html> <!-- Pendefinisian bahwa ini adalah sebuah rumah (halaman web) berstruktur HTML versi 5 terkini -->
+<html lang="id"> <!-- Bungkus utama seluruh isi dokumen, dengan spesifikasi dialek bahasa Indonesia -->
+<head> <!-- Bagian hulu atau atap tak terlihat yang menyimpan seluruh sistem pengaturan mesin Browser internet -->
+    <meta charset="UTF-8"> <!-- Formula keajaiban agar komputer tak salah membaca huruf-huruf di bumi maupun emoji aneh menjadi kotak-kotak error (UTF-8) -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"> <!-- Perintah sakti untuk mengunci wujud layar agar tidak kebesaran di HP dan menyetop sifat jahil jempol yang suka nyubit layar (zoom in/out paksa) -->
+    <meta name="theme-color" content="#F5F5F5"> <!-- Menyuruh pewarna mesin Android agar warna bilah sinyal dan jam di ujung atas layar HP diganti jadi abu-abu cerah selaras dengan aplikasi -->
+    <meta name="apple-mobile-web-app-capable" content="yes"> <!-- Jimat izin khusus kepada raja pembuat iPhone (Apple) agar halaman web ini boleh diinstal jadi Aplikasi Asli di Menu HP (Add to Homescreen) -->
+    
+    <title>Parkirin - Cara Undang Teman</title> <!-- Sapaan teks tebal yang nyangkut di tab Jendela Internet Browser anda -->
+    <link rel="icon" href="/img/favicon.png" type="image/png"> <!-- Memanggil stiker foto kecil (favicon) untuk disematkan di pojok tab tersebut -->
+    
+    <script src="https://cdn.tailwindcss.com"></script> <!-- Memanggil bala bantuan pekerja dekorasi desain instan dari internet bernama Tailwind CSS -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet"> <!-- Mengimpor paksa kitab abjad bergaya 'Montserrat' pinjaman dari perpustakaan Google Fonts -->
+    
+    <style> 
+        body {
+            background-color: #F1F1F1; /* Mencat lantai alam semesta di luar kotak HP menjadi abu-abu pudar */
+            font-family: 'Montserrat', sans-serif; /* Semua tulisan disuruh patuh ganti seragam jadi abjad montserrat */
+            overscroll-behavior-y: none; /* Melarang layar narik narik dan memantul melar seakan kayak karet jika pengunjung sudah scroll mentok ke ujung lantai bawah HP */
+            margin: 0; /* Menghilangkan spasi batas tepi, merapatkan tembok web mentok nempel ke bodi layar kaca HP */
+        }
+
+        /* MANTRA ANIMASI MENGAPUNG (Melesat Naik) */
+        .slide-up {
+            animation: slideUp 0.3s ease-out forwards; /* Perintah nyuruh tayangkan cuplikan video animasi pendek bernama 'slideUp' durasi 0.3 dtk */
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); } /* Adegan Perdana: Layar tak kasat mata (opacity 0) dan diam ngumpet agak melorot ke bawah (translateY) */
+            to { opacity: 1; transform: translateY(0); } /* Adegan Terakhir: Layar berwujud padat penuh (100%) menabrak ke poros tengah aslinya (Y:0) */
+        }
+
+        /* JURUS PENGILANG BAYANGAN SCROLLBAR (Batang Penarik Halaman Bawah) */
+        .hide-scrollbar::-webkit-scrollbar { display: none; } /* Menyapu bersih ilusi batang gulir yang suka nongkrong di browser turunan Google Chrome dan Apple Safari */
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; } /* Mengusir halus penampakan yang sama namun khusus bagi ras browser Firefox maupun Edge versi kuno */
+    </style>
+</head>
+<body class="flex justify-center h-screen text-gray-800 antialiased bg-gray-200"> <!-- Titik pendaratan: Mengunci raga kotak HP ini tepat di pusar tengah meja kerja komputer, menyetel badannya nge-pas batasan pandangan dan memberi warna teks kelabu hitam. -->
+
+    <!-- BODI BINGKAI MESIN HP VIRTUAL (Kotak Utama Penopang Dunia) -->
+    <div class="w-full max-w-[402px] bg-[#F5F5F5] h-full relative flex flex-col shadow-2xl overflow-hidden slide-up"> <!-- Mengkerdilkan ruang maksimal 402 Piksel, diberi pelindung bayangan gelap di punggung belakangnya dan ditimpa efek masuk Melesat Terbang keatas 'slide-up' -->
+        
+        <!-- BAGIAN 1: PENGGANJAL LANGIT (Tope Header Navigasi) -->
+        <div class="bg-[#F5F5F5] w-full pt-10 pb-4 px-4 z-10"> <!-- Kayu tebal pelindung atap warna kelabu dengan jarak padding yang aman agar teks ga nabrak ujung layar -->
+            <div class="flex items-center"> <!-- Area berjejer berbaris lurus kesamping (Horizontal) -->
+                <!-- Tombol Panah Mundur Arah (Lompat Kembali ke lorong waktu 'undang.html') -->
+                <a href="/undang" class="text-[#0064F0] hover:opacity-80 active:scale-95 transition-all cursor-pointer mr-3"> <!-- Tombol tautan biru laut yang bakal keriput mengkerut (active:scale) jika dipites jari -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2.5"> <!-- Gambaran Vektor anak panah tikungan tajam nyasar ke kiri -->
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+                    </svg>
+                </a>
+                <h1 class="text-[20px] font-bold text-[#0064F0]">Undang dan Dapatkan</h1> <!-- Teks tulisan Sakral Papan Nama Atas yang ikut berwarna biru -->
+            </div>
+        </div>
+
+        <!-- BAGIAN 2: LEMBARAN GULUNGAN KERTAS PENJELASAN YANG MELAR (Tempat Naruh Step by Step) -->
+        <div class="flex-grow bg-[#F5F5F5] overflow-y-auto hide-scrollbar flex flex-col relative px-4 pt-6 pb-8"> <!-- Ruang sisa yang bisa di panjang lebarkan sesuai jempol guliran, tanpa ada saksi penampakan scrollbar karet -->
+            
+            <!-- JUDUL BESAR TEBAL PROVOKASI MANIS -->
+            <h2 class="text-[32px] font-extrabold text-black text-center leading-[1.2] tracking-tight mb-4"> <!-- Dipusatkan di perut dan dikasih jarak enter manual (<br>) buat memecah struktur paragraf raksasa -->
+                UNDANG<br>TEMAN DAN<br>DAPATKAN<br>HADIAHNYA!
+            </h2>
+
+            <p class="text-[11px] font-medium text-black text-center mb-10"> <!-- Kata-kata buaian mutiara penjelasan singkat di bawah judul -->
+                Ajak temanmu dan kalian akan mendapatkan poin!
+            </p>
+
+            <!-- BAB 1: TATACARA MENYEBARKAN KODE HASUTAN (Langkah Menyebarkan) -->
+            <!-- *Catatan: Ini Cuma Desain Dummy / Kosongan (Tipuan Mata doang), Panah Slider Navigasi Kanan Kirinya belum diracik di javascript sama developernya, jadi cuma nampilin Step 1 doang secara statis!* -->
+            <div class="mb-8 w-full flex flex-col items-center"> <!-- Membariskan isinya vertikal memusat -->
+                <h3 class="text-[15px] font-semibold text-black mb-4">Cara membagikan kode anda</h3> <!-- Sub judul sesi ini -->
+                
+                <!-- BINGKAI PEMUTAR CERITA (Slider Navigasi Kiri Kanan) -->
+                <div class="flex items-center justify-between w-full px-2"> <!-- Membagi panggung ke 3 tempat: Ujung Kiri (Panah Mundur), Tengah (Isi Teks), Ujung Kanan (Panah Lanjut) -->
+                    
+                    <!-- Panah Sisi Kiri (Sengaja Dibikin Pudar/Lemah Basi Karena ini step pertama, ga bisa mundur lagi ke langkah minus!) -->
+                    <button class="text-[#0064F0] opacity-30 active:scale-90 transition-transform"> <!-- Dikasih jubah transparansi pudar 30% (Opacity 30) -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" /> <!-- Gambar panah Kiri -->
+                        </svg>
+                    </button>
+
+                    <!-- Panggung Utama Area Teks Penjelasan Langkah / Step By Step di Tengah -->
+                    <div class="flex items-center gap-3 flex-grow px-2"> 
+                        <!-- Ornamen Bulatan Kecil Pembungkus Nomor Urut -->
+                        <div class="w-[29px] h-[29px] flex-shrink-0 rounded-full border-[3px] border-[#0064F0] flex items-center justify-center"> <!-- Menggambar lingkaran cincin cincin kebiruan (Border 3px rounded-full) -->
+                            <span class="text-[10px] font-medium text-black">1</span> <!-- Angka Tinta di Dalam Cincinnya -->
+                        </div>
+                        <!-- Kalimat Wejangan Langkah-Langkahnya -->
+                        <p class="text-[10px] font-medium text-black leading-snug text-left">
+                            Buka halaman Undang & Dapatkan pada menu pengaturan
+                        </p>
+                    </div>
+
+                    <!-- Panah Sisi Kanan (Nyala Biru Segar karena disuruh Pencet Lanjut ke Langkah 2!) walau blm bsa jalan -->
+                    <button class="text-[#0064F0] active:scale-90 transition-transform">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /> <!-- Gambar panah Kanan -->
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- BAB 2: TATACARA MENGIKUTI AJARAN SESAT (Langkah Menggunakan / Klaim Kode yang Dapet Dari Temen) -->
+            <!-- *Sama, ini juga slider boneka/Statis yang murni html mentah doang. Belom dibikin fungsi geraknya pake JS* -->
+            <div class="mb-10 w-full flex flex-col items-center">
+                <h3 class="text-[15px] font-semibold text-black mb-4">Cara menggunakan kode anda</h3> <!-- Sub Judul Sesi Kedua -->
+                
+                <!-- BINGKAI PEMUTAR CERITA -->
+                <div class="flex items-center justify-between w-full px-2">
+                    
+                    <!-- Panah Kiri (Pudar 30%) -->
+                    <button class="text-[#0064F0] opacity-30 active:scale-90 transition-transform">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+                        </svg>
+                    </button>
+
+                    <!-- Panggung Tengah Teks Bukti -->
+                    <div class="flex items-center gap-3 flex-grow px-2">
+                        <!-- Lingkaran Angka -->
+                        <div class="w-[29px] h-[29px] flex-shrink-0 rounded-full border-[3px] border-[#0064F0] flex items-center justify-center">
+                            <span class="text-[10px] font-medium text-black">1</span>
+                        </div>
+                        <!-- Teks Penjelasan -->
+                        <p class="text-[10px] font-medium text-black leading-snug text-left">
+                            Install dan daftar akun PARKIRIN <!-- Instruksi pertama mengelabui kawan -->
+                        </p>
+                    </div>
+
+                    <!-- Panah Kanan (Menyala Segar) -->
+                    <button class="text-[#0064F0] active:scale-90 transition-transform">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- BLOK UJUNG BAWAH: TEMPAT NONGKRONGNYA KODE REFERRAL HASUTAN KITA SENDIRI! -->
+            <div class="flex items-center w-full gap-3 mt-auto mb-10"> <!-- Membelah posisi kiri jadi kotak Teks Angka, Kanannya kotak Tombol Eksekusi -->
+                <!-- Kotak Bingkai Kelabu untuk Naruh Angka Acaknya -->
+                <div class="flex-grow h-[44px] bg-[#F5F5F5] border-2 border-[#D9D9D9] rounded-[10px] flex items-center px-4">
+                    <span id="referralCode" class="font-medium text-[16px] text-black">9024191</span> <!-- Ini angka Kodenya (Sengaja sementara kita tulis paten manual disini) -->
+                </div>
+                
+                <!-- Tombol Biru Tukang Copas Ke Ingatan Papan Klip (Clipboard HP) -->
+                <!-- Kalau dipencet nekan, dia memanggil prajurit mesin 'copyCode()' di lorong Javascript bawah! -->
+                <button onclick="copyCode()" class="h-[44px] px-6 bg-[#0062E6] hover:bg-blue-700 rounded-[30px] flex items-center justify-center shadow-md transition-all active:scale-95">
+                    <span class="font-medium text-[14px] text-white whitespace-nowrap">SALIN CODE</span> <!-- Label Provokasi Tombol -->
+                </button>
+            </div>
+
+            <!-- BLOK TOMBOL AJAKAN TAMBAHAN BERWANGI IKLAN (Cuma Pajangan Belom Jalan) -->
+            <div class="w-full pb-4">
+                <button class="w-full bg-[#0141A3] hover:bg-blue-900 text-white rounded-[10px] h-[47px] shadow-md transition-all active:scale-95 flex items-center justify-center"> <!-- Warnanya dibuat Biru paling tua, menekan menjejak ke bawah sendiri -->
+                    <span class="font-semibold text-[11px] tracking-wide">UNDANG LEBIH BANYAK TEMAN</span> <!-- Instruksi Ketamakan (Tampar pengguna untuk bawa korban lebih banyak wkwkw) -->
+                </button>
+            </div>
+
+        </div> <!-- Tutup Area Lahan Panjang Kebawah Tadi -->
+    </div> <!-- Tutup Pelindung Bodi HP Secara Keseluruhan -->
+
+    <!-- PUSAT PEKERJA KERAS CERDAS ALGORITMA (JAVASCRIPT / OTAK APLIKASI) -->
+    <script>
+        // MESIN TUKANG PENCULIK TEKS DAN PENGHAFALNYA KE INGATAN HP (Fitur Copy/Salin)
+        // Fungsi ini bekerja di belakang layar cuma pas Pengguna mencet tombol biru "SALIN CODE" tadi.
+        function copyCode() {
+            // Pertama, cari dan intip baris kode HTML id="referralCode". Lalu cabut dan sedot tulisan yang nyantol didalamnya! (Cth dapet Angka '9024191')
+            const codeText = document.getElementById('referralCode').innerText; 
+            
+            // Perintahkan Komandan Mesin HP bawaan Navigator (navigator.clipboard) untuk memahat dan Menghafal angka tsb di ingatan memori Tangan sistem HP agar kalau nanti pengguna ngetik dan menahan layar di Sosmed lalu pencet "Tempel/Paste", tulisan angka ajaib tsb akan muncul disitu!
+            navigator.clipboard.writeText(codeText).then(() => {
+                // Jika Misi Menghafal Berhasil (Diizinkan Sistem):
+                alert("Kode Referral '" + codeText + "' berhasil disalin!"); // Tampar Muka sang Pengguna dengan Kotak Teks Sederhana bawaan Website menyatakan Misi Copas Telah Sukses dilancarkan.
+            }).catch(err => {
+                // Jika Sistem HP nya jelek, Nge-bug atau Menolak ngasih izin website nyalin copas tulisan ke HP Dia:
+                console.error('Gagal menyalin kode: ', err); // Sembunyikan teriakan error kegagalan misi tsb jauh-jauh di kedalaman kegelapan Console mesin Komputer agar pengunjung tidak menangis ketakutan. (Silent Error).
+            });
+        }
+    </script>
+</body>
+</html>

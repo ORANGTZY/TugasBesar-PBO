@@ -1,0 +1,385 @@
+<!DOCTYPE html> <!-- Deklarasi tipe dokumen HTML5 -->
+<html lang="id"> <!-- Elemen akar dengan bahasa Indonesia -->
+<head> <!-- Bagian metadata halaman -->
+    <meta charset="UTF-8"> <!-- Standar pengkodean karakter teks -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"> <!-- Responsif untuk perangkat seluler, larang zoom -->
+    <meta name="theme-color" content="#F1F1F1"> <!-- Warna tema browser untuk Android -->
+    <meta name="apple-mobile-web-app-capable" content="yes"> <!-- Mendukung aplikasi web seluler di iOS -->
+    
+    <title>Parkirin - Masukkan PIN</title> <!-- Judul halaman web -->
+    <link rel="icon" href="/img/favicon.png" type="image/png"> <!-- Ikon yang tampil di tab browser -->
+
+    <script src="https://cdn.tailwindcss.com"></script> <!-- Mengimpor Tailwind CSS untuk gaya -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet"> <!-- Mengimpor font Montserrat -->
+    
+    <style> 
+        body { 
+            font-family: 'Montserrat', sans-serif; /* Menggunakan font Montserrat */
+            background-color: #F1F1F1; /* Warna latar belakang halaman */
+            margin: 0; /* Menghapus margin bawaan browser */
+            overscroll-behavior-y: none; /* Mencegah efek pantulan scroll di HP */
+            user-select: none; /* Mencegah teks bisa diblok/dipilih pengguna */
+        }
+        
+        .hide-scrollbar::-webkit-scrollbar { display: none; } /* Menyembunyikan scrollbar di browser berbasis Webkit */
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; } /* Menyembunyikan scrollbar di Firefox/IE */
+        
+        /* Animasi masuk dari kanan */
+        .slide-in-right { animation: slideInRight 0.3s ease-out forwards; }
+        @keyframes slideInRight { 
+            from { opacity: 0; transform: translateX(20px); } 
+            to { opacity: 1; transform: translateX(0); } 
+        }
+
+        /* Gaya tombol keypad */
+        .keypad-btn { transition: background-color 0.1s, transform 0.1s; } /* Animasi tombol saat ditekan */
+        .keypad-btn:active, .keypad-btn.keyboard-active { background-color: #E5E5E5; transform: scale(0.9); } /* Efek tombol tertekan */
+        
+        /* Gaya titik-titik indikator PIN */
+        .pin-dot { transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out; } /* Animasi titik PIN */
+        .pin-dot.active { background-color: #0064F0; transform: scale(1.1); } /* Warna biru dan sedikit membesar jika titik terisi */
+        
+        /* Sembunyikan keypad ke bawah */
+        .keypad-hidden { transform: translateY(calc(100% - 35px)); }
+        
+        /* Animasi error getar jika PIN salah */
+        .shake { animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both; } /* Terapkan animasi bergetar */
+        @keyframes shake { /* Definisi gerakan getar (kiri-kanan) */
+            10%, 90% { transform: translate3d(-1px, 0, 0); }
+            20%, 80% { transform: translate3d(2px, 0, 0); }
+            30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+            40%, 60% { transform: translate3d(4px, 0, 0); }
+        }
+    </style>
+</head>
+<body class="flex justify-center h-screen text-gray-800 antialiased bg-gray-200 overflow-hidden"> <!-- Body ditengah layar -->
+
+    <div class="w-full max-w-[402px] bg-[#F1F1F1] h-full relative flex flex-col shadow-2xl overflow-hidden slide-in-right"> <!-- Wadah aplikasi layaknya HP -->
+        
+        <!-- Header Halaman -->
+        <div class="w-full h-[120px] bg-[#F5F5F5] pt-12 px-4 flex items-center z-20 shrink-0 border-b border-gray-200 shadow-sm"> <!-- Bagian atas halaman -->
+            <a href="javascript:history.back()" class="flex items-center text-[#0064F0] hover:opacity-80 active:scale-95 transition-all cursor-pointer"> <!-- Tombol panah kembali -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-[31px] w-[31px] stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2.5"> <!-- Ikon SVG panah kiri -->
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+                </svg>
+                <span class="ml-2 font-bold text-[20px] leading-[24px]">Konfirmasi PIN</span> <!-- Teks Konfirmasi PIN -->
+            </a>
+        </div>
+
+        <div class="flex-grow flex flex-col justify-between relative z-10"> <!-- Ruang tengah konten utama -->
+            
+            <!-- Area Instruksi dan Titik PIN -->
+            <div onclick="showKeypad()" class="flex flex-col items-center w-full pt-16 pb-8 flex-grow cursor-pointer"> <!-- Kotak yang menampung titik PIN -->
+                <h2 class="font-semibold text-[20px] leading-[24px] text-[#0F252A] mb-2">Masukkan PIN Anda</h2> <!-- Teks instruksi PIN -->
+                <p id="error-text" class="text-[12px] text-red-500 font-medium mb-4 opacity-0 transition-opacity">PIN yang Anda masukkan salah.</p> <!-- Pesan error PIN (Tersembunyi secara default) -->
+                
+                <div id="dot-container" class="flex gap-[20px]"> <!-- Deretan 6 titik PIN -->
+                    <div id="dot-1" class="pin-dot w-[25px] h-[25px] rounded-full bg-[#D9D9D9]"></div> <!-- Titik PIN ke-1 -->
+                    <div id="dot-2" class="pin-dot w-[25px] h-[25px] rounded-full bg-[#D9D9D9]"></div> <!-- Titik PIN ke-2 -->
+                    <div id="dot-3" class="pin-dot w-[25px] h-[25px] rounded-full bg-[#D9D9D9]"></div> <!-- Titik PIN ke-3 -->
+                    <div id="dot-4" class="pin-dot w-[25px] h-[25px] rounded-full bg-[#D9D9D9]"></div> <!-- Titik PIN ke-4 -->
+                    <div id="dot-5" class="pin-dot w-[25px] h-[25px] rounded-full bg-[#D9D9D9]"></div> <!-- Titik PIN ke-5 -->
+                    <div id="dot-6" class="pin-dot w-[25px] h-[25px] rounded-full bg-[#D9D9D9]"></div> <!-- Titik PIN ke-6 -->
+                </div>
+                
+                <p id="hint-text" class="text-[10px] text-gray-400 mt-10 opacity-0 transition-opacity duration-300">Ketuk layar untuk memunculkan keypad</p> <!-- Petunjuk menampilkan ulang keypad -->
+            </div>
+
+            <!-- Panel Keypad Angka di Bawah Layar -->
+            <div id="keypad-container" class="w-full bg-white rounded-t-[32px] shadow-[0_-10px_40px_rgba(0,0,0,0.08)] px-8 pt-2 pb-10 flex-shrink-0 transition-transform duration-300 ease-in-out"> <!-- Wadah warna putih -->
+                <div onclick="toggleKeypad(event)" class="w-full py-4 cursor-pointer flex justify-center group" title="Tarik ke bawah/atas"> <!-- Garis kecil penanda tarik/tutup keypad -->
+                    <div class="w-12 h-1.5 bg-gray-200 rounded-full group-hover:bg-gray-300 transition-colors"></div> <!-- Garis abu-abu di atas keypad -->
+                </div>
+
+                <div class="grid grid-cols-3 gap-y-6 gap-x-8 text-center place-items-center"> <!-- Jaringan kisi-kisi tombol angka (3 Kolom) -->
+                    <!-- Baris Tombol Pertama -->
+                    <button data-key="1" onclick="addNumber('1')" class="keypad-btn w-16 h-16 rounded-full flex items-center justify-center text-[28px] font-medium text-black">1</button> <!-- Tombol 1 -->
+                    <button data-key="2" onclick="addNumber('2')" class="keypad-btn w-16 h-16 rounded-full flex items-center justify-center text-[28px] font-medium text-black">2</button> <!-- Tombol 2 -->
+                    <button data-key="3" onclick="addNumber('3')" class="keypad-btn w-16 h-16 rounded-full flex items-center justify-center text-[28px] font-medium text-black">3</button> <!-- Tombol 3 -->
+
+                    <!-- Baris Tombol Kedua -->
+                    <button data-key="4" onclick="addNumber('4')" class="keypad-btn w-16 h-16 rounded-full flex items-center justify-center text-[28px] font-medium text-black">4</button> <!-- Tombol 4 -->
+                    <button data-key="5" onclick="addNumber('5')" class="keypad-btn w-16 h-16 rounded-full flex items-center justify-center text-[28px] font-medium text-black">5</button> <!-- Tombol 5 -->
+                    <button data-key="6" onclick="addNumber('6')" class="keypad-btn w-16 h-16 rounded-full flex items-center justify-center text-[28px] font-medium text-black">6</button> <!-- Tombol 6 -->
+
+                    <!-- Baris Tombol Ketiga -->
+                    <button data-key="7" onclick="addNumber('7')" class="keypad-btn w-16 h-16 rounded-full flex items-center justify-center text-[28px] font-medium text-black">7</button> <!-- Tombol 7 -->
+                    <button data-key="8" onclick="addNumber('8')" class="keypad-btn w-16 h-16 rounded-full flex items-center justify-center text-[28px] font-medium text-black">8</button> <!-- Tombol 8 -->
+                    <button data-key="9" onclick="addNumber('9')" class="keypad-btn w-16 h-16 rounded-full flex items-center justify-center text-[28px] font-medium text-black">9</button> <!-- Tombol 9 -->
+
+                    <!-- Baris Tombol Terakhir -->
+                    <button class="keypad-btn w-16 h-16 rounded-full flex items-center justify-center"> <!-- Tombol kosong dengan ikon sidik jari (hiasan) -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-[#1D1D1B]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"> <!-- Ikon sidik jari -->
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.132A8 8 0 008 4.07M3 15.364c.64-1.319 1-2.8 1-4.364 0-1.457.39-2.823 1.07-4" />
+                        </svg>
+                    </button>
+                    <button data-key="0" onclick="addNumber('0')" class="keypad-btn w-16 h-16 rounded-full flex items-center justify-center text-[28px] font-medium text-black">0</button> <!-- Tombol 0 -->
+                    <button data-key="backspace" onclick="removeNumber()" class="keypad-btn w-16 h-16 rounded-full flex items-center justify-center"> <!-- Tombol Hapus (Backspace) -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-[#546A7B]" viewBox="0 0 20 20" fill="currentColor"> <!-- Ikon Hapus -->
+                            <path fill-rule="evenodd" d="M6.707 4.879A3 3 0 018.828 4H15a3 3 0 013 3v6a3 3 0 01-3 3H8.828a3 3 0 01-2.12-.879l-4.415-4.414a1 1 0 010-1.414l4.414-4.414zm4 2.414a1 1 0 00-1.414 1.414L10.586 10l-1.293 1.293a1 1 0 101.414 1.414L12 11.414l1.293 1.293a1 1 0 001.414-1.414L13.414 10l1.293-1.293a1 1 0 00-1.414-1.414L12 8.586l-1.293-1.293z" clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Modal Pesan Sukses (Muncul bila PIN benar & pesanan dibuat) -->
+        <div id="successModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black bg-opacity-40 backdrop-blur-sm transition-opacity opacity-0"> <!-- Latar belakang pop-up transparan gelap -->
+            <div id="successModalContent" class="bg-white w-[280px] rounded-[20px] p-6 flex flex-col items-center shadow-2xl transform scale-90 transition-transform duration-300"> <!-- Kotak putih tengah modal -->
+                <div class="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mb-4"> <!-- Lingkaran hijau hiasan -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"> <!-- Ikon Centang Hijau -->
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                </div>
+                <h3 class="text-[18px] font-bold text-black mb-2 text-center">Berhasil!</h3> <!-- Teks Berhasil -->
+                <p class="text-[12px] font-medium text-gray-500 text-center mb-6 leading-relaxed">Pesanan tiket parkir Anda berhasil dibuat. Segera menuju ke lokasi.</p> <!-- Pesan pemberitahuan -->
+                <button onclick="finishSetup()" class="w-full bg-[#0064F0] hover:bg-blue-700 text-white font-bold py-2.5 rounded-[12px] text-[12px] transition-colors shadow-md active:scale-95"> <!-- Tombol konfirmasi tiket -->
+                    Lihat Tiket Saya <!-- Teks di tombol konfirmasi -->
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- LOGIKA JAVASCRIPT UNTUK KEYPAD, PIN, & BOOKING -->
+    <script>
+        let currentPin = ""; // Variabel penampung karakter PIN yang sedang diketik
+        const MAX_PIN_LENGTH = 6; // Batasan PIN harus 6 digit angka
+        let isKeypadVisible = true; // Status tampilan keypad layar saat ini
+
+        let latestTicketId = ""; // Simpan ID Tiket secara sementara setelah memesan
+
+        // Fungsi Memproses Pesanan Baru ke Database API
+        async function prosesBookingAPI() {
+            const user = JSON.parse(localStorage.getItem('user')); // Mengambil profil pengguna saat ini
+            const vehicle = JSON.parse(localStorage.getItem('booking_vehicle')); // Mengambil detail kendaraan yang dipilih sebelumnya
+            
+            // Menyusun paket data pesanan parkir
+            const payload = {
+                user_id: user.id, // Menyertakan ID user pemesan
+                area_id: 1,  // ID area tempat parkir
+                jenis_kendaraan: vehicle.jenis || 'mobil', // Menyertakan jenis kendaraan (mobil/motor)
+                lantai: localStorage.getItem('booking_lantai'), // Menyertakan lokasi lantai pilihan 
+                slot_name: localStorage.getItem('booking_slot') // Menyertakan nama kotak slot parkir pilihan
+            };
+
+            try {
+                // Berkomunikasi mengirim data ke server REST API (Booking)
+                const response = await fetch('/api/parkir/booking', {
+                    method: 'POST', // Metode HTTP membuat data baru
+                    headers: { 'Content-Type': 'application/json' }, // Format tipe pesan API (JSON)
+                    body: JSON.stringify(payload) // Mengonversi isi paket pesanan ke bahasa JSON
+                });
+                const result = await response.json(); // Menerima balasan resi tiket dari Server 
+                
+                if (response.ok) { // Jika pesanan disetujui server
+                    latestTicketId = result.kode_unik; // Merekam resi ID Tiket
+
+                    // 1. AMBIL DAFTAR TIKET YANG SUDAH ADA DI MEMORI LOKAL HP (Atau buat daftar kosong jika belum ada)
+                    let activeTickets = JSON.parse(localStorage.getItem('active_tickets')) || [];
+                    
+                    // 2. MASUKKAN TIKET BARU KE DALAM DAFTAR MEMORI
+                    const newTicket = {
+                        id: result.kode_unik, // Simpan kode unik API
+                        expiry: Date.now() + (2 * 60 * 60 * 1000), // Tiket akan kedaluwarsa 2 Jam sejak sekarang
+                        vehicle: vehicle, // Data kendaraan pengguna
+                        lantai: localStorage.getItem('booking_lantai'), // Data lokasi lantai
+                        slot: localStorage.getItem('booking_slot') // Data lokasi slot parkir
+                    };
+                    activeTickets.push(newTicket); // Menambahkan tiket baru ke barisan tumpukan tiket HP
+                    
+                    // 3. SIMPAN KEMBALI DAFTARNYA KE MEMORI HP
+                    localStorage.setItem('active_tickets', JSON.stringify(activeTickets));
+
+                    // 4. Bersihkan memori pilihan (Lantai, Kendaraan) di sesi ini agar fresh kembali
+                    localStorage.removeItem('booking_vehicle');
+                    localStorage.removeItem('booking_lantai');
+                    localStorage.removeItem('booking_slot');
+
+                    showSuccessModal(); // Munculkan pop-up berhasil membuat pesanan
+                } else { // Jika server menolak membuat tiket
+                    alert("Gagal Memesan: " + result.error); // Munculkan pemberitahuan alasan kenapa ditolak
+                    currentPin = ""; updateDots(); // Reset form PIN
+                    closeKeypad(); // Tutup keypad
+                }
+            } catch (e) { // Jika ada masalah internet atau koneksi terputus saat mencoba pesan tiket
+                alert("Gagal koneksi ke server reservasi."); // Beri Peringatan
+            }
+        }
+
+        // Fungsi ketika Klik "Lihat Tiket Saya" 
+        function finishSetup() {
+            // Membawa pindah layar menuju halaman tiket aktif secara SPESIFIK untuk kode tiket barusan
+            window.location.href = `/tiket-aktif?id=${latestTicketId}`; 
+        }
+
+        // Fungsi menyembunyikan atau memunculkan papan keypad angka
+        function toggleKeypad(event) {
+            if(event) event.stopPropagation(); // Mencegah aksi menyebar
+            const keypad = document.getElementById('keypad-container'); // Kotak keypad
+            const hint = document.getElementById('hint-text'); // Teks keterangan "Ketuk Layar..."
+
+            if (isKeypadVisible) { // Bila keypad sedang terlihat, sembunyikan!
+                keypad.classList.add('keypad-hidden'); // Gulung keypad ke bawah
+                hint.classList.remove('opacity-0'); // Munculkan teks hint
+                hint.classList.add('opacity-100');
+            } else { // Bila keypad sedang tersembunyi, munculkan!
+                keypad.classList.remove('keypad-hidden'); // Naikkan keypad ke layar
+                hint.classList.add('opacity-0'); // Hilangkan teks hint
+                hint.classList.remove('opacity-100');
+            }
+            isKeypadVisible = !isKeypadVisible; // Membalik status (Toggled)
+        }
+
+        // Fungsi paksa muncul keypad jika sedang tersembunyi (Diklik di luar area)
+        function showKeypad() {
+            if (!isKeypadVisible) { // Jika papan tersembunyi
+                const keypad = document.getElementById('keypad-container');
+                const hint = document.getElementById('hint-text');
+                keypad.classList.remove('keypad-hidden'); // Naikkan ke layar
+                hint.classList.add('opacity-0'); // Sembunyikan hint teks
+                hint.classList.remove('opacity-100');
+                isKeypadVisible = true; // Tandai aktif di layar
+            }
+        }
+
+        // Fungsi mewarnai / merubah wujud dari enam titik PIN di layar
+        function updateDots() {
+            for (let i = 1; i <= MAX_PIN_LENGTH; i++) { // Mengecek dari urutan titik ke 1 s/d 6
+                const dot = document.getElementById(`dot-${i}`); // Mencari elemen titik di dokumen
+                if (i <= currentPin.length) { // Jika letak titik lebih kecil/sama dengan jumlah karakter PIN terisi saat ini
+                    dot.classList.add('active'); // Titik berubah jadi menyala terang/biru
+                } else { // Jika titik lebih jauh dari pada jumlah PIN masuk
+                    dot.classList.remove('active'); // Titik dibiarkan pudar / abu-abu kosong
+                }
+            }
+        }
+
+        // Fungsi ketika sebuah angka di keypad diketuk
+        function addNumber(num) {
+            document.getElementById('error-text').classList.remove('opacity-100'); // Memastikan tulisan pesan salah pin disembunyikan 
+            document.getElementById('error-text').classList.add('opacity-0'); // (Sembunyikan pesan kesalahan saat pengguna menekan ulang angka)
+
+            showKeypad(); // Pastikan keypad masih terlihat jika pengguna tiba-tiba memakai keyboard HP fisik
+            if (currentPin.length < MAX_PIN_LENGTH) { // Jangan sampai input pin masuk melewati batas maksimum 6
+                currentPin += num; // Tambahkan digit angka baru tersebut di bagian ujung kanan antrian pin
+                updateDots(); // Jalankan fungsi pengecatan efek titik layar
+
+                if (currentPin.length === MAX_PIN_LENGTH) { // Saat pas di digit ke-enam (PIN Penuh)
+                    setTimeout(() => { // Tunda pengiriman singkat sejenak
+                        verifikasiPin(); // Langsung periksa apakah PIN ini cocok!
+                    }, 300); // 0,3 detik ditunda agar orang melihat bahwa efek titik bulat nomor-6 nyala dulu sebentar
+                }
+            }
+        }
+
+        // Fungsi tombol menghapus 1 digit angka di kanan keypad
+        function removeNumber() {
+            showKeypad(); // Jika sedang menutup, angkat keypad
+            if (currentPin.length > 0) { // Selama belum kosong total
+                currentPin = currentPin.slice(0, -1); // Potong dan hilangkan huruf nomor 1 terakhir di paling kanan variabel (array cut)
+                updateDots(); // Hapus warna titik PIN sejenak yang sudah menyala di layar
+            }
+        }
+
+        // ==========================================
+        // LOGIKA PENGECEKAN KEBENARAN PIN KE SERVER API
+        // ==========================================
+        async function verifikasiPin() {
+            let user = JSON.parse(localStorage.getItem('user')); // Memeriksa profil
+            
+            if (!user || !user.id) { // Perlindungan tambahan jika pengguna membuka layar web ini tanpa otorisasi login HP / Cache Kosong
+                alert("Sesi Anda telah habis. Silakan login kembali."); // Usir pergi
+                window.location.href = "/login"; // Memaksa lompat kembali ke menu masuk awal
+                return; // Membunuh sisa fungsi agar tidak tereksekusi paksa (Break out)
+            }
+
+            try {
+                // BERTANYA KE DATABASE SERVER UTAMA: "Apakah PIN akun si Pengguna ini benar (Cocok dengan Database Enkripsi)?"
+                const response = await fetch('/api/auth/verify-pin', { // Memanggil Endpoint Verify PIN di Controller Backend
+                    method: 'POST', // Format POST Request
+                    headers: { 'Content-Type': 'application/json' }, // Format teks JSON
+                    body: JSON.stringify({ user_id: user.id, pin: currentPin }) // Kirimkan Payload ke API (Memuat Identitas User + 6 Digit Rahasia)
+                });
+
+                const result = await response.json(); // Menerima respon (Benar/Salah)
+
+                if (response.ok && result.status === 'success') {
+                    // Jika PIN BENAR & Tervalidasi Server, Lanjut Proses Buat Pesanan Tiket (Booking)!
+                    prosesBookingAPI(); 
+                } else if (response.status === 404) {
+                    // Jika Server Melapor, ternyata akun ini Belum Pernah Mengatur PIN sebelumnya!
+                    alert("Anda belum mengatur PIN. Silakan atur PIN di menu Profil terlebih dahulu."); // Larang Memesan
+                    window.location.href = "/atur-pin"; // Arahkan Web untuk mengatur ulang PIN terlebih dulu
+                } else {
+                    // Jika PIN SALAH COCOK (Mungkin Salah Password)
+                    pinSalah(); // Jalankan skenario Getar Kegagalan dan Reset Angka
+                }
+            } catch (error) { // Bila Terputus server tidak menyala
+                alert("Gagal memverifikasi PIN. Pastikan server menyala."); // Kasih Tahu Error
+                currentPin = ""; updateDots(); // Hapus angka
+            }
+        }
+
+        // Fungsi Menangani Skenario Pin Gagal
+        function pinSalah() {
+            // Munculkan teks error warna merah "PIN Salah" di bawah layar tengah
+            document.getElementById('error-text').classList.remove('opacity-0');
+            document.getElementById('error-text').classList.add('opacity-100');
+
+            // Tambahkan animasi getar ke kotak barisan lingkaran titik-titik tersebut
+            const dotContainer = document.getElementById('dot-container');
+            dotContainer.classList.add('shake'); // Memberikan class Tailwind efek bergetar
+            
+            setTimeout(() => { // Tunggu getaran selesai sebelum melakukan bersih-bersih ulang form (Kurang dari 1/2 detik delay)
+                dotContainer.classList.remove('shake'); // Stop Getar
+                currentPin = ""; // Reset semua data isian PIN lama
+                updateDots(); // Kembalikan seluruh titik enam biji jadi abu abu pucat semua.
+            }, 500);
+        }
+
+        // Fungsi Modul Pop-Up Kotak Muncul Menginformasikan Tiket Sukses di Order (Booking API OK)
+        function showSuccessModal() {
+            const modal = document.getElementById('successModal'); // Ambil Kotak Hitam Pudar Pembatas
+            const modalContent = document.getElementById('successModalContent'); // Ambil Kotak Putih Utama Informasinya
+            
+            modal.classList.remove('hidden'); // Munculkan kotak utama
+            modal.classList.add('flex'); // Pakai Display Flex Tengah
+            
+            setTimeout(() => { // Tunda animasi transisi (Kecil Ke Besar)
+                modal.classList.remove('opacity-0'); 
+                modal.classList.add('opacity-100'); // Jadikan Terang Padat
+                modalContent.classList.remove('scale-90'); // Hilangkan status skala kecil
+                modalContent.classList.add('scale-100'); // Jadikan skala normal (Animasi pop)
+            }, 10);
+        }
+
+        // Perlindungan Jika Pengguna Memakai Keyboard Fisik PC / Laptop! (Aksesibilitas)
+        document.addEventListener('keydown', function(event) {
+            const modal = document.getElementById('successModal'); // Cek jika sukses maka kunci HP tak terima lagi ketik di PC
+            if (!modal.classList.contains('hidden')) return; // Abaikan bila ada popup
+
+            if (event.key >= '0' && event.key <= '9') { // Jika nekan karakter Keyboard '0' s/d '9'
+                addNumber(event.key); // Samakan seperti klik layar Add Number 
+                triggerVisualKeystroke(event.key); // Munculkan warna klik sebentar
+            } 
+            else if (event.key === 'Backspace') { // Jika tekan tombol 'Delete/Hapus Balik' di Kibor Laptop
+                removeNumber(); // Samakan seperti klik tombol backspace hp
+                triggerVisualKeystroke('backspace'); // Munculkan warna kelip 
+            }
+        });
+
+        // Fungsi bantuan membikin kelap-kelip tombol simulasi ketika ditekan dari keyboard PC agar tampak nyata ditekan dari HP juga
+        function triggerVisualKeystroke(key) {
+            const btn = document.querySelector(`button[data-key="${key}"]`); // Ambil tombolnya by attribut
+            if (btn) { // Jika elemen Ketemu di html
+                btn.classList.add('keyboard-active'); // Pasangkan gaya CSS Kelabu seolah di sentuh tangan
+                setTimeout(() => { // Sebentar, lalu....
+                    btn.classList.remove('keyboard-active'); // Copot efek sentuhan bayangan tangannya (Selesai).
+                }, 100); 
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,266 @@
+<!DOCTYPE html> <!-- Deklarasi bahwa ini adalah dokumen HTML5 -->
+<html lang="id"> <!-- Elemen akar halaman, bahasa Indonesia -->
+<head> <!-- Bagian kepala halaman — berisi pengaturan dan sumber daya -->
+    <meta charset="UTF-8"> <!-- Mengatur karakter encoding ke UTF-8 agar teks bahasa Indonesia tampil benar -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"> <!-- Mengatur tampilan agar menyesuaikan layar HP, tanpa zoom -->
+    <meta name="theme-color" content="#1A73E8"> <!-- Warna tema browser di HP Android -->
+    <meta name="apple-mobile-web-app-capable" content="yes"> <!-- Mengizinkan halaman ini digunakan sebagai web app di iPhone -->
+    
+    <title>Parkirin - Login</title> <!-- Judul tab browser -->
+    <link rel="icon" href="/img/favicon.png" type="image/png"> <!-- Ikon kecil yang muncul di tab browser -->
+    
+    <script src="https://cdn.tailwindcss.com"></script> <!-- Mengimpor Tailwind CSS dari internet untuk membuat tampilan -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet"> <!-- Mengimpor font Montserrat dari Google Fonts -->
+    
+    <script src="https://accounts.google.com/gsi/client" async defer></script> <!-- Mengimpor library Google Sign-In (untuk tombol Login Google) -->
+
+    <style> 
+        body {
+            background-color: #1A73E8; /* Warna latar belakang biru utama */
+            background-image: radial-gradient(circle at 10% 20%, rgba(172, 198, 255, 0.2) 0%, transparent 40%), /* Efek gradien lingkaran di kiri atas */
+                              radial-gradient(circle at 90% 80%, rgba(126, 171, 255, 0.2) 0%, transparent 40%); /* Efek gradien lingkaran di kanan bawah */
+            font-family: 'Montserrat', sans-serif; /* Gunakan font Montserrat untuk semua teks */
+            overscroll-behavior-y: none; /* Mencegah halaman bergulir berlebih saat ditarik */
+        }
+    </style>
+</head>
+<body class="flex justify-center min-h-screen text-gray-800 antialiased"> <!-- Badan halaman: tata letak tengah, tinggi minimal penuh layar -->
+
+    <div id="fb-root"></div> <!-- Elemen wajib untuk inisialisasi Facebook SDK -->
+    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/id_ID/sdk.js"></script> <!-- Mengimpor library Facebook SDK (untuk tombol Login Facebook) -->
+
+    <!-- WADAH UTAMA HALAMAN LOGIN -->
+    <div class="w-full max-w-[402px] flex flex-col min-h-screen relative px-4 py-8"> <!-- Wadah konten: lebar maksimal 402px, padding horizontal dan vertikal -->
+        
+        <!-- LOGO PARKIRIN -->
+        <div class="flex justify-center items-center mb-10 mt-8"> <!-- Wadah logo, rata tengah dengan margin atas dan bawah -->
+            <img src=".//img/LOGO.png" alt="Logo Parkirin" class="h-10 object-contain drop-shadow-md"> <!-- Logo Parkirin dengan bayangan lembut -->
+        </div>
+
+        <!-- FORM LOGIN UTAMA -->
+        <div class="bg-[#FFFFFF] rounded-[10px] p-5 shadow-lg mb-5 w-full relative z-10"> <!-- Kotak putih berisi form login dengan bayangan dan sudut membulat -->
+            <h2 class="text-[20px] font-bold text-[#475569] text-center mb-6 mt-2">Selamat Datang</h2> <!-- Judul form login -->
+
+            <form id="loginForm" class="space-y-4" novalidate> <!-- Form login dengan ID "loginForm", validasi dilakukan manual lewat JavaScript -->
+                
+                <!-- INPUT NOMOR TELEPON -->
+                <div class="flex flex-col text-left"> <!-- Kolom input nomor telepon -->
+                    <label class="text-[10px] font-bold text-[#475569] mb-1 ml-1">Nomor Telepon Aktif</label> <!-- Label di atas kolom input -->
+                    <input type="tel" id="no_telepon" placeholder="Contoh: 08123456789" required
+                        class="w-full bg-[#F6F6F6] rounded-[5px] h-[48px] px-4 text-[12px] font-medium text-black placeholder-black/30 focus:outline-none focus:ring-2 focus:ring-cyan-400 transition-all"> <!-- Kolom input nomor telepon -->
+                </div>
+
+                <!-- INPUT EMAIL -->
+                <div class="flex flex-col text-left"> <!-- Kolom input email -->
+                    <label class="text-[10px] font-bold text-[#475569] mb-1 ml-1">Alamat Email</label> <!-- Label di atas kolom input -->
+                    <input type="email" id="email" placeholder="contoh@email.com" required
+                        class="w-full bg-[#F6F6F6] rounded-[5px] h-[48px] px-4 text-[12px] font-medium text-black placeholder-black/30 focus:outline-none focus:ring-2 focus:ring-cyan-400 transition-all"> <!-- Kolom input email -->
+                </div>
+
+                <!-- INPUT KATA SANDI -->
+                <div class="flex flex-col text-left"> <!-- Kolom input kata sandi -->
+                    <label class="text-[10px] font-bold text-[#475569] mb-1 ml-1">Kata Sandi</label> <!-- Label di atas kolom input -->
+                    <div class="relative w-full"> <!-- Wadah relatif agar tombol mata bisa diposisikan di dalam kolom -->
+                        <input type="password" id="password" placeholder="Masukkan Kata Sandi" required
+                            class="w-full bg-[#F6F6F6] rounded-[5px] h-[48px] px-4 text-[12px] font-medium text-black placeholder-black/30 focus:outline-none focus:ring-2 focus:ring-cyan-400 transition-all"> <!-- Kolom input kata sandi (tersembunyi) -->
+                        <button type="button" onclick="togglePassword('password', this)" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-cyan-400 focus:outline-none"> <!-- Tombol untuk tampilkan/sembunyikan kata sandi -->
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg> <!-- Ikon mata untuk tampilkan/sembunyikan kata sandi -->
+                        </button>
+                    </div>
+                </div>
+
+                <!-- LINK LUPA KATA SANDI -->
+                <div class="text-right"> <!-- Rata kanan untuk tautan lupa kata sandi -->
+                    <a href="/forgot-password" class="text-[10px] text-gray-500 hover:text-cyan-500 font-medium">Lupa Kata Sandi?</a> <!-- Tautan ke halaman lupa kata sandi -->
+                </div>
+
+                <!-- TOMBOL LOGIN -->
+                <button type="button" onclick="validateAndSubmit()"
+                    class="w-full bg-[#89E7F9] hover:bg-cyan-400 text-[#F5F5F5] font-bold text-[13px] h-[47px] rounded-[10px] mt-2 shadow-sm transition-all active:scale-95"> <!-- Tombol submit form login -->
+                    LOGIN
+                </button>
+            </form>
+        </div>
+
+        <!-- OPSI LOGIN SOSIAL -->
+        <div class="bg-[#FFFFFF] rounded-[10px] p-5 shadow-lg w-full flex flex-col items-center justify-center h-[150px] relative z-10"> <!-- Kotak putih berisi opsi login alternatif -->
+            <p class="text-[11px] font-bold text-[#8A8A8A] mb-4">ATAU LOGIN MENGGUNAKAN</p> <!-- Teks pemisah -->
+            <div class="flex gap-6 mb-4"> <!-- Wadah untuk tombol-tombol login sosial -->
+                <button type="button" onclick="loginWithFacebook()" class="w-[50px] h-[50px] rounded-full shadow-md hover:opacity-90 active:scale-95 transition-all overflow-hidden flex items-center justify-center border border-gray-100 bg-white"> <!-- Tombol login dengan Facebook -->
+                    <img src="/img/iconfacebook.png" alt="Login Facebook" class="w-full h-full object-cover"> <!-- Ikon Facebook -->
+                </button>
+                <button type="button" onclick="loginWithGoogle()" class="w-[50px] h-[50px] rounded-full shadow-md hover:opacity-90 active:scale-95 transition-all overflow-hidden flex items-center justify-center border border-gray-100 bg-white p-1"> <!-- Tombol login dengan Google -->
+                    <img src="/img/icongoogle.png" alt="Login Google" class="w-full h-full object-contain"> <!-- Ikon Google -->
+                </button>
+            </div>
+            <div class="relative w-full text-center mt-2"> <!-- Wadah tautan daftar -->
+                <span class="text-[11px] text-gray-500">Belum punya akun? </span> <!-- Teks ajakan daftar -->
+                <a href="/register" class="text-[11px] text-[#42BEE2] font-bold hover:underline">Daftar Sekarang</a> <!-- Tautan ke halaman registrasi -->
+            </div>
+        </div>
+
+        <!-- MODAL NOTIFIKASI (Sukses/Gagal) -->
+        <div id="loginModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black bg-opacity-40 backdrop-blur-sm transition-opacity opacity-0"> <!-- Latar semi-transparan modal, tersembunyi secara default -->
+            <div id="loginModalContent" class="bg-white w-[300px] rounded-[20px] p-6 flex flex-col items-center shadow-2xl transform scale-90 transition-transform duration-300"> <!-- Kotak konten modal -->
+                <div id="modalIconContainer" class="w-14 h-14 rounded-full flex items-center justify-center mb-4"></div> <!-- Wadah ikon modal (centang hijau atau silang merah) -->
+                <h3 id="modalTitle" class="text-[18px] font-bold text-black mb-2 text-center"></h3> <!-- Judul modal (diisi oleh JavaScript) -->
+                <p id="modalMessage" class="text-[12px] font-medium text-gray-500 text-center mb-6 leading-relaxed"></p> <!-- Pesan modal (diisi oleh JavaScript) -->
+                <button id="modalBtn" class="w-full text-white font-bold py-2.5 rounded-[12px] text-[12px] transition-colors shadow-md active:scale-95"></button> <!-- Tombol aksi modal (diisi oleh JavaScript) -->
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // INISIALISASI OAUTH FACEBOOK & GOOGLE
+        let googleClient; // Variabel untuk menyimpan objek client Google OAuth
+
+        window.fbAsyncInit = function() { // Fungsi ini otomatis dipanggil saat Facebook SDK selesai dimuat
+            FB.init({ // Inisialisasi Facebook SDK dengan konfigurasi
+                appId      : 'GANTI_DENGAN_FACEBOOK_APP_ID_ANDA', // ID aplikasi Facebook (perlu diganti dengan ID asli)
+                cookie     : true, // Izinkan penggunaan cookie untuk sesi
+                xfbml      : true, // Izinkan parsing elemen Facebook di HTML
+                version    : 'v19.0' // Versi API Facebook yang digunakan
+            });
+        };
+
+        window.onload = function() { // Fungsi ini dipanggil saat seluruh halaman selesai dimuat
+            if(window.google) { // Cek apakah library Google sudah tersedia
+                const clientId = 'GANTI_DENGAN_GOOGLE_CLIENT_ID_ANDA.apps.googleusercontent.com'; // ID klien Google OAuth (perlu diganti dengan ID asli dari Google Cloud)
+                // Jangan inisialisasi jika masih placeholder
+                if (clientId.startsWith('GANTI_DENGAN')) { // Cek apakah Client ID masih belum dikonfigurasi
+                    console.warn('[Parkirin] Google OAuth belum dikonfigurasi. Ganti client_id di login.html.'); // Tampilkan peringatan di konsol developer
+                    return; // Hentikan eksekusi jika belum dikonfigurasi
+                }
+                googleClient = google.accounts.oauth2.initTokenClient({ // Inisialisasi client OAuth2 Google
+                    client_id: clientId, // Gunakan Client ID yang sudah dikonfigurasi
+                    scope: 'email profile openid', // Minta izin akses email, profil, dan identitas pengguna
+                    callback: (response) => { // Fungsi yang dipanggil setelah login Google selesai
+                        if (response && response.access_token) { // Jika login berhasil dan ada token akses
+                            showModal(true, 'Login Google Berhasil!', 'Autentikasi Google berhasil dilakukan.', '/user-dashboard'); // Tampilkan modal sukses dan arahkan ke dashboard
+                        }
+                    },
+                });
+            }
+        };
+
+        function loginWithFacebook() { // Fungsi untuk memulai proses login dengan akun Facebook
+            if(typeof FB === 'undefined') { // Cek apakah Facebook SDK sudah dimuat
+                showModal(false, 'Gagal', 'SDK Facebook sedang memuat. Periksa internet Anda dan coba lagi.'); return; // Tampilkan error jika SDK belum siap
+            }
+            FB.login(function(response) { // Buka popup login Facebook
+                if (response.authResponse) { // Jika pengguna berhasil login
+                    FB.api('/me', {fields: 'name'}, function(res) { // Ambil nama pengguna dari Facebook
+                        showModal(true, 'Login Facebook Berhasil!', `Selamat datang kembali, ${res.name}!`, '/user-dashboard'); // Tampilkan modal sukses dengan nama pengguna
+                    });
+                } else { // Jika pengguna membatalkan login
+                    console.log('Login Facebook dibatalkan pengguna.'); // Catat ke konsol developer
+                }
+            }, {scope: 'public_profile,email'}); // Minta izin akses profil publik dan email
+        }
+
+        function loginWithGoogle() { // Fungsi untuk memulai proses login dengan akun Google
+            if(googleClient) { // Jika Google OAuth sudah dikonfigurasi
+                googleClient.requestAccessToken(); // Buka popup login Google
+            } else { // Jika Google OAuth belum dikonfigurasi
+                showModal(false, 'Google OAuth Belum Aktif', 'Fitur login Google memerlukan Client ID dari Google Cloud Console. Silakan konfigurasi terlebih dahulu di file login.html.'); // Tampilkan pesan info konfigurasi
+            }
+        }
+
+        function togglePassword(inputId, button) { // Fungsi untuk menampilkan atau menyembunyikan kata sandi
+            const input = document.getElementById(inputId); // Ambil elemen input kata sandi
+            if (input.type === 'password') { // Jika kata sandi sedang disembunyikan
+                input.type = 'text'; // Ubah ke tipe teks agar kata sandi terlihat
+                button.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88" /></svg>`; // Ganti ikon menjadi mata dicoret
+            } else { // Jika kata sandi sedang ditampilkan
+                input.type = 'password'; // Kembalikan ke tipe password agar tersembunyi lagi
+                button.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>`; // Kembalikan ikon ke mata normal
+            }
+        }
+
+        function showModal(isSuccess, title, message, redirectUrl = null) { // Fungsi untuk menampilkan modal notifikasi (sukses atau gagal)
+            const modal = document.getElementById('loginModal'); // Ambil elemen modal
+            const modalContent = document.getElementById('loginModalContent'); // Ambil konten modal
+            const iconContainer = document.getElementById('modalIconContainer'); // Ambil wadah ikon
+            const btn = document.getElementById('modalBtn'); // Ambil tombol modal
+            
+            document.getElementById('modalTitle').textContent = title; // Isi judul modal
+            document.getElementById('modalMessage').textContent = message; // Isi pesan modal
+
+            if(isSuccess) { // Jika status sukses
+                iconContainer.className = "w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mb-4"; // Atur ikon lingkaran hijau
+                iconContainer.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>`; // Tampilkan ikon centang
+                btn.className = "w-full bg-green-500 hover:bg-green-600 text-white font-bold py-2.5 rounded-[12px] text-[12px] transition-colors shadow-md active:scale-95"; // Atur tampilan tombol hijau
+                btn.textContent = "Masuk ke Dashboard"; // Teks tombol sukses
+                btn.onclick = () => { window.location.href = redirectUrl; }; // Klik tombol → pindah ke dashboard
+            } else { // Jika status gagal/error
+                iconContainer.className = "w-14 h-14 bg-red-100 rounded-full flex items-center justify-center mb-4"; // Atur ikon lingkaran merah
+                iconContainer.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-[#E53935]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>`; // Tampilkan ikon silang
+                btn.className = "w-full bg-[#E53935] hover:bg-red-700 text-white font-bold py-2.5 rounded-[12px] text-[12px] transition-colors shadow-md active:scale-95"; // Atur tampilan tombol merah
+                btn.textContent = "Perbaiki Data"; // Teks tombol gagal
+                btn.onclick = () => { // Klik tombol → tutup modal
+                    modal.classList.remove('opacity-100'); // Hapus kelas opacity penuh
+                    modal.classList.add('opacity-0'); // Buat modal transparan
+                    modalContent.classList.remove('scale-100'); // Hapus ukuran normal
+                    modalContent.classList.add('scale-90'); // Kembalikan ke ukuran lebih kecil
+                    setTimeout(() => {
+                        modal.classList.add('hidden'); // Sembunyikan modal setelah animasi
+                        modal.classList.remove('flex'); // Hapus display flex
+                    }, 300);
+                };
+            }
+
+            modal.classList.remove('hidden'); // Tampilkan modal
+            modal.classList.add('flex'); // Gunakan flex layout
+            setTimeout(() => { // Tunggu sebentar agar transisi CSS bisa berjalan
+                modal.classList.remove('opacity-0'); // Buat latar modal terlihat
+                modal.classList.add('opacity-100'); // Atur transparansi penuh
+                modalContent.classList.remove('scale-90'); // Hapus efek mengecil
+                modalContent.classList.add('scale-100'); // Kembalikan ke ukuran normal
+            }, 10);
+        }
+
+        async function validateAndSubmit() { // Fungsi untuk memvalidasi form dan mengirim data login ke server
+            const no_telepon = document.getElementById('no_telepon'); // Ambil elemen input nomor telepon
+            const email = document.getElementById('email'); // Ambil elemen input email
+            const password = document.getElementById('password'); // Ambil elemen input kata sandi
+
+            no_telepon.classList.remove('ring-2', 'ring-red-500'); // Hapus highlight error dari input nomor telepon
+            email.classList.remove('ring-2', 'ring-red-500'); // Hapus highlight error dari input email
+            password.classList.remove('ring-2', 'ring-red-500'); // Hapus highlight error dari input kata sandi
+
+            if (!no_telepon.value.trim() || !email.value.trim() || !password.value.trim()) { // Cek apakah ada kolom yang masih kosong
+                if(!no_telepon.value.trim()) no_telepon.classList.add('ring-2', 'ring-red-500'); // Beri highlight merah pada nomor telepon jika kosong
+                if(!email.value.trim()) email.classList.add('ring-2', 'ring-red-500'); // Beri highlight merah pada email jika kosong
+                if(!password.value.trim()) password.classList.add('ring-2', 'ring-red-500'); // Beri highlight merah pada kata sandi jika kosong
+                
+                showModal(false, 'Data Tidak Lengkap', 'Peringatan: Form tidak boleh kosong. Harap isi seluruh kolom yang tersedia sebelum login.'); // Tampilkan modal error
+                return; // Hentikan proses login
+            }
+
+            try {
+                const response = await fetch('/api/login', { // Kirim permintaan POST ke API login
+                    method: 'POST', // Gunakan metode POST
+                    headers: { 'Content-Type': 'application/json' }, // Beritahu server data dalam format JSON
+                    body: JSON.stringify({ // Ubah data form menjadi format JSON
+                        no_telepon: no_telepon.value, // Nomor telepon yang dimasukkan
+                        email: email.value, // Email yang dimasukkan
+                        password: password.value // Kata sandi yang dimasukkan
+                    }) 
+                });
+                
+                const result = await response.json(); // Ubah respons server dari JSON menjadi objek JavaScript
+                
+                if (response.ok) { // Jika server merespons dengan sukses (kode 200-299)
+                    localStorage.setItem('user', JSON.stringify(result.user)); // Simpan data pengguna di penyimpanan lokal browser
+                    showModal(true, 'Login Berhasil!', `Selamat datang kembali, ${result.user.nama}!`, '/user-dashboard'); // Tampilkan modal sukses dengan nama pengguna
+                } else { // Jika server merespons dengan error
+                    showModal(false, 'Login Gagal', result.message); // Tampilkan modal error dengan pesan dari server
+                }
+            } catch (error) { // Jika terjadi error koneksi
+                showModal(false, 'Kesalahan Jaringan', 'Terjadi kesalahan saat menghubungi server. Pastikan server Backend aktif.'); // Tampilkan modal error koneksi
+            }
+        }
+    </script>
+</body>
+</html>

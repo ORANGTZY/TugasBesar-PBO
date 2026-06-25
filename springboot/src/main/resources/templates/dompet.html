@@ -1,0 +1,365 @@
+<!DOCTYPE html> <!-- Deklarasi bahwa ini adalah dokumen HTML5 -->
+<html lang="id"> <!-- Elemen akar halaman, bahasa Indonesia -->
+<head> <!-- Bagian kepala halaman -->
+    <meta charset="UTF-8"> <!-- Encoding UTF-8 agar teks Indonesia tampil benar -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"> <!-- Tampilan responsif di HP -->
+    <meta name="theme-color" content="#F1F1F1"> <!-- Warna tema browser di Android -->
+    
+    <title>Parkirin - Dompet Saya</title> <!-- Judul tab browser -->
+    <link rel="icon" href="/img/favicon.png" type="image/png"> <!-- Ikon tab browser -->
+
+    <script src="https://cdn.tailwindcss.com"></script> <!-- Tailwind CSS dari internet -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet"> <!-- Font Montserrat -->
+    
+    <style> 
+        body { font-family: 'Montserrat', sans-serif; background-color: #F1F1F1; margin: 0; overscroll-behavior-y: none; } /* Font, latar, tanpa margin */
+        .hide-scrollbar::-webkit-scrollbar { display: none; } /* Sembunyikan scrollbar Chrome/Safari */
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; } /* Sembunyikan scrollbar IE/Firefox */
+        
+        .slide-in { animation: slideInRight 0.3s ease-out forwards; } /* Animasi geser masuk dari kanan */
+        @keyframes slideInRight { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } } /* Definisi animasi geser masuk */
+
+        .loader { /* Lingkaran berputar sebagai indikator loading */
+            border: 4px solid #f3f3f3; /* Warna lingkaran loading abu-abu */
+            border-top: 4px solid #0271FE; /* Warna bagian atas lingkaran loading biru */
+            border-radius: 50%; /* Bentuk melingkar */
+            width: 40px; /* Lebar lingkaran loading */
+            height: 40px; /* Tinggi lingkaran loading */
+            animation: spin 1s linear infinite; /* Animasi berputar terus-menerus */
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } } /* Definisi animasi berputar */
+    </style>
+</head>
+<body class="flex justify-center h-screen text-gray-800 antialiased bg-gray-200 overflow-hidden"> <!-- Badan halaman: tengah, tinggi penuh, tanpa overflow -->
+
+    <!-- WADAH UTAMA HALAMAN DOMPET -->
+    <div class="w-full max-w-[402px] bg-[#F1F1F1] h-full relative flex flex-col shadow-2xl overflow-hidden slide-in"> <!-- Wadah utama dengan animasi geser masuk -->
+        
+        <!-- HEADER: Tombol kembali dan judul -->
+        <div class="w-full bg-[#F1F1F1] pt-12 pb-4 px-5 flex items-center justify-between z-30 shrink-0"> <!-- Bar atas halaman -->
+            <a href="/user-dashboard" class="hover:opacity-70 active:scale-90 transition-transform"> <!-- Tautan kembali ke dashboard -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"> <!-- Ikon panah kembali -->
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" /> <!-- Bentuk panah kiri -->
+                </svg>
+            </a>
+            <h1 class="text-[18px] font-bold text-center flex-grow pr-6 select-none">Dompet Saya</h1> <!-- Judul halaman di tengah -->
+        </div>
+
+        <!-- AREA KONTEN YANG BISA DIGULIR -->
+        <div class="flex-grow overflow-y-auto hide-scrollbar z-10 flex flex-col pb-6 relative"> <!-- Area konten utama -->
+            
+            <!-- KARTU SALDO UTAMA -->
+            <div class="mx-5 p-5 bg-gradient-to-r from-[#0271FE] to-[#014498] rounded-[20px] text-white shadow-lg relative overflow-hidden select-none min-h-[120px] flex flex-col justify-center"> <!-- Kartu saldo dengan gradien biru -->
+                <!-- Dekorasi lingkaran transparan di belakang kartu -->
+                <div class="absolute -top-10 -right-10 w-32 h-32 bg-white/10 rounded-full pointer-events-none"></div> <!-- Lingkaran dekoratif kanan atas -->
+                <div class="absolute -bottom-8 -left-5 w-24 h-24 bg-white/10 rounded-full pointer-events-none"></div> <!-- Lingkaran dekoratif kiri bawah -->
+                
+                <!-- BARIS LABEL DAN IKON KARTU -->
+                <div class="flex justify-between items-center relative z-10"> <!-- Baris atas kartu -->
+                    <span class="text-[14px] font-medium opacity-90">Total Saldo Parkirin</span> <!-- Label judul saldo -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 opacity-80" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"> <!-- Ikon kartu kredit -->
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" /> <!-- Bentuk ikon kartu -->
+                    </svg>
+                </div>
+                
+                <!-- JUMLAH SALDO -->
+                <div class="mt-2 relative z-10 flex items-baseline"> <!-- Baris jumlah saldo -->
+                    <span class="text-[14px] font-bold mr-1.5 opacity-90">IDR</span> <!-- Label mata uang -->
+                    <span id="wallet-balance" class="text-[32px] font-extrabold tracking-tight">0</span> <!-- Jumlah saldo — diisi JavaScript -->
+                </div>
+                
+                <!-- NAMA PEMILIK DOMPET -->
+                <div id="wallet-name" class="mt-3 text-[10px] font-medium opacity-70 relative z-10"> <!-- Nama pemilik dompet -->
+                    Memuat data... <!-- Teks sementara sebelum data dimuat -->
+                </div>
+            </div>
+
+            <!-- MENU AKSI UTAMA: Isi Saldo & Riwayat -->
+            <div class="grid grid-cols-2 gap-4 mx-5 mt-6 mb-8 select-none"> <!-- Grid 2 kolom -->
+                <!-- TOMBOL ISI SALDO -->
+                <a href="/topup" class="bg-white border border-gray-200 rounded-[12px] py-3 flex flex-col items-center gap-1.5 shadow-sm hover:bg-gray-50 active:scale-95 transition-all cursor-pointer block text-center"> <!-- Tombol Isi Saldo (ke halaman top-up) -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#0271FE]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"> <!-- Ikon plus -->
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" /> <!-- Bentuk plus -->
+                    </svg>
+                    <span class="text-[12px] font-bold text-black">Isi Saldo</span> <!-- Label tombol -->
+                </a>
+                <!-- TOMBOL RIWAYAT -->
+                <div class="bg-white border border-gray-200 rounded-[12px] py-3 flex flex-col items-center gap-1.5 shadow-sm hover:bg-gray-50 active:scale-95 transition-all cursor-pointer"> <!-- Tombol Riwayat -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#0271FE]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"> <!-- Ikon jam/riwayat -->
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /> <!-- Bentuk ikon jam -->
+                    </svg>
+                    <span class="text-[12px] font-bold text-black">Riwayat</span> <!-- Label tombol -->
+                </div>
+            </div>
+
+            <div class="bg-gray-200 h-2 w-full mb-6"></div> <!-- Garis pemisah section -->
+
+            <!-- SECTION E-WALLET -->
+            <div class="px-5 mb-8"> <!-- Wadah section e-wallet -->
+                <div class="flex justify-between items-center mb-4 select-none"> <!-- Baris judul dan tautan -->
+                    <h3 class="font-bold text-[14px]">E-Wallet & Metode Lain</h3> <!-- Judul section -->
+                    <a href="#" class="text-[11px] font-bold text-[#0271FE] hover:underline">Lihat Semua</a> <!-- Tautan lihat semua e-wallet -->
+                </div>
+                
+                <!-- GRID IKON E-WALLET -->
+                <div class="grid grid-cols-4 gap-4 mt-4"> <!-- Grid 4 kolom ikon e-wallet -->
+                    <!-- DANA -->
+                    <div onclick="handleEwalletClick('DANA', '/img/icondana.png')" class="flex flex-col items-center cursor-pointer active:scale-95 transition-transform"> <!-- Tombol e-wallet DANA -->
+                        <div class="relative w-14 h-14 rounded-full overflow-hidden mb-1 flex items-center justify-center bg-white shadow-sm border border-gray-200 p-2"> <!-- Lingkaran logo e-wallet -->
+                            <img src="/img/icondana.png" alt="DANA" class="h-full w-full object-contain"> <!-- Logo DANA -->
+                            <div id="status-DANA" class="hidden absolute inset-0 bg-green-500/20 backdrop-blur-[1px] flex items-center justify-center"> <!-- Overlay hijau jika sudah terhubung -->
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg> <!-- Ikon centang hijau -->
+                            </div>
+                        </div>
+                        <span class="text-[10px] font-semibold text-center mt-1">DANA</span> <!-- Label DANA -->
+                    </div>
+                    
+                    <!-- OVO -->
+                    <div onclick="handleEwalletClick('OVO', '/img/iconovo.png')" class="flex flex-col items-center cursor-pointer active:scale-95 transition-transform"> <!-- Tombol e-wallet OVO -->
+                        <div class="relative w-14 h-14 rounded-full overflow-hidden mb-1 flex items-center justify-center bg-white shadow-sm border border-gray-200 p-2"> <!-- Lingkaran logo e-wallet -->
+                            <img src="/img/iconovo.png" alt="OVO" class="h-full w-full object-contain"> <!-- Logo OVO -->
+                            <div id="status-OVO" class="hidden absolute inset-0 bg-green-500/20 backdrop-blur-[1px] flex items-center justify-center"> <!-- Overlay hijau jika terhubung -->
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg> <!-- Ikon centang -->
+                            </div>
+                        </div>
+                        <span class="text-[10px] font-semibold text-center mt-1">OVO</span> <!-- Label OVO -->
+                    </div>
+                    
+                    <!-- GOPAY -->
+                    <div onclick="handleEwalletClick('GoPay', '/img/icongopay.png')" class="flex flex-col items-center cursor-pointer active:scale-95 transition-transform"> <!-- Tombol e-wallet GoPay -->
+                        <div class="relative w-14 h-14 rounded-full overflow-hidden mb-1 flex items-center justify-center bg-white shadow-sm border border-gray-200 p-2"> <!-- Lingkaran logo e-wallet -->
+                            <img src="/img/icongopay.png" alt="GoPay" class="h-full w-full object-contain"> <!-- Logo GoPay -->
+                            <div id="status-GoPay" class="hidden absolute inset-0 bg-green-500/20 backdrop-blur-[1px] flex items-center justify-center"> <!-- Overlay hijau jika terhubung -->
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg> <!-- Ikon centang -->
+                            </div>
+                        </div>
+                        <span class="text-[10px] font-semibold text-center mt-1">GoPay</span> <!-- Label GoPay -->
+                    </div>
+                    
+                    <!-- SHOPEEPAY -->
+                    <div onclick="handleEwalletClick('ShopeePay', '/img/iconspay.png')" class="flex flex-col items-center cursor-pointer active:scale-95 transition-transform"> <!-- Tombol e-wallet ShopeePay -->
+                        <div class="relative w-14 h-14 rounded-full overflow-hidden mb-1 flex items-center justify-center bg-white shadow-sm border border-gray-200 p-2"> <!-- Lingkaran logo e-wallet -->
+                            <img src="/img/iconspay.png" alt="ShopeePay" class="h-full w-full object-contain"> <!-- Logo ShopeePay -->
+                            <div id="status-ShopeePay" class="hidden absolute inset-0 bg-green-500/20 backdrop-blur-[1px] flex items-center justify-center"> <!-- Overlay hijau jika terhubung -->
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg> <!-- Ikon centang -->
+                            </div>
+                        </div>
+                        <span class="text-[10px] font-semibold text-center mt-1">ShopeePay</span> <!-- Label ShopeePay -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-gray-200 h-2 w-full mb-6"></div> <!-- Garis pemisah section -->
+
+            <!-- SECTION TRANSAKSI TERAKHIR -->
+            <div class="px-5 pb-4 select-none"> <!-- Wadah section transaksi -->
+                <div class="flex justify-between items-center mb-5"> <!-- Baris judul dan ikon cari -->
+                    <h3 class="font-bold text-[14px]">Transaksi Terakhir</h3> <!-- Judul section -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"> <!-- Ikon kaca pembesar -->
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /> <!-- Bentuk ikon kaca pembesar -->
+                    </svg>
+                </div>
+                
+                <!-- DAFTAR TRANSAKSI -->
+                <div class="flex flex-col gap-4"> <!-- Wadah daftar transaksi -->
+                    <!-- TRANSAKSI TOP UP (masuk) -->
+                    <div class="flex items-center gap-4 p-3 bg-white border border-gray-100 rounded-[12px] shadow-sm"> <!-- Kartu transaksi -->
+                        <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center shrink-0"> <!-- Lingkaran ikon plus hijau -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"> <!-- Ikon plus -->
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" /> <!-- Bentuk ikon plus -->
+                            </svg>
+                        </div>
+                        <div class="flex-grow"> <!-- Informasi transaksi -->
+                            <h4 class="font-bold text-[12px] text-black">Top Up Saldo - DANA</h4> <!-- Nama transaksi -->
+                            <p class="text-[10px] text-gray-500 mt-0.5">24 Mei 2024 • 09:15 WIB</p> <!-- Waktu transaksi -->
+                        </div>
+                        <span class="font-bold text-[13px] text-green-600 tracking-tight">+50.000</span> <!-- Jumlah saldo masuk (positif) -->
+                    </div>
+                    
+                    <!-- TRANSAKSI PARKIR (keluar) -->
+                    <div class="flex items-center gap-4 p-3 bg-white border border-gray-100 rounded-[12px] shadow-sm"> <!-- Kartu transaksi -->
+                        <div class="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center shrink-0"> <!-- Lingkaran ikon minus merah -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"> <!-- Ikon minus -->
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4" /> <!-- Bentuk garis horizontal (minus) -->
+                            </svg>
+                        </div>
+                        <div class="flex-grow"> <!-- Informasi transaksi -->
+                            <h4 class="font-bold text-[12px] text-black">Parkir - RITA Supermall</h4> <!-- Nama transaksi -->
+                            <p class="text-[10px] text-gray-500 mt-0.5">23 Mei 2024 • 18:30 WIB</p> <!-- Waktu transaksi -->
+                        </div>
+                        <span class="font-bold text-[13px] text-red-600 tracking-tight">-12.000</span> <!-- Jumlah saldo keluar (negatif) -->
+                    </div>
+                </div>
+
+                <!-- TOMBOL LIHAT SEMUA AKTIVITAS -->
+                <button class="w-full mt-6 py-3 border-2 border-gray-300 rounded-[12px] text-[12px] font-bold text-gray-700 hover:bg-gray-100 active:scale-95 transition-all"> <!-- Tombol untuk melihat semua transaksi -->
+                    Lihat Semua Aktivitas
+                </button>
+            </div>
+            
+        </div>
+
+        <!-- MODAL HUBUNGKAN E-WALLET -->
+        <div id="ewalletModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm transition-opacity opacity-0"> <!-- Latar modal hubungkan e-wallet -->
+            <div id="ewalletModalContent" class="bg-white w-[300px] rounded-[24px] p-6 flex flex-col items-center shadow-2xl transform scale-90 transition-transform duration-300 relative overflow-hidden"> <!-- Kotak konten modal -->
+                <!-- TAMPILAN LOADING (saat memproses) -->
+                <div id="modal-loading" class="flex flex-col items-center w-full"> <!-- Wadah tampilan loading -->
+                    <img id="ewallet-logo" src="" alt="E-Wallet" class="h-10 object-contain mb-6"> <!-- Logo e-wallet yang dipilih -->
+                    <div class="loader mb-5"></div> <!-- Lingkaran loading berputar -->
+                    <h3 class="text-[16px] font-bold text-black mb-1">Menghubungkan...</h3> <!-- Judul loading -->
+                    <p class="text-[11px] font-medium text-gray-500 text-center">Sedang memproses autentikasi server. Mohon tunggu sebentar.</p> <!-- Pesan loading -->
+                </div>
+                <!-- TAMPILAN SUKSES (setelah berhasil) -->
+                <div id="modal-success" class="hidden flex flex-col items-center w-full"> <!-- Wadah tampilan sukses -->
+                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4"> <!-- Lingkaran ikon centang hijau -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg> <!-- Ikon centang -->
+                    </div>
+                    <h3 class="text-[18px] font-bold text-black mb-1">Berhasil!</h3> <!-- Judul sukses -->
+                    <p class="text-[11px] font-medium text-gray-500 text-center mb-6">Akun <span id="ewallet-name-success" class="font-bold text-black"></span> Anda telah berhasil ditautkan.</p> <!-- Pesan sukses -->
+                    <button onclick="closeEwalletModal()" class="w-full bg-[#0271FE] hover:bg-blue-700 text-white font-bold py-3 rounded-[12px] text-[12px] transition-colors shadow-md active:scale-95">Selesai</button> <!-- Tombol tutup modal sukses -->
+                </div>
+            </div>
+        </div>
+
+        <!-- MODAL PUTUS KONEKSI E-WALLET -->
+        <div id="disconnectModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm transition-opacity opacity-0"> <!-- Latar modal konfirmasi putus koneksi -->
+            <div id="disconnectModalContent" class="bg-white w-[300px] rounded-[24px] p-6 flex flex-col items-center shadow-2xl transform scale-90 transition-transform duration-300 relative overflow-hidden"> <!-- Kotak konten modal -->
+                <div class="w-14 h-14 bg-red-100 rounded-full flex items-center justify-center mb-4"> <!-- Lingkaran ikon informasi merah -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-[#E53935]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg> <!-- Ikon informasi -->
+                </div>
+                <h3 class="text-[18px] font-bold text-black mb-2 text-center">Putuskan Koneksi?</h3> <!-- Judul modal -->
+                <p class="text-[12px] font-medium text-gray-500 text-center mb-6 leading-relaxed">Apakah Anda yakin ingin memutus tautan dompet <span id="disconnect-ewallet-name" class="font-bold text-black"></span> Anda?</p> <!-- Pesan konfirmasi dengan nama e-wallet -->
+                <div class="flex w-full gap-3"> <!-- Baris dua tombol aksi -->
+                    <button onclick="closeDisconnectModal()" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-2.5 rounded-[12px] text-[12px] transition-colors active:scale-95">Batal</button> <!-- Tombol batal -->
+                    <button onclick="executeDisconnect()" class="flex-1 bg-[#E53935] hover:bg-red-700 text-white font-bold py-2.5 rounded-[12px] text-[12px] transition-colors shadow-md active:scale-95">Putuskan</button> <!-- Tombol konfirmasi putus koneksi -->
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        let currentEwallet = ""; // Variabel untuk menyimpan nama e-wallet yang sedang diproses
+        let currentUserId = ""; // Variabel untuk menyimpan ID pengguna yang sedang login
+
+        document.addEventListener("DOMContentLoaded", function() { // Jalankan setelah halaman siap
+            let userData = localStorage.getItem('user'); // Ambil data pengguna dari penyimpanan lokal
+            if (userData) { // Jika pengguna sudah login
+                let user = JSON.parse(userData); // Ubah dari JSON ke objek JavaScript
+                currentUserId = user.id; // Simpan ID user untuk kunci memori
+                const formattedName = user.nama ? user.nama.split(' ')[0] : "Pengguna"; // Ambil nama depan pengguna
+                document.getElementById('wallet-name').textContent = `${formattedName} • **** 9812`; // Tampilkan nama dan nomor kartu (acak)
+                
+                if (user.saldo === undefined) { // Jika saldo belum pernah diatur
+                    user.saldo = 150000; // Atur saldo awal Rp150.000
+                    localStorage.setItem('user', JSON.stringify(user)); // Simpan kembali
+                }
+                const formattedSaldo = user.saldo.toLocaleString('id-ID'); // Format saldo dengan pemisah ribuan
+                document.getElementById('wallet-balance').textContent = formattedSaldo; // Tampilkan saldo
+
+                // LOAD STATUS PER USER [BARU]
+                let connectedWallets = JSON.parse(localStorage.getItem(`connectedWallets_${currentUserId}`)) || []; // Ambil daftar e-wallet terhubung dari penyimpanan lokal
+                connectedWallets.forEach(ewallet => { // Proses setiap e-wallet yang terhubung
+                    const statusDiv = document.getElementById(`status-${ewallet}`); // Ambil elemen overlay centang
+                    if(statusDiv) statusDiv.classList.remove('hidden'); // Tampilkan overlay centang hijau
+                });
+            } else { // Jika pengguna belum login
+                document.getElementById('wallet-balance').textContent = "0"; // Tampilkan saldo 0
+                document.getElementById('wallet-name').textContent = "Belum Login"; // Tampilkan pesan belum login
+            }
+        });
+
+        function handleEwalletClick(ewalletName, logoSrc) { // Fungsi yang dipanggil saat pengguna mengklik ikon e-wallet
+            if(!currentUserId) { alert("Silakan login terlebih dahulu."); return; } // Cek apakah sudah login
+            currentEwallet = ewalletName; // Simpan nama e-wallet yang diklik
+            let connectedWallets = JSON.parse(localStorage.getItem(`connectedWallets_${currentUserId}`)) || []; // Ambil daftar e-wallet terhubung
+
+            if(connectedWallets.includes(ewalletName)) { // Jika e-wallet sudah terhubung
+                document.getElementById('disconnect-ewallet-name').textContent = ewalletName; // Isi nama e-wallet di modal
+                openDisconnectModal(); // Tampilkan modal konfirmasi putus koneksi
+            } else { // Jika e-wallet belum terhubung
+                connectEwallet(ewalletName, logoSrc); // Mulai proses menghubungkan e-wallet
+            }
+        }
+
+        function connectEwallet(ewalletName, logoSrc) { // Fungsi untuk menghubungkan e-wallet baru
+            const modal = document.getElementById('ewalletModal'); // Ambil elemen modal
+            const modalContent = document.getElementById('ewalletModalContent'); // Ambil konten modal
+            const loadingState = document.getElementById('modal-loading'); // Ambil tampilan loading
+            const successState = document.getElementById('modal-success'); // Ambil tampilan sukses
+            
+            document.getElementById('ewallet-logo').src = logoSrc; // Atur logo e-wallet di modal
+            document.getElementById('ewallet-name-success').textContent = ewalletName; // Atur nama e-wallet di pesan sukses
+
+            loadingState.classList.remove('hidden'); // Tampilkan loading
+            loadingState.classList.add('flex'); // Gunakan flex layout
+            successState.classList.add('hidden'); // Sembunyikan tampilan sukses
+            successState.classList.remove('flex');
+
+            modal.classList.remove('hidden'); // Tampilkan modal
+            modal.classList.add('flex'); // Gunakan flex layout
+            setTimeout(() => { // Tunggu 10ms agar transisi bisa berjalan
+                modal.classList.remove('opacity-0'); // Buat latar terlihat
+                modal.classList.add('opacity-100'); // Transparansi penuh
+                modalContent.classList.remove('scale-90'); // Hapus efek mengecil
+                modalContent.classList.add('scale-100'); // Ukuran normal
+            }, 10);
+
+            setTimeout(() => { // Setelah 2 detik (simulasi loading)
+                loadingState.classList.add('hidden'); // Sembunyikan loading
+                loadingState.classList.remove('flex');
+                successState.classList.remove('hidden'); // Tampilkan sukses
+                successState.classList.add('flex'); // Gunakan flex layout
+                
+                document.getElementById(`status-${currentEwallet}`).classList.remove('hidden'); // Tampilkan centang pada ikon e-wallet
+
+                // SIMPAN STATUS PER USER [BARU]
+                let connectedWallets = JSON.parse(localStorage.getItem(`connectedWallets_${currentUserId}`)) || []; // Ambil daftar e-wallet terhubung
+                if(!connectedWallets.includes(currentEwallet)) { // Jika belum terdaftar
+                    connectedWallets.push(currentEwallet); // Tambahkan ke daftar
+                    localStorage.setItem(`connectedWallets_${currentUserId}`, JSON.stringify(connectedWallets)); // Simpan kembali
+                }
+            }, 2000); // Tunggu 2000ms = 2 detik
+        }
+
+        function executeDisconnect() { // Fungsi untuk memutus koneksi e-wallet terpilih
+            // HAPUS STATUS PER USER [BARU]
+            let connectedWallets = JSON.parse(localStorage.getItem(`connectedWallets_${currentUserId}`)) || []; // Ambil daftar e-wallet terhubung
+            connectedWallets = connectedWallets.filter(item => item !== currentEwallet); // Hapus e-wallet yang dipilih dari daftar
+            localStorage.setItem(`connectedWallets_${currentUserId}`, JSON.stringify(connectedWallets)); // Simpan perubahan
+
+            document.getElementById(`status-${currentEwallet}`).classList.add('hidden'); // Sembunyikan centang dari ikon e-wallet
+            closeDisconnectModal(); // Tutup modal konfirmasi
+            alert(`Tautan ${currentEwallet} berhasil diputuskan.`); // Tampilkan notifikasi sukses
+        }
+
+        function closeEwalletModal() { // Fungsi untuk menutup modal hubungkan e-wallet
+            const modal = document.getElementById('ewalletModal'); // Ambil elemen modal
+            const modalContent = document.getElementById('ewalletModalContent'); // Ambil konten modal
+            modal.classList.remove('opacity-100'); // Mulai memudar
+            modal.classList.add('opacity-0'); // Transparan
+            modalContent.classList.remove('scale-100'); // Mulai mengecil
+            modalContent.classList.add('scale-90'); // Mengecil 10%
+            setTimeout(() => { modal.classList.add('hidden'); modal.classList.remove('flex'); }, 300); // Sembunyikan setelah animasi 300ms
+        }
+
+        function openDisconnectModal() { // Fungsi untuk menampilkan modal putus koneksi e-wallet
+            const modal = document.getElementById('disconnectModal'); // Ambil elemen modal
+            const modalContent = document.getElementById('disconnectModalContent'); // Ambil konten modal
+            modal.classList.remove('hidden'); // Tampilkan modal
+            modal.classList.add('flex'); // Gunakan flex layout
+            setTimeout(() => { modal.classList.remove('opacity-0'); modal.classList.add('opacity-100'); modalContent.classList.remove('scale-90'); modalContent.classList.add('scale-100'); }, 10); // Animasi masuk
+        }
+
+        function closeDisconnectModal() { // Fungsi untuk menutup modal putus koneksi e-wallet
+            const modal = document.getElementById('disconnectModal'); // Ambil elemen modal
+            const modalContent = document.getElementById('disconnectModalContent'); // Ambil konten modal
+            modal.classList.remove('opacity-100'); // Mulai memudar
+            modal.classList.add('opacity-0'); // Transparan
+            modalContent.classList.remove('scale-100'); // Mulai mengecil
+            modalContent.classList.add('scale-90'); // Mengecil 10%
+            setTimeout(() => { modal.classList.add('hidden'); modal.classList.remove('flex'); }, 300); // Sembunyikan setelah animasi 300ms
+        }
+    </script>
+</body>
+</html>

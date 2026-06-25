@@ -1,0 +1,201 @@
+<!DOCTYPE html> <!-- Ini penanda bahwa halaman ini mematuhi standar dasar HTML versi 5 -->
+<html lang="id"> <!-- Akar dokumen ini dengan aturan penggunaan bahasa Indonesia -->
+<head> <!-- Ruang tak terlihat untuk mengkonfigurasi setelan awal halaman -->
+    <meta charset="UTF-8"> <!-- Standarisasi pemrosesan aksara agar sanggup mencetak abjad unik di seluruh dunia (UTF-8) -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"> <!-- Rumus desain agar pas menempel rapat ke batas layar HP dan mencekal usaha pengguna melebarkan layar dengan cubitan zoom -->
+    <meta name="theme-color" content="#F5F5F5"> <!-- Mewarnai bilah bar status bagian atas di perangkat ponsel pintar -->
+    <title>Parkirin - Pesanan Anda</title> <!-- Teks utama yang muncul di Tab Jendela Web -->
+    
+    <link rel="icon" href="/img/favicon.png" type="image/png"> <!-- Memanggil foto mungil (favicon) ke sudut Tab Browser -->
+
+    <script src="https://cdn.tailwindcss.com"></script> <!-- Mengakses alat bantu perwarnaan dan posisi dari Tailwind secara online -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet"> <!-- Mengimpor jenis font bergaya nama 'Montserrat' ciptaan Google -->
+    
+    <style> 
+        body { font-family: 'Montserrat', sans-serif; background-color: #F1F1F1; margin: 0; overscroll-behavior-y: none; } /* Semua teks wajib montserrat, warna latar luar abu muda, batas rapat pinggir (margin 0), tak boleh memantul saat layar habis (overscroll) */
+        .hide-scrollbar::-webkit-scrollbar { display: none; } /* Jurus ampuh menghilangkan bayangan batang scroll di Browser berbasis Google Chrome */
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; } /* Jurus peredam bayangan batang scroll pada peramban gaya lama seperti Firefox & Edge */
+        .slide-in-right { animation: slideInRight 0.3s ease-out forwards; } /* Perintah panggil memutar cuplikan video animasi yang dinamai slideInRight */
+        @keyframes slideInRight { /* Pembuatan struktur animasi geser dari Kanan layar menuju Tengah (seperti efek geser layar HP) */
+            from { opacity: 0; transform: translateX(20px); } /* Mulai dari tembus pandang pudar, di koordinat kanan 20 piksel */
+            to { opacity: 1; transform: translateX(0); } /* Berhenti dalam keadaan jelas padat warna penuh, di koordinat poros aslinya (0px) */
+        }
+    </style>
+</head>
+<body class="flex justify-center h-screen text-gray-800 antialiased bg-gray-200 overflow-hidden"> <!-- Layar utama yang menyusun aplikasi simulasi di tengah bingkai layar laptop dengan ujung-ujung latar abu hitam di sekitarnya -->
+
+    <!-- KERANGKA FISIK VIRTUAL PONSEL -->
+    <div class="w-full max-w-[402px] bg-[#F1F1F1] h-full relative flex flex-col shadow-2xl overflow-hidden slide-in-right"> <!-- Kotak yang membatasi konten agar tak bleber kesamping mirip bodi smartphone -->
+        
+        <!-- BAGIAN 1: BAR ATAS PENGATUR NAVIGASI (Header) -->
+        <div class="w-full h-[120px] bg-[#F5F5F5] pt-12 px-4 flex items-center shadow-sm z-20 shrink-0"> <!-- Kotak statis tebal putih keabuan menempel mati di langit-langit layar -->
+            <!-- TOMBOL IKON PANAH KEMBALI MENU -->
+            <a href="javascript:history.back()" class="flex items-center text-[#0064F0] hover:opacity-80 active:scale-95 transition-all cursor-pointer"> <!-- Instruksi kembali melompat mundur ke lembar riwayat halaman internet sebelumnya -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2.5"> <!-- Gambar Panah lengkung hadap kiri -->
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+                </svg>
+            </a>
+            <span class="ml-2 font-bold text-[20px] text-[#0064F0]">Pesanan Anda</span> <!-- Tulisan Besar "Pesanan Anda" warna biru ngejreng -->
+        </div>
+
+        <!-- BAGIAN 2: PAPAN KONTEN UTAMA RINGKASAN PESANAN (Kertas tagihan yang bisa digulung / scroll) -->
+        <div class="flex-grow overflow-y-auto hide-scrollbar z-10 flex flex-col pt-4 pb-28 relative"> <!-- Tempat penampung isi struk, punya sifat melar dan disembunyikan scrollnya -->
+            
+            <!-- BLOK KARTU 1: INFO LOKASI PARKIR -->
+            <div class="w-full bg-[#F5F5F5] px-4 py-4 mb-4"> <!-- Wadah warna abu putih untuk kelompok data alamat dan spot yang dipesan -->
+                <h2 class="font-semibold text-[16px] text-black mb-3">Tempat Parkir</h2> <!-- Judul subseksi 1 -->
+                
+                <!-- Kotak Rincian Tempat -->
+                <div class="bg-[#F5F5F5] border border-[#D9D9D9] rounded-[11px] p-4 relative"> <!-- Bingkai garis abu di sekeliling data informasi pesanan -->
+                    <span id="display-date" class="font-semibold text-[10px] text-[#9E9898] block mb-2">Memuat...</span> <!-- Area JS bakal melempar teks Tanggal dan Jam kunjungan otomatis ke sini -->
+                    
+                    <div class="flex justify-between items-start mt-1"> <!-- Menjejalkan tulisan jadi dua kubu berhadapan (Kiri & Kanan) sejajar horizontal -->
+                        <!-- Info Kubu Kiri (Alamat dan Slot Gedung) -->
+                        <div class="flex flex-col gap-1"> <!-- Area teks berbaris menumpuk kebawah -->
+                            <span class="font-semibold text-[14px] text-black">Rita Supermall</span> <!-- Judul Nama Mal / Pusat perbelanjaan target -->
+                            <span id="display-slot" class="font-normal text-[13px] text-black">Memuat Slot...</span> <!-- Tempat kosong yang akan disuntik teks Lantai + Nomer Slot pilihan pengunjung -->
+                        </div>
+                        <!-- Info Kubu Kanan (Identitas Kendaraan Pengguna) -->
+                        <div class="flex flex-col gap-1 text-right"> <!-- Area baris tulisan bersusun tapi memaksa menyandar ke tepian paling kanan -->
+                            <span id="display-vehicle-name" class="font-semibold text-[14px] text-black">Memuat...</span> <!-- Tempat JS menyematkan nama merek kendaraan (contoh: Honda Jazz) -->
+                            <span id="display-vehicle-plate" class="font-medium text-[14px] text-black">...</span> <!-- Tempat JS menyematkan nomor lisensi pelat kepolisian -->
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Peringatan Darurat / Note Penting! -->
+                <span class="font-medium text-[10px] text-[#FF0000] mt-2 block pl-1">Note: Tiket akan hangus jika melewati batas waktu 2 jam, Tiket tidak dapat digunakan untuk kendaraan lain.</span> <!-- Teks ancaman batas kadaluarsa sistem tiket warna merah menyala tajam -->
+            </div>
+
+            <!-- BLOK KARTU 2: RINCIAN TAGIHAN ESTIMASI HARGA (Kasir) -->
+            <div class="w-full bg-[#F5F5F5] px-4 py-4 flex-grow"> <!-- Area yang melapisi bagian detail biaya di sebelah bawah -->
+                <h2 class="font-semibold text-[16px] text-black mb-3">Rincian Harga</h2> <!-- Judul Subseksi 2 -->
+                
+                <!-- Kotak Putih Rincian Biaya Bon -->
+                <div class="bg-[#F5F5F5] border border-[#D9D9D9] rounded-[11px] p-4 flex flex-col"> <!-- Mirip kotak atas, ini bingkai tagihan -->
+                    <span id="display-slot-price" class="font-semibold text-[14px] text-black mb-4">Memuat Slot...</span> <!-- Pengulangan teks keterangan Lantai dan Slot sebagai bukti resi tagihan -->
+                    
+                    <!-- Baris Biaya Jam Pertama -->
+                    <div class="flex justify-between items-center mb-1"> <!-- Barisan rincian per baris, tulisan kiri dan harga berhadapan ke kanan -->
+                        <span class="font-normal text-[13px] text-black">Jam Pertama</span> <!-- Teks statis nama tagihan: "Jam Pertama" -->
+                        <span id="price-first-hour" class="font-bold text-[13px] text-black">...</span> <!-- Area kosong khusus bagi mesin JS untuk mengutip Harga jam pertama dari Database -->
+                    </div>
+                    
+                    <!-- Baris Biaya Jam Selanjutnya (Overtime/Denda) -->
+                    <div class="flex justify-between items-center mb-4"> <!-- Sama seperti atas namun tulisan dipucatkan karena hanya sekedar info denda bila telat -->
+                        <span class="font-normal text-[13px] text-[#9E9898]">Jam Berikutnya</span> <!-- Tulisan statis informasi tagihan tambahan -->
+                        <span id="price-next-hour" class="font-semibold text-[13px] text-[#9E9898]">...</span> <!-- Tempat JS mencetak harga lipatan per kelipatan jamnya -->
+                    </div>
+
+                    <!-- Garis Patah-patah Pembatas Subtotal -->
+                    <div class="w-full border-t-2 border-dashed border-[#D9D9D9] my-4"></div> <!-- Tali putus-putus seperti di bon indomaret -->
+
+                    <!-- Baris Hitam Biru Total Keseluruhan Biaya -->
+                    <div class="w-full bg-[#E3E1ED] rounded-[10px] flex justify-between items-center px-4 py-2 mt-2"> <!-- Area penyorotan utama untuk uang total di paling bawah bon (Diberi blok warna berbeda biru pucat) -->
+                        <span class="font-semibold text-[14px] text-black">Total Tagihan Sementara</span> <!-- Tulisan tebal Total Akhir Tagihan -->
+                        <span id="price-total" class="font-bold text-[13px] text-[#9E9898]">...</span> <!-- Ruang di pojok kanan untuk melempar hasil pertambahan kalkulator otomatis mesin program terhadap harga-harga diatas -->
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- BAGIAN 3: ALAT PENGENDALI AKHIR MENU BAWAH MELAYANG (Tombol Eksekusi Bayar / Konfirmasi Pin) -->
+        <div class="absolute bottom-0 w-full h-[89px] bg-[#F1F1F1] flex flex-col justify-center px-4 z-20 pb-4"> <!-- Kotak keras pengganjal bawah layar, tak akan tertutup oleh scroll gulir tagihan di atasnya -->
+            <!-- TOMBOL PESAN TIKET (Aksi Utama Pengguna) -->
+            <button onclick="prosesPesanan()" class="w-full h-[60px] bg-[#0141A3] hover:bg-blue-800 rounded-[10px] flex items-center justify-center transition-all active:scale-95 shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1)]"> <!-- Tombol paling sakral biru tua gelap, saat dipencet akan menyuruh Program menjalankan fungsi pindah halaman ke Input PIN -->
+                <span class="text-white font-semibold text-[14px] tracking-wide">Pesan Tiket</span> <!-- Intruksi pemantik klik -->
+            </button>
+        </div>
+
+    </div>
+
+    <!-- PUSAT KERJA MESIN KECERDASAN HALAMAN (JAVASCRIPT) -->
+    <script>
+        // Siagakan sistem untuk menunggu sampai keseluruhan batu bata penyusun rangka HTML diatas telah dirender dengan sempurna di Browser
+        document.addEventListener("DOMContentLoaded", () => {
+            // MENCETAK OTOMATIS IDENTITAS TANGGAL WAKTU SAAT INI (REAL-TIME)
+            const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu']; // Daftar nama hari bahasa lokal
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des']; // Daftar singkatan nama bulan bahasa lokal
+            const d = new Date(); // Melakukan panggilan internal ke server jam mesin perangkat (Misal Jam HP Apple)
+            // Memasang hasil terjemahan ramuan jam nya ke dalam kertas informasi bon (Contoh Keluar Teks: "Selasa, 12 Sep 2025")
+            document.getElementById('display-date').textContent = `${days[d.getDay()]}, ${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+
+            // MEMBACA CATATAN INGATAN (MEMORI LOKAL) HP TENTANG APA SAJA YANG DIPILIH PENGGUNA DI HALAMAN-HALAMAN SEBELUMNYA.
+            const vehicle = JSON.parse(localStorage.getItem('booking_vehicle')); // Membuka laci memori mencari data Mobil/Motor (Data ini ada dari halaman 'Booking-Pilih-Kendaraan' kemarin)
+            const slot = localStorage.getItem('booking_slot'); // Membuka laci memori mencari Nomer/Blok Lahan yang dipilih (Dari halaman Pilih-Slot)
+            const lantai = localStorage.getItem('booking_lantai') || 'Lantai B'; // Membuka memori pilihan tingkat Lantai, kalau kosong/bug, paksa jatuhkan tebakan default ke 'Lantai B'.
+
+            // PROSES MENYALIN INGATAN MOBIL KE ATAS KERTAS HTML
+            if(vehicle) { // Jika Data Kendaraan ada (Manusia normal)
+                document.getElementById('display-vehicle-name').textContent = vehicle.name; // Tulis stiker merek (Cth: Pajero) ke HTML
+                document.getElementById('display-vehicle-plate').textContent = vehicle.plate; // Tulis huruf Plat (Cth B1997XYZ) ke HTML
+            }
+
+            // PROSES MENYALIN INGATAN LAHAN KE ATAS KERTAS HTML 
+            if(slot) { // Kalau Nomor Slot lahannya beneran terekam tak hilang
+                let slotText = ""; // Keranjang untuk menenun kalimat
+                // MENGGABUNGKAN DATA LANTAI DENGAN DATA SLOT UNTUK MEMBENTUK 1 KALIMAT ALAMAT YANG UTUH.
+                // Catatan: property pada localStorage 'jenis' itu di ambil dari saat milih tipe awal mobil vs motor
+                if(vehicle && vehicle.jenis === 'mobil') { // Kalau tipenya terdeteksi kendaraan Roda Empat 
+                     slotText = `${lantai}, Slot ${slot}`; // Kata sapaannya pakai awalan 'Slot' karena mobil pesannya per kotak kecil (Contoh: "Lantai P2, Slot B-14")
+                } else { // Jika selain itu (Berarti ya pasti sepeda Motor kan)
+                     slotText = `${lantai}, ${slot}`;  // Tanpa kata awalan karena data slot Motor biasanya sudah mengandung frasa kata 'Blok' dari awal sana (Contoh: "Lantai B1, Blok A")
+                }
+                
+                document.getElementById('display-slot').textContent = slotText; // Timpa kata memuat di bagian Informasi Tempat
+                document.getElementById('display-slot-price').textContent = slotText; // Timpa kata memuat di bagian Bon Resi Tagihan Harga bawah
+            }
+
+            // AKHIR PENGCEKAN AWAL: SURUH AMBIL DAFTAR HARGA KELAS KENDARAAN (MOBIL BEDA HARGA DENGAN MOTOR) DARI SERVER
+            if(vehicle) {
+                // Memanggil tukang pos (fungsi fetchTarif di bawah) untuk terbang ke Markas Database membawa jenis kendaraan (Cth: 'motor' atau 'mobil')
+                fetchTarif(vehicle.jenis);
+            }
+        });
+
+        // FUNGSI TUKANG POS UNTUK MENGAMBIL DAN MENANYAKAN BIAYA TARIF LOKASI INI DARI DATABASE PUSAT (API SERVER)
+        async function fetchTarif(jenisKendaraan) {
+            try {
+                // Panggil endpoint API tarif di Backend kita (Springboot controller)
+                const response = await fetch('/api/tarif');
+                const result = await response.json(); // Terjemahkan surat yang didapat dari server
+                
+                if(result.data && result.data.length > 0) { // Bila Pelayan backend sukses membongkar muatan daftar Harga dan datanya lumayan ada banyak (Minimal 1)
+                    // Cari pakai kaca pembesar, manakah didalam tabel Harga Database tersebut yang nama kendaraanya itu persis plek-ketiplek sama persis dengan Jenis Kendaraan orang ini (Tadi motor atau mobil)?
+                    const tarif = result.data.find(item => item.jenis_kendaraan.toLowerCase() === jenisKendaraan.toLowerCase()); // toLowerCase berguna merubah huruf jadi kecil semua agar tak salah kaprah m banding M.
+                    
+                    if (tarif) { // Eureka! Bila Ketemu kecocokan harganya...
+                        const hargaPertama = tarif.tarif_jam_pertama.toLocaleString('id-ID'); // Rubah angka mentah server (Cth: 10000) menjadi ber-titik uang (Cth: 10.000) ala duit Indonesia
+                        const hargaBerikutnya = tarif.tarif_jam_berikutnya.toLocaleString('id-ID'); // Sama, tapi ini untuk harga tambahan uang overtime.
+
+                        // MASUKKAN ANGKA-ANGKA RUPIAH BERGAYA ITU KE DALAM TEMPAT KOSONG '...' DI DALAM HTML KITA.
+                        document.getElementById('price-first-hour').textContent = hargaPertama; // Tempel nilai awal ke tagihan baris 1
+                        document.getElementById('price-next-hour').textContent = hargaBerikutnya; // Tempel nilai denda lewati batas ke tagihan baris 2
+                        document.getElementById('price-total').textContent = hargaPertama; // Total akhir sementara disamakan penuh dengan harga awal bayar dp per jam pertama saja (Tak perlu hitungan ribet dulu)
+                    }
+                }
+            } catch (error) { // JIKA ALAM SEMESTA TAK BERPIHAK / SERVER API KITA JATUH (DOWN, ERROR 500, OFFLINE INTERNET)
+                console.error('Gagal mengambil data tarif dari server:', error); // Tuliskan dosa kegagalan ini ke log programmer di belakang layar
+                
+                // JALANKAN LOGIKA PERTAHANAN MUNDUR (FALLBACK) / NILAI TEBAKAN CADANGAN JIKA SERVER DATABASE MATI TOTAL! (Agar aplikasi tak terlihat nge-bug "Memuat..." terus menerus pada Pengguna Awam di Lapangan)
+                if(jenisKendaraan === 'mobil') { // Kalau ingatannya sih mobil
+                    document.getElementById('price-first-hour').textContent = "10.000"; // Tembak dan Tebak Pasang Angka Patokan Umum (10 Ribu)
+                    document.getElementById('price-next-hour').textContent = "2.000"; // Tembak Patokan denda lembur
+                    document.getElementById('price-total').textContent = "10.000"; // Tembak Subtotal 10 rb
+                } else { // Jika dia pakai Sepeda Motor
+                    document.getElementById('price-first-hour').textContent = "3.000"; // Tembak Harga motor Umum  (3 Ribu)
+                    document.getElementById('price-next-hour').textContent = "1.000"; // Denda Se-ribu
+                    document.getElementById('price-total').textContent = "3.000"; // Total 3 rb
+                }
+            }
+        }
+
+        // FUNGSI DIEKSEKUSI PADA SAAT USER DENGAN TEKAD BULAT MEMENCET TOMBOL RAKSASA BIRU 'PESAN TIKET' DI BAWAH LAYAR
+        function prosesPesanan() {
+            // Alihkan pandangan layar Pengguna menuju halaman rahasia penginputan angka gembok PIN secara seketika (Fast Redirect)
+            window.location.href = "/konfirmasi-pin"; 
+        }
+    </script>
+</body>
+</html>

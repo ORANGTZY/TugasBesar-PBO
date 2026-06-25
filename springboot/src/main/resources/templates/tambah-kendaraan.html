@@ -1,0 +1,225 @@
+<!DOCTYPE html> <!-- Pendefinisian bahwa halaman web ini memakai cetakan standar HTML versi 5 -->
+<html lang="id"> <!-- Akar dokumen ini dengan spesifikasi aturan berbahasa Indonesia -->
+<head> <!-- Bagian atas tersembunyi yang menyimpan pengaturan peramban internet -->
+    <meta charset="UTF-8"> <!-- Berfungsi agar browser paham membaca huruf simbol dan emoji unik di seluruh jagat maya (UTF-8) -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"> <!-- Perintah menekan wujud web tetap responsif di layar HP dan mustahil di zoom/cubit karena sudah diblokir -->
+    <meta name="theme-color" content="#F5F5F5"> <!-- Mengganti warna bilah notifikasi di atas layar HP Android agar nyaru warna kelabu -->
+    <meta name="apple-mobile-web-app-capable" content="yes"> <!-- Memicu agar browser Safari di iPhone menampilkannya dalam mode Layar Penuh (Kaya Apk Asli) -->
+    
+    <title>Parkirin - Tambah Kendaraan</title> <!-- Judul halaman di bilah penamaan tab Jendela Internet -->
+    <link rel="icon" href="/img/favicon.png" type="image/png"> <!-- Memanggil stiker mungil (favicon) ke sudut Tab Browser -->
+    
+    <script src="https://cdn.tailwindcss.com"></script> <!-- Mengakses alat pengatur desain instan (Tailwind CSS) yang dialirkan dari internet -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet"> <!-- Mengimpor huruf elegan tipe 'Montserrat' pinjaman dari perpustakaan Google Fonts -->
+    
+    <style> 
+        body { font-family: 'Montserrat', sans-serif; background-color: #F1F1F1; margin: 0; overscroll-behavior-y: none; } /* Semua teks berseragam Montserrat, Latar luar berwarna kelabu pudar, Tepian rapat, dan Tarikan per pir pada Android dimatikan total */
+        .hide-scrollbar::-webkit-scrollbar { display: none; } /* Resep jitu membuang jejak batang guling pinggir (Scrollbar) secara gaib pada Chrome/Safari */
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; } /* Resep pamungkas serupa ditujukan untuk Firefox dan Microsoft Edge lawas */
+        .slide-in { animation: slideInRight 0.3s ease-out forwards; } /* Perintah menjalankan cuplikan animasi efek masuk layar (Slide In)  */
+        @keyframes slideInRight { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } } /* Naskah animasinya = Mulai di posisi kanan agak hilang, diakhiri dengan bentuk sejati persis di tengah */
+        input[type="radio"]:checked + div { background-color: #000; box-shadow: inset 0 0 0 4px #F5F5F5; } /* Trik sakti mengubah bentuk jelek titik buletan Radio bawaan komputer menjadi lingkaran hitam tebal ala desain modern kekinian ketika dipencet/dicontreng (checked) */
+    </style>
+</head>
+<body class="flex justify-center h-screen text-gray-800 antialiased bg-gray-200"> <!-- Lapisan panggung belakang abu-abu yang menjepit kotak simulasi HP pas berdiri di titik sentral layar laptop -->
+
+    <!-- RANGKA BODI SMARTPHONE VIRTUAL -->
+    <div class="w-full max-w-[402px] bg-[#F1F1F1] h-full relative flex flex-col shadow-2xl overflow-hidden slide-in"> <!-- Batasan utama layar ponsel (Lebar max 402, sisanya kepotong) -->
+        
+        <!-- BAGIAN 1: TOPI KEPALA HALAMAN (Bar Putih Tebal Atas) -->
+        <div class="w-full h-[120px] bg-[#F5F5F5] pt-12 px-4 flex items-center shadow-sm z-20 shrink-0"> <!-- Kotak statis tebal yang menjadi pondasi judul -->
+            <!-- TOMBOL IKON PANAH KEMBALI KIRI MUNDUR -->
+            <a href="/kendaraan" class="text-[#0064F0] hover:opacity-80 active:scale-95 transition-all cursor-pointer mr-3"> <!-- Link mundur dengan efek kilatan dan bisa mengecil sejenak saat ditekan jari (active) -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" /></svg> <!-- Gambaran lengkungan Panah membelok ke kiri -->
+            </a>
+            <h1 class="text-[20px] font-bold text-[#0064F0]">Tambah kendaraan</h1> <!-- Tulisan Biru besar Judul Aktivitas Saat ini -->
+        </div>
+
+        <!-- BAGIAN 2: LEMBARAN KONTEN ISIAN FORMULIR UTAMA (Papan Gulir Kertas Tengah) -->
+        <div class="flex-grow overflow-y-auto hide-scrollbar z-10 flex flex-col pb-32"> <!-- Lembaran putih melar ke bawah, yang menyembunyikan scrollbarnya agar keliatan estetik licin -->
+            
+            <!-- BLOK LEMBAR 1: DATA FISIK DAN IDENTITAS LUAR KENDARAAN -->
+            <div class="w-full bg-[#F5F5F5] px-4 pt-4 pb-6 mt-[11px]"> <!-- Kartu kertas dengan alas kelabu muda -->
+                <p class="text-[12px] font-medium text-[#A4A4A4] mb-4">Pilih Kendaraan</p> <!-- Subjudul Panduan Atas -->
+                
+                <!-- Opsi Memilih Klasifikasi (Motor Atau Mobil) Berjejer Bersisian -->
+                <div class="flex gap-8 mb-8"> 
+                    
+                    <!-- Pilihan Opsi 1: SEPEDA MOTOR -->
+                    <label class="flex items-center gap-3 cursor-pointer group select-none"> <!-- label mengikat seluruh ikon gambar dan tulisan, jika tulisan tertekan.. radio tertekan juga otomatis! -->
+                        <div class="relative flex items-center justify-center">
+                            <!-- Inilah elemen Radio titik bulatnya yang tersembunyi (Disembunyikan sengaja oleh fungsi class sr-only tailwind) namun dia di set Aktif (Checked) dari lahir -->
+                            <input type="radio" name="jenis_kendaraan" value="motor" class="peer sr-only" checked>
+                            <!-- Ini adalah lingkaran grafis palsu buatan Tailwind yang menyamar bereaksi menggantikan rupa Radio jelek tadi. Jika Radio asli dicentang (Peer-checked) si grafis ini berubah jadi lingkaran tebal! -->
+                            <div class="w-[25px] h-[25px] border-2 border-black rounded-full transition-all peer-checked:border-[6px]"></div>
+                        </div>
+                        <img src="/img/elemenmotorcycle.png" alt="Motor" class="h-8 w-8 object-contain"> <!-- Gambar Logo Sepeda Motor -->
+                        <span class="font-semibold text-[20px] text-black">Motor</span> <!-- Tulisan Besar "Motor" -->
+                    </label>
+
+                    <!-- Pilihan Opsi 2: KENDARAAN MOBIL -->
+                    <label class="flex items-center gap-3 cursor-pointer group select-none"> <!-- label Pembungkus -->
+                        <div class="relative flex items-center justify-center">
+                            <!-- Elemen Radio Asli (Tersembunyi). Jika Mobil dipilih, radio motor akan mati karena "Nama/Name" gembok mereka sama yakni 'jenis_kendaraan' -->
+                            <input type="radio" name="jenis_kendaraan" value="mobil" class="peer sr-only">
+                            <!-- Titik Lingkaran Desain Palsunya yang cantik. Bereaksi menebal jika kepencet. -->
+                            <div class="w-[25px] h-[25px] border-2 border-black rounded-full transition-all peer-checked:border-[6px]"></div>
+                        </div>
+                        <!-- Gambar Ikon Mobil (Dibuat pakai SVG langsung daripada narik gambar format PNG) -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-black" viewBox="0 0 24 24" fill="currentColor"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/></svg>
+                        <span class="font-semibold text-[20px] text-black">Mobil</span> <!-- Teks Besar 'Mobil' -->
+                    </label>
+                </div>
+
+                <!-- Kelompok Berbaris Isian Kotak Formulir Teks (Inputs) -->
+                <div class="flex flex-col gap-4"> 
+                    <!-- Kotak 1: Formulir Plat Nomor Penuh (Satu baris horizontal panjang sendirian) -->
+                    <div class="relative w-full h-[68px] bg-[#EDEDED] border-b border-black"> <!-- Alas input kelabu gelap dengan garis lantai hitam -->
+                        <label class="absolute left-5 top-2.5 text-[8px] font-semibold text-[#A4A4A4]">Plat Nomor Kendaraan</label> <!-- Keterangan Teks Menempel diatas sudut kotak -->
+                        <input type="text" id="add-plat" class="absolute left-5 bottom-2 w-[calc(100%-40px)] bg-transparent text-[15px] font-semibold text-black focus:outline-none placeholder-gray-400" placeholder="Contoh: B 1234 ABC"> <!-- Kolom dimana mesin ketik HP akan keluar -->
+                    </div>
+                    
+                    <!-- Barisan Kembar Terbelah Dua (Merek Kiri - Model Kanan) -->
+                    <div class="grid grid-cols-2 gap-4"> <!-- Membagi porsi tanah selebar dua balok kembar (Grid = Papan Catur 2 kolom) -->
+                        <div class="relative w-full h-[68px] bg-[#EDEDED] border-b border-black"> <!-- Kotak Merek -->
+                            <label class="absolute left-5 top-2.5 text-[8px] font-semibold text-[#A4A4A4]">Merek</label> 
+                            <input type="text" id="add-merek" class="absolute left-5 bottom-2 w-[calc(100%-30px)] bg-transparent text-[15px] font-semibold text-black focus:outline-none"> <!-- (Cth: Toyota / Honda) -->
+                        </div>
+                        <div class="relative w-full h-[68px] bg-[#EDEDED] border-b border-black"> <!-- Kotak Model (Tipe Khusus) -->
+                            <label class="absolute left-5 top-2.5 text-[8px] font-semibold text-[#A4A4A4]">Model</label>
+                            <input type="text" id="add-model" class="absolute left-5 bottom-2 w-[calc(100%-30px)] bg-transparent text-[15px] font-semibold text-black focus:outline-none"> <!-- (Cth: Avanza Veloz / Beat Fi) -->
+                        </div>
+                    </div>
+                    
+                    <!-- Barisan Kembar Terbelah Dua Lainnya (Tahun Rakitan & Warna Cat) -->
+                    <div class="grid grid-cols-2 gap-4"> <!-- Papan catur 2 kolom lagi -->
+                        <div class="relative w-full h-[68px] bg-[#EDEDED] border-b border-black"> <!-- Kotak Tahun -->
+                            <label class="absolute left-5 top-2.5 text-[8px] font-semibold text-[#A4A4A4]">Tahun Produksi</label>
+                            <input type="number" id="add-tahun" class="absolute left-5 bottom-2 w-[calc(100%-30px)] bg-transparent text-[15px] font-semibold text-black focus:outline-none"> <!-- Type Number akan memaksa papan ketik HP hanya memunculkan tombol angka saja (Tanpa Abjad) (Cth: 2018) -->
+                        </div>
+                        <div class="relative w-full h-[68px] bg-[#EDEDED] border-b border-black"> <!-- Kotak Warnanya -->
+                            <label class="absolute left-5 top-2.5 text-[8px] font-semibold text-[#A4A4A4]">Warna</label>
+                            <input type="text" id="add-warna" class="absolute left-5 bottom-2 w-[calc(100%-30px)] bg-transparent text-[15px] font-semibold text-black focus:outline-none"> <!-- (Cth: Silver Metalik / Hitam Doff) -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BLOK LEMBAR 2: DATA SURAT JEROAN KENDARAAN & DOKUMEN UPLOAD -->
+            <div class="w-full bg-[#F5F5F5] px-4 py-6 mt-[11px]"> <!-- Lembar beralas warna serupa tapi berjarak dengan lembar satu di atas tadi -->
+                <h2 class="text-[16px] font-semibold text-black mb-4">Informasi STNK</h2> <!-- Subjudul seksi rahasia -->
+                
+                <div class="grid grid-cols-2 gap-4 mb-6"> <!-- Baris Input Teks Belah Dua -->
+                    <div class="relative w-full h-[68px] bg-[#EDEDED] border-b border-black"> <!-- Nomor Mesin -->
+                        <label class="absolute left-5 top-2.5 text-[8px] font-semibold text-[#A4A4A4]">Nomor Mesin</label>
+                        <input type="text" id="add-mesin" class="absolute left-5 bottom-2 w-[calc(100%-30px)] bg-transparent text-[15px] font-semibold text-black focus:outline-none"> <!-- Baris Angka unik sasis dsb -->
+                    </div>
+                    <div class="relative w-full h-[68px] bg-[#EDEDED] border-b border-black"> <!-- Nomor Rangka Tembaga -->
+                        <label class="absolute left-5 top-2.5 text-[8px] font-semibold text-[#A4A4A4]">Nomor Rangka</label>
+                        <input type="text" id="add-rangka" class="absolute left-5 bottom-2 w-[calc(100%-30px)] bg-transparent text-[15px] font-semibold text-black focus:outline-none">
+                    </div>
+                </div>
+
+                <h3 class="text-[10px] font-semibold text-black mb-3">Upload Dokumen Yang dibutuhkan</h3> <!-- Perintah Meminta Pengguna Unggah Gambar -->
+                
+                <div class="relative w-full mt-2"> <!-- Area Zona Tempat Peletakan Formulir Penunggah Gambar -->
+                    
+                    <!-- ZONA GARIS PUTUS PUTUS (Belum Ada Gambar): Kalau ditekan, mesin HP akan buka Laci Foto Galeri Camera -->
+                    <label id="upload-box" class="w-full h-[70px] border border-dashed border-[#D9D9D9] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition-colors rounded"> <!-- Area kotakan putus-putus pencentak -->
+                        <span class="text-[13px] font-semibold text-[#A4A4A4]">STNK</span> <!-- Teks Panduan Bawaan -->
+                        <!-- Mesin Gaib Penarik File milik bawaan Browser. Disembunyikan agar tak jelek (hidden), dia hanya minta Gambar 'image/*' bukan file lagu! dan bila isinya dimasukin dia akan lapor ke Pak Fungsi 'previewImage()' di bawah -->
+                        <input type="file" id="stnk-input" class="hidden" accept="image/*" onchange="previewImage(event)"> 
+                    </label>
+
+                    <!-- ZONA PREVIEW (Ada Gambar): Wilayah ini awalnya disembunyikan pakai gaib 'hidden'. Bakal dimunculkan JS menggantikan ZONA di atas jika orang sudah milih foto. -->
+                    <div id="preview-box" class="hidden relative w-full h-[150px] bg-white border border-[#D9D9D9] rounded flex items-center justify-center p-2 shadow-sm">
+                        <!-- Tampilan bingkai fotocopy STNK yang berhasil dipilih -->
+                        <img id="upload-preview" class="w-full h-full object-contain" alt="STNK Preview">
+                        
+                        <!-- TOMBOL SILANG MERAH (Tutup / Batal) - Menganulir Pilihan dan mengembalikan layar HP ke keadaan semula (Kosong putus-putus) -->
+                        <button onclick="hapusGambar()" class="absolute -top-3 -right-2 w-7 h-7 bg-[#E53935] text-white rounded-full flex items-center justify-center shadow-lg hover:bg-red-700 active:scale-90 transition-transform"> <!-- Tombol merah melayang tumpang tindih di ujung sudut  -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg> <!-- Garis Tanda Huruf 'X' (Silang) -->
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- BAGIAN 3: ALAT FINAL BAWAH (Tombol Biru Pendaftaran Penyelesaian Tugas) -->
+        <div class="absolute bottom-0 w-full h-[81px] bg-[#F5F5F5] z-20 flex flex-col items-center justify-center px-4 shadow-[0_-5px_15px_rgba(0,0,0,0.02)]"> <!-- Papan tebal memanjang sebagai penahan penahan yang tertambat di lantai terbawah aplikasi -->
+            <!-- Tombol Tambah yang Bila di klik orang akan memerintahkan si Kurir JS mengirim semua catatan tulisan ini ke Gudang Server! (Fungsi 'simpanKendaraan') -->
+            <button onclick="simpanKendaraan()" class="w-full h-[36px] bg-[#0141A3] rounded-[10px] flex items-center justify-center hover:bg-blue-800 active:scale-95 transition-all shadow-sm"> <!-- Biru Elektrik Gagah! -->
+                <span class="text-[12px] font-semibold text-white">Tambah Kendaraan</span> <!-- Insturksi Terakhir ke Pengguna -->
+            </button>
+        </div>
+    </div>
+
+    <!-- PUSAT KERJA MESIN KECERDASAN DAN TUKANG POS (JAVASCRIPT) -->
+    <script>
+        
+        // FUNGSI UTAMA 1: TUKANG POS MENGUMPULKAN SELURUH TULISAN/PILIHAN UNTUK DIKIRIM KE DATABASE (BACKEND SPRINGBOOT)
+        async function simpanKendaraan() {
+            // Sebelum dikirim, pastikan tahu dulu dong ini yang nambah mobil punya ID User siapa?
+            let userData = JSON.parse(localStorage.getItem('user')); // Buka arsip profil di memori Lokal
+            if (!userData || !userData.id) { // Perlindungan Darurat: Kalau ketahuan ga pernah login (Atau nekat potong jalur buka web)
+                alert("Sesi login tidak valid!"); return; // Usir mentah-mentah pakai Peringatan dan batalkan eksekusi
+            }
+
+            // KUMPULKAN DAN JADIKAN SATU BUNGKUS PAKET INFO SELURUH TULISAN TULISAN TADI!
+            const payload = {
+                user_id: userData.id, // Sisipkan Nama ID Akun Pengguna ini
+                jenis: document.querySelector('input[name="jenis_kendaraan"]:checked').value, // Ambil Nilai dari Radio Lingkaran yang terpencet (Mobil / Motor ?)
+                plat: document.getElementById('add-plat').value, // Curi tulisan plat yang diketik Pengguna
+                merek: document.getElementById('add-merek').value, // Curi Merek Nya
+                model: document.getElementById('add-model').value, // Curi Serinya
+                tahun: document.getElementById('add-tahun').value, // Curi Tahunnya
+                warna: document.getElementById('add-warna').value, // Curi Warnanya
+                mesin: document.getElementById('add-mesin').value, // Curi Angka Mesinnya
+                rangka: document.getElementById('add-rangka').value // Curi Angka Rangkanya
+            };
+
+            // PERJALANAN PAKET KE KANTOR PUSAT MENGGUNAKAN PESAWAT INTERNET (Fetch)
+            try {
+                const response = await fetch('/api/kendaraan', { // Tujuan Pendaratan Kurir (Endpoint Controller Tambah Kendaraan)
+                    method: 'POST', // Kode Rahasia Misi ini adalah POST (Artinya Menciptakan Arsip Data Baru di tujuan!)
+                    headers: { 'Content-Type': 'application/json' }, // Format surat diatur dan dilipat dalam kaidah tulisan terstruktur baku JSON
+                    body: JSON.stringify(payload) // Terjemahkan bungkusan kita tadi jadi barisan teks dan hempaskan Terbang!
+                });
+                
+                const result = await response.json(); // Bongkar Balasan Resi Bukti Terimanya dari Server (Berhasil/Gagal)
+                
+                if(response.ok) { // Jika Server senyum tersenyum (Kode Balasan Ramah/Terkirim Lulus 200)
+                    window.location.href = "/kendaraan"; // Paksa Layar Melompat ke Halaman Daftar List Kendaraan agar Pengguna melihat Mobilnya Sukses Ditambah! (Misi Berhasil!)
+                } else { // Jika Server Menolak Marah karena Error (Bisa jadi Platnya Kosong/Isian Tidak Lengkap / Duplikat)
+                    alert('Gagal: ' + result.message); // Munculkan Pesan Bentakan Asli Penjelasan dari Server nya ke Mata Pengguna!
+                }
+            } catch (err) { // Jika Terjadi Gangguan Bencana Kiamat (Mati Lampu Server / Internet Putus) sewaktu Pesawat di perjalanan...
+                alert('Server Error'); // Kabarkan Duka.
+            }
+        }
+
+        // FUNGSI TAMBAHAN 2: MEMBUAT EFEK SULAP MENGGANTI KOTAK PUTUS-PUTUS MENJADI GAMBAR FOTO DI LAYAR 
+        function previewImage(event) {
+            const input = event.target; // Ambil File Asli (Gambar/Fotocopyan STNK)
+            if (input.files && input.files[0]) { // Jika file nya ada...
+                const reader = new FileReader(); // Panggil pakar Tukang Baca File dari HP
+                reader.onload = function(e) { // Bila tukang ini sudah rampung merangkai ulang pecahan titik gambar tsb...
+                    document.getElementById('upload-preview').src = e.target.result; // Timpa gambar pajangan kosong tadi menjadi gambar STNK murni ini!
+                    document.getElementById('upload-box').classList.add('hidden'); // Singkirkan jauh-jauh (Sembunyikan) Zona Kotak Garis Putus-Putus
+                    document.getElementById('preview-box').classList.remove('hidden'); // Munculkan terang-terangan Zona Preview Frame Foto yang berisi gambar ini ke tengah layar!
+                };
+                reader.readAsDataURL(input.files[0]); // Suruh tukang baca mengeksekusi merangkai filenya.
+            }
+        }
+
+        // FUNGSI TAMBAHAN 3: KETIKA PENGGUNA TERNYATA SALAH MASUKIN FOTO (LALU PENCET TOMBOL SILANG MERAH!)
+        function hapusGambar() {
+            document.getElementById('stnk-input').value = ""; // Bersihkan Ingatan memori foto lama dari kotak file aslinya
+            document.getElementById('upload-preview').src = ""; // Cabut Gambar Foto yang terpajang 
+            document.getElementById('preview-box').classList.add('hidden'); // Sembunyikan Frame Foto Preview pajangan itu ke Alam Bawah
+            document.getElementById('upload-box').classList.remove('hidden'); // Bangunkan lagi dari Alam Bawah, Kotak Garis Putus Putusnya (Untuk mengulang memilih gambar lagi)
+        }
+    </script>
+</body>
+</html>

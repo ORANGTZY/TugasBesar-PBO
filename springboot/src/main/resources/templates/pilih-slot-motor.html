@@ -1,0 +1,276 @@
+<!DOCTYPE html> <!-- Mengartikan bahwa halaman web ini memakai struktur HTML versi 5 -->
+<html lang="id"> <!-- Pengaturan elemen terluar memakai bahasa Indonesia -->
+<head> <!-- Kerangka kepala untuk pengaturan metadata dan file bantuan -->
+    <meta charset="UTF-8"> <!-- Berfungsi agar browser paham membaca huruf simbol dan emoji di seluruh dunia (UTF-8) -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"> <!-- Perintah menekan desain tetap responsif ukuran HP dan mustahil di zoom/cubit layar -->
+    <meta name="theme-color" content="#F5F5F5"> <!-- Mengganti warna bilah atas browser HP menjadi abu muda -->
+    
+    <title>Parkirin - Pilih Slot Motor</title> <!-- Judul teks yang terletak di tab jendela atas browser -->
+    <link rel="icon" href="/img/favicon.png" type="image/png"> <!-- Memuat gambar lambang mungil ikon Parkirin pada sudut tab browser -->
+
+    <script src="https://cdn.tailwindcss.com"></script> <!-- Mengkoneksikan file program styling instan (Tailwind CSS) secara daring -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet"> <!-- Mengunduh tipografi font idaman 'Montserrat' milik Google -->
+    
+    <style> 
+        body { 
+            font-family: 'Montserrat', sans-serif; /* Semua kalimat dipaksa memakai font Montserrat cantik tadi */
+            background-color: #F1F1F1; /* Pewarnaan background luas di luar batas aplikasi dengan abu pucat */
+            margin: 0; /* Menempelkan sudut ujung elemen ke tembok layar (tanpa jarak) */
+            overscroll-behavior-y: none; /* Mencegah layar HP Android menarik efek mental pantulan (bouncing) sewaktu mentok ke bawah/atas */
+            user-select: none; /* Melindungi aplikasi dari blok seleksi biru pengguna yang tidak sengaja menyorot layar panjang-panjang */
+        }
+        .hide-scrollbar::-webkit-scrollbar { display: none; } /* Resep jitu membuang jejak visibilitas batang scroll kanan pada Safari dan Chrome */
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; } /* Resep pembuang scroll bar khusus untuk Firefox dan Edge Lama */
+        
+        /* Animasi khusus untuk kartu/blok motor */
+        .block-card { transition: all 0.2s; } /* Memberikan pelicin perubahan warna dan ukuran saat kartu blok bereaksi disentuh jari */
+        /* Efek gaya desain yang diterapkan saat sebuah kartu blok diklik/dipilih oleh Pengguna */
+        .block-card.selected { 
+            background-color: #D8F6FF; /* Warnanya berubah jadi Biru laut pucat cerah */
+            border-color: #0064F0; /* Pinggirannya berubah menebal tegas jadi Biru Elektrik */
+            transform: scale(0.98); /* Sedikit ditekan ke dalam (mengecil 2%) agar tampak asyik dipencet nyata */
+        }
+        .drag-scroll { cursor: grab; } /* Mengubah gambar ikon mouse (kursor) di PC menjadi "tangan terbuka siap meremas/tarik" saat berada di list tombol lantai bawah */
+        .drag-scroll:active { cursor: grabbing; } /* Mengubah ikon mouse di PC seakan sedang "menggenggam/menarik paksa" layar lantai bila tombol di klik tahan (Drag) */
+    </style>
+</head>
+<body class="flex justify-center h-screen text-gray-800 antialiased bg-gray-200 overflow-hidden"> <!-- Layar diblok di tengah agar aplikasi simulasi terkurung seperti bentuk smartphone nyata -->
+
+    <!-- BATAS PENGOTAKAN BENTUK LAYAR SMARTPHONE (Container Inti) -->
+    <div class="w-full max-w-[402px] bg-[#F6F6F6] h-full relative flex flex-col shadow-2xl overflow-hidden"> <!-- Lebar terkunci maks 402px, warna latar abu terang keputihan -->
+        
+        <!-- BAGIAN 1: HEADER HALAMAN (Bar Putih di Kepala Aplikasi) -->
+        <div class="w-full bg-[#F5F5F5] pt-10 pb-4 px-4 flex flex-col relative z-20 shrink-0 shadow-sm h-[130px]"> <!-- Kotak tebal di atas yang tidak akan mengecil maupun menghilang -->
+            <!-- TOMBOL IKON PANAH KEMBALI KIRI (Di Ujung Kiri Atas) -->
+            <a href="javascript:history.back()" class="absolute left-4 top-[50px] text-[#0064F0] hover:opacity-80 transition-all cursor-pointer z-30"> <!-- Instruksi melompat paksa ke halaman asal di peramban sejarahnya -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" /></svg> <!-- Garis melengkung bentuk tanda kurang < -->
+            </a>
+            <!-- BLOK TENGAH SUSUNAN INFORMASI PENDEK (Detail dan Pilih Slot -> Rita Mall -> Tanggal) -->
+            <div class="text-center mt-[-4px]"> <!-- Area difokuskan rata tengah semua tulisannya dan diangkat sedikit ke atas (-) -->
+                <h1 class="text-[14px] font-bold text-black leading-tight">Detail dan Pilih Slot</h1> <!-- Judul Halaman atas kecil hitam -->
+                <p class="text-[14px] font-normal text-black leading-tight">Rita Supermall</p> <!-- Nama Lokasi Cabang Parkir secara spesifik -->
+                <!-- ID elemen untuk tempat mencetak waktu hari secara langsung (Bakal disuntik JS) -->
+                <p id="current-date" class="text-[12px] font-semibold text-black mt-4">Memuat...</p> <!-- Waktu tanggal kunjungan ke parkir yang sedang dinanti saat proses muat (Palsu) -->
+            </div>
+        </div>
+
+        <!-- BAGIAN 2: PAPAN KONTEN YANG BISA DISENTUH UNTUK SCROLL TURUN NAIK (Ruang Pilih Lahan Motor) -->
+        <div class="flex-grow overflow-y-auto hide-scrollbar z-10 flex flex-col px-4 pb-40 relative"> <!-- Wadah dinamis melar yang akan menampung daftar blok/barisan, dihias fitur pergeseran ajaib tiada bingkai scroll -->
+            
+            <!-- BLOK KARTU IDENTITAS KENDARAAN PEMESAN -->
+            <div class="w-full mt-6 mb-4"> <!-- Baris kontainer berbatas jarak (Margin) -->
+                <div class="bg-[#F6F6F6] border border-[#D9D9D9] rounded-[6px] w-[155px] p-2 flex flex-col items-center mx-auto shadow-sm"> <!-- Bingkai kotak pil khusus terpusat ditengah memuat Identitas Motor -->
+                    <span id="vehicle-name" class="font-semibold text-[12px] text-black">Memuat...</span> <!-- Area JS merubah label merek (Cth: Honda Beat) -->
+                    <span id="vehicle-plate" class="font-bold text-[14px] text-black mt-1">...</span> <!-- Area JS merubah angka pelat (Cth: R 4444 NN) -->
+                </div>
+            </div>
+
+            <!-- LABEL INFORMASI LANTAI SAAT INI (Bakal berubah kalau tombol bawah dipencet) -->
+            <h2 id="floor-title" class="text-center font-semibold text-[14px] text-black mb-6">Lantai B1</h2> <!-- Judul penanda daftar deretan blok/barisan parkir motor yang sedang di plot -->
+
+            <!-- WADAH PAPAN BESAR PENAMPUNG DAFTAR BLOK/KOLOM LAHAN PARKIR MOTOR -->
+            <div id="block-container" class="flex flex-col gap-3 px-2"> <!-- Rak bersusun vertikal kebawah (Tidak seperti mobil yang menyamping papan catur) -->
+                <!-- {DISINI TEMPAT SISTEM BACKEND SERVER BERPIKIR DAN MELEMPAR MUNCULNYA DAFTAR BLOK MOTOR SECARA GAIB/DINAMIS} -->
+            </div>
+        </div>
+
+        <!-- BAGIAN 3: FOOTER MELAYANG MENEMPEL BAWAH (Navigasi Lantai + Tombol Akhir Eksekusi) -->
+        <div class="absolute bottom-0 w-full bg-[#F6F6F6] flex flex-col justify-center px-4 z-20 pb-4 pt-2 shadow-[0_-5px_15px_rgba(0,0,0,0.03)] border-t border-[#E5E5E5]"> <!-- Kotak kaku tak bergerak memotong papan gulir area atas -->
+            
+            <!-- BLOK MENU SLIDER MEMILIH TINGKAT LANTAI GEDUNG (Bisa ditarik ke Kiri Kanan) -->
+            <div id="lantai-container" class="drag-scroll w-full overflow-x-auto hide-scrollbar mb-4"> <!-- Area ini membiarkan banyak tombol tumpah menyamping agar tersembunyi ke samping HP -->
+                <div class="flex gap-3 w-max min-w-full justify-start md:justify-center px-2"> <!-- Susunan rel tombol-tombolnya berjejer rapi horisontal -->
+                    <!-- Tombol-tombol lantai. Saat dipencet, akan melompat memanggil perintah javascript 'pilihLantaiMotor' dengan mengirim parameter string tingkatnya -->
+                    <div onclick="pilihLantaiMotor(this, 'Lantai B1')" class="floor-btn bg-[#E3E1ED] rounded-[10px] px-6 py-2 cursor-pointer font-semibold text-[14px] shadow-sm shrink-0">Lantai B1</div> <!-- Tombol default terang nyala duluan -->
+                    <div onclick="pilihLantaiMotor(this, 'Lantai P1')" class="floor-btn bg-[#E3E1ED] rounded-[10px] px-6 py-2 cursor-pointer font-semibold text-[14px] shadow-sm opacity-50 shrink-0">Lantai P1</div> <!-- Tombol pudar tak aktif (Opacity 50) -->
+                    <div onclick="pilihLantaiMotor(this, 'Lantai P2')" class="floor-btn bg-[#E3E1ED] rounded-[10px] px-6 py-2 cursor-pointer font-semibold text-[14px] shadow-sm opacity-50 shrink-0">Lantai P2</div>
+                    <div onclick="pilihLantaiMotor(this, 'Lantai P3')" class="floor-btn bg-[#E3E1ED] rounded-[10px] px-6 py-2 cursor-pointer font-semibold text-[14px] shadow-sm opacity-50 shrink-0">Lantai P3</div>
+                </div>
+            </div>
+
+            <!-- TOMBOL AKSI TERAKHIR UNTUK PINDAH MENU BAYAR (Lanjutkan) -->
+            <button id="btn-lanjutkan" onclick="lanjutkan()" disabled class="w-full h-[55px] bg-[#D9D9D9] rounded-[10px] flex items-center justify-center transition-all duration-300 shadow-sm shrink-0"> <!-- Wujud awak mematikan kemampuan klik dengan attribut 'disabled' dan warna cat Abu mati -->
+                <span class="text-white font-semibold text-[14px]">Lanjut Pemesanan</span> <!-- Teks instruksi di dalamnya -->
+            </button>
+        </div>
+
+        <!-- ALAT POP-UP KOTAK PERINGATAN BILA ORANG TIDAK SENGAJA MENGKLIK BLOK YANG SUDAH MERAH (PENUH) -->
+        <div id="alertModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black bg-opacity-40 backdrop-blur-sm transition-opacity opacity-0"> <!-- Kain hitam pudar menutupi sekeliling layar HP sementara -->
+            <div id="alertModalContent" class="bg-white w-[280px] rounded-[20px] p-6 flex flex-col items-center shadow-2xl transform scale-90 transition-transform duration-300"> <!-- Titik terang putih kemunculan Kotak informasi Alert di tengah -->
+                <div class="w-14 h-14 bg-red-100 rounded-full flex items-center justify-center mb-4"> <!-- Lingkaran hiasan cat merah jambu muda untuk membungkus ikon -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"> <!-- Gambar ikon Silang Segitiga Tanda Bahaya -->
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                </div>
+                <h3 class="text-[18px] font-bold text-black mb-2 text-center">Penuh</h3> <!-- Label error menampar kesadaran pengguna -->
+                <p class="text-[12px] font-medium text-gray-500 text-center mb-6 leading-relaxed">Maaf, blok parkir ini sudah penuh. Silakan pilih blok parkir yang lain!</p> <!-- Detail teguran halus agar menekan yang benar (Pindah blok lain) -->
+                <button onclick="closeAlertModal()" class="w-full bg-[#0141A3] hover:bg-blue-800 text-white font-bold py-2.5 rounded-[12px] text-[12px] transition-colors shadow-md active:scale-95">Mengerti</button> <!-- Pintu keluar kembali mematikan layar pop up ini ke kondisi layar semula -->
+            </div>
+        </div>
+
+    </div>
+
+    <!-- PUSAT KENDALI LOGIKA APLIKASI (JAVASCRIPT) -->
+    <script>
+        let selectedBlock = null; // Memori variabel untuk menangkap nama Blok Parkir mana yang sedang dicolok jari pengguna 
+        let selectedFloor = 'Lantai B1'; // Memori variabel melacak dia sedang ada di lantai penampang mana, Awalnya lantai paling dasar.
+
+        // Menunggu elemen bangunan HTML termuat sepenuhnya ke mesin peramban
+        document.addEventListener("DOMContentLoaded", () => {
+            // MENGHITUNG PENANGGALAN OTOMATIS
+            const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu']; // Daftar penerjemah nama hari
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des']; // Daftar penerjemah nama bulan
+            const d = new Date(); // Memanggil detektif jam waktu dari sistem HP
+            // Menyusun dan mencetak kalimat tanggal (Misal: Senin, 5 Nov 2024) ke teks informasi bagian Header Atas tadi.
+            document.getElementById('current-date').textContent = `${days[d.getDay()]}, ${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+
+            // MEMUAT IDENTITAS KENDARAAN YANG TADI DIPILIH DI HALAMAN SEBELUMNYA 
+            const vehicle = JSON.parse(localStorage.getItem('booking_vehicle')); // Menarik memori file bungkusan sisa halaman terdahulu dari lemari HP
+            if(vehicle) { // Jika ternyata orang tersebut beneran membawa memori info motor ke sini
+                document.getElementById('vehicle-name').textContent = vehicle.name; // Tulis ke Label Kotak Nama 
+                document.getElementById('vehicle-plate').textContent = vehicle.plate; // Tulis Ke Label Pelat Nomornya
+            }
+
+            // PERINTAHKAN MULAI SULAP MENAMPILKAN KARTU DAFTAR BLOK SESUAI TINGKATAN LANTAI AWAL!
+            renderBlocks(); // Panggil fungsi pelukis kartu blok!
+
+            // ==========================================
+            // KODE SULAP KUSUS AGAR MENU LANTAI DI BAWAH BISA DISERET/DIGESER PAKAI JARI DENGAN LICIN
+            // ==========================================
+            const slider = document.getElementById('lantai-container'); // Ambil palang wadah tombol lantai
+            let isDown = false; let startX; let scrollLeft; // Siapkan memori pencatatan arah tarikan sentuhan tangan/mouse
+            // Deteksi Jari Menempel Memencet
+            slider.addEventListener('mousedown', (e) => { isDown = true; slider.classList.add('active'); startX = e.pageX - slider.offsetLeft; scrollLeft = slider.scrollLeft; });
+            // Deteksi Jari Pergi menjauh 
+            slider.addEventListener('mouseleave', () => { isDown = false; slider.classList.remove('active'); });
+            // Deteksi Jari diangkat/Dilepas dari layar kaca
+            slider.addEventListener('mouseup', () => { isDown = false; slider.classList.remove('active'); });
+            // Deteksi Jari Bergeser Menyeret Kiri Kanan selama menempel memencet (Pemindahan Skrol Kordinat)
+            slider.addEventListener('mousemove', (e) => {
+                if (!isDown) return; // Jika tidak nekan, hentikan
+                e.preventDefault(); // Batalkan fungsi block text bawaan browser
+                const x = e.pageX - slider.offsetLeft; // Hitung sejauh mana perjalanan gesekan
+                slider.scrollLeft = scrollLeft - (x - startX) * 2; // Ubah sistem scroll bilahnya mengikuti arah tarikan dikalikan dua kali kelajuan kelicinannya.
+            });
+        });
+
+        // FUNGSI GANTI LANTAI JIKA SALAH SATU TOMBOL TINGKATAN DI BAWAH DIKLIK
+        function pilihLantaiMotor(element, namaLantai) {
+            const floorBtns = document.querySelectorAll('.floor-btn'); // Menjaring semua tombol lantai menjadi satu kantong penampungan
+            floorBtns.forEach(btn => btn.classList.add('opacity-50')); // Redupkan semua lampu tombolnya secara massal agar tampak mati 
+            element.classList.remove('opacity-50'); // Khusus bagian Tombol yang ini saja yang ditekan, matikan fungsi redup, yang bikin dia bersinar sendiri!
+
+            selectedFloor = namaLantai; // Menimpa ingatan memori komputer dari letak lantai lama ke tulisan lantai yg baru diklik (Misal dari B1 ke P2)
+            document.getElementById('floor-title').textContent = namaLantai; // Ganti Judul atas tengah lantai ke yang baru ini!
+
+            // PROSES RESET PERSIAPAN PINDAH ALAM
+            selectedBlock = null; // Menghapus ingatan nama blok yg pernah dipencet di lantai sebelah (Biar tidak curang kecampur)
+            const btn = document.getElementById('btn-lanjutkan'); // Cari si tombol "Lanjutkan"
+            btn.disabled = true; // Kunci Mati kembali kemampuan pencetan layarnya agar user milih slot lagi
+            btn.classList.add('bg-[#D9D9D9]'); // Pasangkan warna cat Kelabu Mati kusam ke tubuh tombol
+            btn.classList.remove('bg-[#0141A3]', 'hover:bg-blue-800', 'active:scale-95'); // Cabut stiker kemewahan warna Biru Menyala di badannya
+
+            renderBlocks(); // Tarik nafas, Panggil perintah ambil data ulang menggambar daftar blok di Gedung lantai yang ini saja!
+        }
+
+        // FUNGSI MEMUNCULKAN JENDELA PERINGATAN HITAM SAAT MELAKUKAN KESALAHAN PENCET BLOK MERAH (PENUH)
+        function tampilkanPesanPenuh() {
+            const modal = document.getElementById('alertModal'); // Rangkul Latar Peringatan
+            const modalContent = document.getElementById('alertModalContent'); // Rangkul Kotak Peringatannya
+            modal.classList.remove('hidden'); // Bangunkan dia dari mode kasat mata menjadi ada di dunia
+            modal.classList.add('flex'); // Pakai tipe Display memusat (Flex)
+            setTimeout(() => { // Kasih jeda waktu sedikit agar komputer gak grogi animasi CSS patah-patah
+                modal.classList.remove('opacity-0'); // Buang status Pudar (Transparansi)
+                modal.classList.add('opacity-100'); // Kembalikan ke Nyata Penuh (Muncul animasi fade)
+                modalContent.classList.remove('scale-90'); // Hilangkan kekerdilan badannya
+                modalContent.classList.add('scale-100'); // Besarkan normal ukurannya seperti efek Pop kaget
+            }, 10);
+        }
+
+        // FUNGSI MEMBUNUH/MENGHILANGKAN JENDELA PERINGATAN SAAT KLIK TOMBOL "MENGERTI"
+        function closeAlertModal() {
+            const modal = document.getElementById('alertModal');
+            const modalContent = document.getElementById('alertModalContent');
+            modal.classList.opacity-100; // Lepas sifat kemunculan padatnya
+            modal.classList.add('opacity-0'); // Pakai kembali jubah tembus pandang Pudar pelan-pelan
+            modalContent.classList.remove('scale-100'); // Cabut ukuran wajarnya
+            modalContent.classList.add('scale-90'); // Biarkan badannya menciut kempes
+            setTimeout(() => { // Tunggu hingga seluruh animasi menciut pudar kelar baru total...
+                modal.classList.add('hidden'); // Singkirkan sepenuhnya ke ranah Gaib
+                modal.classList.remove('flex'); // Bongkar strukturnya
+            }, 300); // 300 milisekon setara animasi CSS beraksi di atas kelarnya.
+        }
+
+        // FUNGSI PALING PENTING!: MENGHUBUNGI PELAYAN DATA BACKEND SERVER (SPRINGBOOT) & MENYULAP MENGGAMBAR KARTU-KARTU BLOK PARKIR MOTOR
+        async function renderBlocks() {
+            const container = document.getElementById('block-container'); // Cari papan papan area lapang blok
+            container.innerHTML = '<p class="text-center text-sm text-gray-400 mt-4">Sinkronisasi Database...</p>'; // Tutupi dengan pesan loading sedang berusaha berkhabar ke Server
+            
+            try {
+                // KIRIM MERPATI MINTA INFO BLOK LANTAI!
+                // Mengirim kurir HTTP ngetok gerbang API pelayan BackEnd, dengan membawa nama tingkat gedung sebagai kode parameter.  (Fungsi encodeURIComponent agar huruf spasi lantai tidak bikin sistem mabuk)
+                const response = await fetch(`/api/parkir/slots/motor/1/${encodeURIComponent(selectedFloor)}`);
+                const result = await response.json(); // Menerima bingkisan format peta motor dari pelayan pelabuhan Server
+                container.innerHTML = ''; // Oke Data dapet! Kosongkan teks loading abu-abu yang ganggu tadi.
+                
+                if (result.status === 'success' && result.data.length > 0) { // Bila Jawaban API nya Sukses Mantap dan isinya tidak kosong melompong (Ada blok yg dibongkar)
+                    result.data.forEach(b => { // Baca setiap 1 Blok Area Motor (looping/diulangi mesin sebanyak blok tersedia)
+                        
+                        const terisi = b.total - b.tersedia; // Hitung kalkulasi angka matematika (Total Kapasitas Blok DIKURANGI Slot yang Nganggur) = Dapatlah Angka Motor Nyata yang Terparkir
+                        const isFull = b.tersedia === 0; // Apakah slot kosongnya = 0? Jika Ya, tandai lapor sebagai Penuh (Full).
+
+                        if (isFull) { // Uji Kasus A: JIKA TERNYATA STATUS DARI BLOK INI SUDAH DI-BOOKING BANYAK ORANG / PENUH (KOTAK MERAH)
+                            // Menyulap (Injection) kode HTML per Kartu Blok ke Papan, disetal pasang warna latar merah terang pucat (bg-[#FFE5E5]) dan ada efek memanggil peringatan dilarang mengklik (tampilkanPesanPenuh()) kalau nekat memencet.
+                            container.innerHTML += `
+                            <div onclick="tampilkanPesanPenuh()" class="block-card w-full h-[50px] bg-[#FFE5E5] border border-[#DC3545] rounded-[15px] flex justify-between items-center px-4 cursor-not-allowed shadow-sm opacity-70">
+                                <span class="font-semibold text-[14px] text-[#DC3545]">${b.blok}</span> <!-- Tulis nama Blok (Cth: Blok A) di Kiri -->
+                                <div class="flex items-center gap-1"><span class="font-semibold text-[10px] text-[#DC3545]">Penuh</span><span class="font-semibold text-[10px] text-[#DC3545]">${terisi}/${b.total}</span></div> <!-- Tulis Angka Kapasitas (Cth: 20/20) di Kanan -->
+                            </div>`;
+                        } else { // Uji Kasus B: JIKA MASIH ADA SISA KAPASITAS / LAPANG (KOTAK PUTIH-ABU NORMAL)
+                            // Menyulap (Injection) kode per Kartu Blok di setel warna kalem (bg-[#F5F5F5]) dan memperbolehkan di klik normal masuk memanggil 'pilihBlokMotor()'.
+                            container.innerHTML += `
+                            <div onclick="pilihBlokMotor(this, '${b.blok}')" class="block-card w-full h-[50px] bg-[#F5F5F5] border border-[#D9D9D9] rounded-[15px] flex justify-between items-center px-4 cursor-pointer hover:bg-gray-100 shadow-sm">
+                                <span class="font-semibold text-[14px] text-black">${b.blok}</span> <!-- Tulis nama Blok (Cth: Blok B) di Kiri -->
+                                <div class="flex items-center gap-1"><span class="font-semibold text-[10px] text-black">Terisi</span><span class="font-semibold text-[10px] text-black">${terisi}/${b.total}</span></div> <!-- Tulis Angka Kapasitas (Cth: 5/20) di Kanan -->
+                            </div>`;
+                        }
+                    });
+                } else { // JIKA BACKEND BILANG "KOSONG/BELUM ADA RANCANGAN BLOK MOTOR DI LANTAI ITU"
+                    container.innerHTML = '<p class="text-center text-sm text-gray-400 mt-4">Tidak ada data blok.</p>'; // Tulis keluh kesah
+                }
+            } catch (error) { // JIKA TERJADI KIAMAT INTERNET SAAT KURIR API NYA DI JALAN
+                container.innerHTML = '<p class="text-center text-sm text-red-500 mt-4">Gagal terhubung ke Database Server.</p>'; // Munculkan sinyal merah
+            }
+        }
+
+        // FUNGSI GANTI WARNA KOTAK ABU MENJADI BIRU LAUT BILA DISENTUH JARI PENGGUNA YANG INGIN MEMBOOKING
+        function pilihBlokMotor(element, blockName) {
+            // Pengaman darurat! Tolak klik apabila kebetulan kotaknya itu adalah Kotak Penuh Dilarang / Cursor-Not-Allowed (Antisipasi celah bug)
+            if(element.classList.contains('cursor-not-allowed')) return;
+
+            const allBlocks = document.querySelectorAll('.block-card'); // Sedot seluruh kartu-kartu blok motor yang ada di layar
+            allBlocks.forEach(block => { // Telusuri setiap bijinya satu-satu dalam gerak lambat...
+                block.classList.remove('selected'); // Copot SEMUA Pakaian status Pilihan (Selected css) dari kartu manapun agar bersih semua.
+            });
+            element.classList.add('selected'); // Pakaikan Pakaian status 'selected' biru terang KHUSUS HANYA UNTUK kartu yang baru aja ini disentuh/diklik!
+
+            selectedBlock = blockName; // Rekam Nama Blok pilihan ini ke dalam ingat memori Variabel Global kita (Cth: Blok C)
+
+            // Karena kita berhasil memilih tempat blok yang SAH, maka Aktifkan / Nyalakan Tombol Raksasa Lanjut di ujung bawah layar
+            const btn = document.getElementById('btn-lanjutkan');
+            btn.disabled = false; // Buka Gemboknya, perbolehkan di sentuh klik.
+            btn.classList.remove('bg-[#D9D9D9]'); // Kupas warna Kusam Bisu Abal-abal
+            btn.classList.add('bg-[#0141A3]', 'hover:bg-blue-800', 'active:scale-95'); // Lulurkan warna cat kebanggaan Biru Elektrik Nyala Berani sebagai tanda bisa dipencet melangkah pergi!
+        }
+
+        // FUNGSI EKSEKUSI KLIK TOMBOL "LANJUT PEMESANAN" BIRU BAWAH KE LAMAN PEMBAYARAN KASIR
+        function lanjutkan() {
+            if(selectedBlock) { // Pengecekan Akhir pastikan kalau beneran dianya milih blok tanpa nipu kode
+                localStorage.setItem('booking_lantai', selectedFloor); // Titip simpan Nama Tingkat Lantainya di laci Lokal Memori HP (Browser) untuk dibawa lompat ke lembaran kasir Checkout
+                localStorage.setItem('booking_slot', selectedBlock); // Titip simpan Nama Blok lahannya juga.
+                window.location.href = "/ringkasan-pesanan"; // Pindah Pintu secara paksa Lompat ke Lembaran Transaksi Ringkasan Pesanan.
+            }
+        }
+    </script>
+</body>
+</html>

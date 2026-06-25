@@ -1,0 +1,77 @@
+<!DOCTYPE html> <!-- Deklarasi bahwa ini adalah dokumen HTML5 -->
+<html lang="id"> <!-- Elemen akar halaman, bahasa Indonesia -->
+<head> <!-- Bagian kepala halaman — berisi pengaturan dan sumber daya -->
+    <meta charset="UTF-8"> <!-- Mengatur karakter encoding ke UTF-8 agar teks bahasa Indonesia tampil benar -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"> <!-- Mengatur tampilan agar menyesuaikan layar HP, tanpa zoom -->
+    <meta name="theme-color" content="#1A73E8"> <!-- Warna tema browser di HP Android -->
+    <meta name="apple-mobile-web-app-capable" content="yes"> <!-- Mengizinkan halaman ini digunakan sebagai web app di iPhone -->
+    
+    <title>Parkirin - Onboarding 1</title> <!-- Judul tab browser -->
+    <link rel="icon" href="/img/favicon.png" type="image/png"> <!-- Ikon kecil yang muncul di tab browser -->
+    
+    <script src="https://cdn.tailwindcss.com"></script> <!-- Mengimpor Tailwind CSS dari internet untuk membuat tampilan -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet"> <!-- Mengimpor font Montserrat dari Google Fonts -->
+    
+    <style> 
+        body {
+            background-color: #1A73E8; /* Warna latar belakang biru utama */
+            background-image: radial-gradient(circle at 10% 20%, rgba(172, 198, 255, 0.2) 0%, transparent 40%), /* Efek gradien cahaya di kiri atas */
+                              radial-gradient(circle at 90% 80%, rgba(126, 171, 255, 0.2) 0%, transparent 40%); /* Efek gradien cahaya di kanan bawah */
+            font-family: 'Montserrat', sans-serif; /* Gunakan font Montserrat untuk semua teks */
+            overscroll-behavior-y: none; /* Mencegah halaman bergulir berlebih saat ditarik */
+        }
+        
+        /* Animasi masuk perlahan */
+        .slide-up {
+            animation: slideUp 0.6s ease-out forwards; /* Terapkan animasi geser ke atas selama 0.6 detik */
+        }
+        @keyframes slideUp { /* Definisi animasi geser ke atas */
+            from { opacity: 0; transform: translateY(20px); } /* Mulai dari bawah dan transparan */
+            to { opacity: 1; transform: translateY(0); } /* Berakhir di posisi normal dan terlihat */
+        }
+    </style>
+</head>
+<body class="flex justify-center min-h-screen text-gray-800 antialiased"> <!-- Badan halaman: tata letak tengah, tinggi minimal penuh layar -->
+
+    <!-- WADAH UTAMA HALAMAN ONBOARDING 1 -->
+    <div class="w-full max-w-[402px] flex flex-col min-h-screen relative px-4 py-8"> <!-- Wadah konten: lebar maksimal 402px, padding horizontal dan vertikal -->
+        
+        <!-- LOGO PARKIRIN -->
+        <div class="flex justify-center items-center mb-6 mt-4 slide-up"> <!-- Wadah logo dengan animasi slide-up -->
+            <img src=".//img/LOGO.png" alt="Logo Parkirin" class="h-9 object-contain drop-shadow-md"> <!-- Logo Parkirin dengan bayangan -->
+        </div>
+
+        <!-- KARTU KONTEN ONBOARDING -->
+        <div class="bg-[#EAF8FC] rounded-[15px] p-6 shadow-xl flex-grow flex flex-col items-center text-center relative slide-up" style="animation-delay: 0.1s;"> <!-- Kartu biru muda dengan animasi terlambat 0.1 detik -->
+            
+            <!-- JUDUL SAMBUTAN -->
+            <h1 class="text-[20px] font-bold text-black mt-2 mb-8 leading-snug"> <!-- Judul utama halaman onboarding pertama -->
+                Selamat Datang <br> di PARKIRIN <!-- Baris pertama dan kedua judul -->
+            </h1>
+
+            <!-- ILUSTRASI ONBOARDING -->
+            <img src=".//img/onboarding1.png" alt="Ilustrasi Parkir" class="w-full max-w-[280px] object-contain mb-8 drop-shadow-sm"> <!-- Gambar ilustrasi parkir dengan lebar maksimal 280px -->
+
+            <!-- DESKRIPSI FITUR -->
+            <p class="text-[14px] font-medium text-black leading-relaxed px-1 mb-8"> <!-- Paragraf penjelasan fitur aplikasi -->
+                Ucapkan selamat tinggal pada stres mencari parkir. Temukan slot kosong, pesan, dan bayar hanya dalam beberapa ketukan <!-- Teks deskripsi yang menjelaskan manfaat utama aplikasi -->
+            </p>
+
+            <!-- INDIKATOR HALAMAN (titik navigasi) -->
+            <div class="flex gap-2.5 mt-auto mb-8 justify-center items-center"> <!-- Wadah indikator titik halaman -->
+                <div class="w-7 h-[10px] bg-[#0064F0] rounded-full transition-all"></div> <!-- Titik biru panjang = halaman aktif (halaman 1) -->
+                <div class="w-[10px] h-[10px] bg-[#D9D9D9] rounded-full transition-all"></div> <!-- Titik abu-abu bulat = halaman tidak aktif (halaman 2) -->
+            </div>
+
+            <!-- TOMBOL LANJUT -->
+            <a href="/onboarding-2" class="w-full"> <!-- Tautan ke halaman onboarding kedua -->
+                <button class="w-full bg-[#0141A3] hover:bg-blue-900 text-white font-semibold text-[13px] h-[48px] rounded-[10px] shadow-md transition-all active:scale-95"> <!-- Tombol lanjut ke halaman berikutnya -->
+                    Lanjut
+                </button>
+            </a>
+
+        </div>
+    </div>
+
+</body>
+</html>

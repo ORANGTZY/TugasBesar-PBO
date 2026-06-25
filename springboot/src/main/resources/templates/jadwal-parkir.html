@@ -1,0 +1,175 @@
+<!DOCTYPE html> <!-- Deklarasi bahwa ini adalah dokumen HTML5 -->
+<html lang="id"> <!-- Elemen akar halaman, menetapkan bahasa Indonesia -->
+<head> <!-- Bagian kepala halaman (metadata) -->
+    <meta charset="UTF-8"> <!-- Mengatur standar pengkodean karakter ke UTF-8 (mendukung teks Internasional) -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"> <!-- Memastikan desain responsif pas di HP dan menonaktifkan fitur zoom/cubit -->
+    <meta name="theme-color" content="#F5F5F5"> <!-- Mengatur warna bingkai peramban Android menjadi abu-abu terang -->
+    
+    <title>Parkirin - Ringkasan Waktu</title> <!-- Teks judul pada tab peramban -->
+    <link rel="icon" href="/img/favicon.png" type="image/png"> <!-- Memasang gambar ikon kecil di sebelah judul tab -->
+
+    <script src="https://cdn.tailwindcss.com"></script> <!-- Menyambungkan framework desain antarmuka Tailwind CSS dari internet -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet"> <!-- Mengimpor huruf cantik "Montserrat" beraneka ketebalan -->
+    
+    <style> 
+        body { 
+            font-family: 'Montserrat', sans-serif; /* Menerapkan jenis huruf (font) Montserrat ke seluruh teks */
+            background-color: #F1F1F1; /* Memberi warna cat latar belakang dasar aplikasi abu-abu terang */
+            margin: 0; /* Menghilangkan jarak (margin) putih bawaan browser di tepi layar */
+            overscroll-behavior-y: none; /* Mencegah layar mental memantul saat mentok ditarik di peramban HP */
+            user-select: none; /* Menonaktifkan kemampuan pengguna untuk menyorot atau mengeblok teks */
+        }
+        
+        .hide-scrollbar::-webkit-scrollbar { display: none; } /* Menyembunyikan palang gulir (scrollbar) untuk Chrome dan Safari */
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; } /* Menyembunyikan palang gulir untuk IE dan Firefox */
+        
+        .slide-in-right { animation: slideInRight 0.3s ease-out forwards; } /* Memanggil animasi pergeseran masuk dari samping kanan (0.3 detik) */
+        @keyframes slideInRight { /* Rangkaian langkah (keyframe) dari animasi geser masuk kanan */
+            from { opacity: 0; transform: translateX(20px); } /* Awal: Tak terlihat (tembus pandang) dan tergeser 20 piksel ke kanan */
+            to { opacity: 1; transform: translateX(0); } /* Akhir: Terlihat jelas (padat) dan kembali ke tengah sempurna */
+        }
+
+        .pulse-text { animation: pulse 2s infinite; } /* Efek tulisan berkedip layaknya detak jantung (pulse) perlahan berulang-ulang */
+        @keyframes pulse { /* Aturan berkedip (Pulse) */
+            0% { opacity: 1; } /* Menyala penuh */
+            50% { opacity: 0.5; } /* Meredup setengah */
+            100% { opacity: 1; } /* Kembali menyala penuh */
+        }
+    </style>
+</head>
+<body class="flex justify-center h-screen text-gray-800 antialiased bg-gray-200 overflow-hidden"> <!-- Badan Utama: Layar diposisikan di tengah, tidak bisa bergeser ke pinggir, warna teks abu gelap -->
+
+    <!-- KOTAK WADAH APLIKASI UTAMA BERBENTUK HP -->
+    <div class="w-full max-w-[402px] bg-[#F1F1F1] h-full relative flex flex-col shadow-2xl overflow-hidden slide-in-right"> <!-- Batasan layar selebar layar HP rata-rata, ada efek bayangan tebal -->
+        
+        <!-- BAGIAN HEADER ATAS (NAVIGASI) -->
+        <div class="w-full h-[120px] bg-[#F5F5F5] pt-12 px-4 flex items-center justify-between shadow-sm z-20 shrink-0"> <!-- Kotak bar bagian atas layar warna putih kotor sedikit berbayang -->
+            <div class="flex items-center"> <!-- Area khusus untuk mengatur barisan ikon kembali dan teks berdampingan -->
+                <!-- TOMBOL KEMBALI KE HALAMAN SEBELUMNYA -->
+                <a href="javascript:history.back()" class="flex items-center text-[#0064F0] hover:opacity-80 active:scale-95 transition-all cursor-pointer"> <!-- Tombol panah kembali (biru), bereaksi memudar dan mengecil sedikit jika ditekan -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2.5"> <!-- Ikon Panah melengkung ke kiri -->
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" /> <!-- Garis panah -->
+                    </svg>
+                </a>
+                <span class="ml-2 font-bold text-[20px] text-[#0064F0]">Konfirmasi Waktu</span> <!-- Judul utama Header berwarna biru aplikasi Parkirin -->
+            </div>
+            <!-- TOMBOL IKON MENU / PILIHAN LAIN DI KANAN ATAS -->
+            <button class="text-[#0062E6] hover:opacity-70 transition-all cursor-pointer p-2"> <!-- Tombol ikon garis tiga di pojok kanan -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"> <!-- Ikon burger menu (tiga garis lurus mendatar) -->
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" /> <!-- Garis-garis Menu Burger -->
+                </svg>
+            </button>
+        </div>
+
+        <!-- AREA KONTEN ISI HALAMAN (BISA DI SCROLL KE BAWAH) -->
+        <div class="flex-grow overflow-y-auto hide-scrollbar z-10 flex flex-col px-4 pt-6 pb-28 relative"> <!-- Wadah bergulir penampung informasi parkir -->
+            
+            <!-- KOTAK INFO "BAYAR DI AKHIR" (Warna Biru Muda) -->
+            <div class="w-full bg-[#E5F6FD] border border-[#00D1FF] rounded-[10px] p-4 flex gap-3 shadow-sm mb-6"> <!-- Pengumuman/Highlight tentang aturan pembayaran -->
+                <!-- IKON DOMPET / INFO -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-[#0064F0] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"> <!-- Ikon dompet kantong biru tua -->
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /> <!-- Pola Garis Dompet/Jam -->
+                </svg>
+                <!-- TEKS INFO KANAN IKON -->
+                <div> <!-- Bagian Teks Judul dan Paragraf -->
+                    <h3 class="font-bold text-[13px] text-[#0141A3] mb-1">Bayar di Akhir</h3> <!-- Subjudul penjelasan sistem -->
+                    <p class="text-[11px] font-medium text-black leading-relaxed"> <!-- Penjabaran detail sistem bayar -->
+                        Tidak perlu menentukan durasi parkir. Biaya akan dihitung saat Anda keluar berdasarkan lama parkir aktual Anda. <!-- Teks isi informasi -->
+                    </p>
+                </div>
+            </div>
+
+            <!-- KOTAK BESAR "BATAS WAKTU KEDATANGAN" TIKET (Warna Putih Kotak Tengah) -->
+            <div class="w-full bg-[#FFFFFF] rounded-[15px] shadow-sm relative flex flex-col items-center justify-center overflow-hidden py-8 mb-6 border-b-4 border-[#206DF1]"> <!-- Kartu informasi jam kedatangan yang penting -->
+                <span class="text-[12px] font-bold text-[#3F465C] mb-4 z-10 tracking-widest uppercase">Batas Waktu Kedatangan</span> <!-- Tulisan Penanda Label Jam Atas -->
+                
+                <!-- ANGKA JAM DIGITAL YANG BESAR -->
+                <div class="flex items-end z-10"> <!-- Mengumpulkan jam dan format AM/PM -->
+                    <span id="display-time-limit" class="text-[50px] font-extrabold text-black leading-none tracking-tight">--:--</span> <!-- Angka Jam Digital (Akan disuntik isinya dari JavaScript nanti) -->
+                    <span id="display-ampm" class="text-[16px] font-bold text-black ml-2 mb-2">--</span> <!-- Status siang/malam (AM/PM) -->
+                </div>
+                
+                <!-- PERINGATAN HANGUS (Warna Merah) -->
+                <div class="bg-[#FFE5E5] px-4 py-1.5 rounded-full mt-4 z-10 flex items-center gap-1.5"> <!-- Pil Kapsul Peringatan Warna Latar Merah Pudar -->
+                    <div class="w-2 h-2 bg-[#FF0B0B] rounded-full pulse-text"></div> <!-- Titik Lampu Indikator Merah Berkedip Animasi (Pulse) -->
+                    <span class="text-[10px] font-semibold text-[#FF0B0B]">Tiket hangus jika melewati batas waktu</span> <!-- Pesan hukuman keterlambatan -->
+                </div>
+
+                <!-- HIASAN AIRMARK JAM SUPER BESAR TRANSLUCENT (DI POJOK KANAN BAWAH KARTU) -->
+                <div class="absolute right-[-20px] bottom-[-20px] text-[#DCDDEA] opacity-30 z-0 pointer-events-none"> <!-- Ikon background transparan memudar -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-40 w-40" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"> <!-- Ikon Jam Raksasa -->
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /> <!-- Lingkaran Jam -->
+                    </svg>
+                </div>
+            </div>
+
+            <!-- KOTAK RINCIAN DAFTAR HARGA PARKIR (Warna Abu Abu) -->
+            <div class="w-full mx-auto bg-[#D9D9D9] rounded-[10px] shadow-sm relative flex flex-col py-5 px-6 overflow-hidden"> <!-- Wadah info tarif parkir -->
+                <span class="text-[13px] font-bold text-[#3F465C] mb-4 z-10 tracking-wide text-center">INFORMASI TARIF PARKIR</span> <!-- Judul tabel harga -->
+                
+                <!-- RINCIAN HARGA MOBIL -->
+                <div class="flex justify-between items-start z-10 w-full mb-4 border-b border-gray-400 pb-4"> <!-- Bagian biaya Mobil (Diberi garis batas bawah) -->
+                    <div class="flex flex-col"> <!-- Blok teks harga Mobil -->
+                        <span class="text-[13px] font-bold text-black">MOBIL</span> <!-- Judul Kategori Kendaraan: MOBIL -->
+                        <span class="text-[10px] font-medium text-black mt-1">1 Jam Pertama : Rp 10.000</span> <!-- Harga 1 Jam Awal Mobil -->
+                        <span class="text-[10px] font-medium text-black mt-0.5">Jam Berikutnya : Rp 2.000 / Jam</span> <!-- Kelipatan Denda/Jam Mobil -->
+                    </div>
+                </div>
+
+                <!-- RINCIAN HARGA MOTOR -->
+                <div class="flex justify-between items-start z-10 w-full"> <!-- Bagian biaya Motor -->
+                    <div class="flex flex-col"> <!-- Blok teks harga Motor -->
+                        <span class="text-[13px] font-bold text-black">MOTOR</span> <!-- Judul Kategori Kendaraan: MOTOR -->
+                        <span class="text-[10px] font-medium text-black mt-1">1 Jam Pertama : Rp 3.000</span> <!-- Harga 1 Jam Awal Motor -->
+                        <span class="text-[10px] font-medium text-black mt-0.5">Jam Berikutnya : Rp 1.000 / Jam</span> <!-- Kelipatan Denda/Jam Motor -->
+                    </div>
+                </div>
+
+                <!-- HIASAN AIRMARK PAPAN 'P' PARKIR TRANSLUCENT (DI POJOK KANAN BAWAH) -->
+                <div class="absolute right-[-10px] bottom-[-10px] text-[#DCDDEA] opacity-40 z-0 pointer-events-none"> <!-- Latar belakang gambar papan P samar-samar -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-32 w-32" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"> <!-- Ikon Papan -->
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /> <!-- Bentuk papan -->
+                        <text x="12" y="16" font-family="Montserrat" font-weight="bold" font-size="8" text-anchor="middle" fill="currentColor">P</text> <!-- Huruf 'P' besar di tengah Ikon -->
+                    </svg>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- BAGIAN BAWAH FOOTER (TOMBOL AKSI UTAMA) -->
+        <div class="absolute bottom-0 w-full h-[89px] bg-[#D6D8D9] flex flex-col justify-center px-4 z-20"> <!-- Panel melekat menempel pada ujung layar bawah -->
+            <!-- TOMBOL PESAN TIKET MASUK -->
+            <a href="#" class="w-full h-[55px] bg-[#0141A3] hover:bg-blue-900 rounded-[10px] flex items-center justify-center transition-all active:scale-95 shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1)] block"> <!-- Tombol besar aksi cetak tiket warna biru tua solid -->
+                <span class="text-white font-semibold text-[13px] tracking-wide">Dapatkan Tiket Masuk</span> <!-- Teks instruksi di dalam Tombol Biru -->
+            </a>
+        </div>
+
+    </div>
+
+    <!-- PUSAT PENGENDALI OTOMATISASI DAN LOGIKA APLIKASI MENGGUNAKAN JAVASCRIPT -->
+    <script>
+        // FUNGSI UNTUK MENGUBAH TAMPILAN JAM MENJADI FORMAT AM DAN PM
+        function format12Hour(dateObj) { 
+            let h = dateObj.getHours(); // Mengambil nilai Jam (0 sampai 23) dari mesin sistem perangkat 
+            let m = dateObj.getMinutes().toString().padStart(2, '0'); // Mengambil nilai Menit, dan menambahkan angka "0" di depannya jika hanya 1 digit (Contoh: "9" jadi "09")
+            let ampm = h >= 12 ? 'PM' : 'AM'; // Menentukan apakah waktu sudah melewati jam 12 Siang (PM) atau masih pagi (AM)
+            h = h % 12 || 12; // Menurunkan sistem 24-jam menjadi 12-jam (Contoh: Jam 14 akan diubah menjadi Jam 2)
+            return { // Mengirim kembali hasil formatan jam beserta penunjuk AM/PM-nya 
+                time: `${h.toString().padStart(2, '0')}:${m}`, // Menyatukan susunan struktur teks jam dan menit (misal: "02:09")
+                ampm: ampm // Mengirim tulisan "AM" atau "PM" untuk ditampilkan
+            };
+        }
+
+        // FUNGSI UTAMA YANG AKAN DIJALANKAN KETIKA WEB SELESAI DIBUKA
+        document.addEventListener("DOMContentLoaded", () => { 
+            const now = new Date(); // Mencatat / memotret waktu sistem peramban saat ini berada
+            now.setHours(now.getHours() + 2); // Menambahkan 2 jam ke depan dari waktu sekarang (Batas durasi maksimum parkir kedatangan)
+
+            const formattedLimit = format12Hour(now); // Memasukkan waktu yang telah ditambah tadi ke mesin pengubah format jam AM/PM di atas
+
+            document.getElementById('display-time-limit').textContent = formattedLimit.time; // Memasang teks struktur waktu tadi menggantikan bagian angka besar putus "--:--" di HTML Layar atas
+            document.getElementById('display-ampm').textContent = formattedLimit.ampm; // Memasang keterangan teks 'AM' atau 'PM' menggantikan ikon strip "--" di layar 
+        });
+    </script>
+</body>
+</html>

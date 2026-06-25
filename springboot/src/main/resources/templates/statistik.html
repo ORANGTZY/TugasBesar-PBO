@@ -1,0 +1,374 @@
+<!DOCTYPE html> <!-- Pendefinisian bahwa halaman web ini dibangun menggunakan standar HTML versi 5 -->
+<html lang="id"> <!-- Pembungkus terluar halaman dengan deklarasi pengaturan bahasa Indonesia -->
+<head> <!-- Bagian hulu dokumen untuk menaruh pengaturan mesin peramban (browser) dan tautan referensi -->
+    <meta charset="UTF-8"> <!-- Standar pengkodean tulisan huruf agar dapat membaca berbagai simbol internasional secara normal (UTF-8) -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"> <!-- Perintah membatasi tampilan selebar HP dan melarang fitur zoom cubit di layar sentuh -->
+    <meta name="theme-color" content="#F5F5F5"> <!-- Perintah mengganti warna pita atas (Status Bar) pada browser HP Android menjadi abu muda -->
+    
+    <title>Parkirin - Statistik Pengguna</title> <!-- Teks tebal yang tertera di label Tab Web Browser -->
+    <link rel="icon" href="/img/favicon.png" type="image/png"> <!-- Menyisipkan foto mungil logo aplikasi disamping kiri judul tab -->
+
+    <script src="https://cdn.tailwindcss.com"></script> <!-- Mengakses alat pengatur desain gaya instan (Tailwind CSS) langsung dari sumber online -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet"> <!-- Mengunduh font tulisan modis 'Montserrat' buatan Google Fonts -->
+    
+    <style> 
+        body { font-family: 'Montserrat', sans-serif; background-color: #F1F1F1; margin: 0; overscroll-behavior-y: none; } /* Semua teks gunakan Montserrat, latar luar diset abu pucat, tepian layar dirapatkan, dan efek layar mental khas Android dinonaktifkan */
+        .hide-scrollbar::-webkit-scrollbar { display: none; } /* Trik sakti membuang penampakan garis gulir (scrollbar) di Chrome/Safari */
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; } /* Trik membuang penampakan garis gulir di Firefox/Edge */
+        .slide-in-right { animation: slideInRight 0.3s ease-out forwards; } /* Perintah panggil memutar animasi masuk dari kanan bernama slideInRight */
+        @keyframes slideInRight { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } } /* Resep animasi masuk: Dari kanan samar-samar menuju ke tengah layar dengan wujud yang padat */
+    </style>
+</head>
+<body class="flex justify-center h-screen text-gray-800 antialiased bg-gray-200 overflow-hidden"> <!-- Latar utama laptop digelapkan, dan membungkus wujud aplikasi secara proporsional presisi di titik tengah layar -->
+
+    <!-- KERANGKA VISUAL PONSEL (Wadah Utama Aplikasi) -->
+    <div class="w-full max-w-[402px] bg-[#F5F5F5] h-full relative flex flex-col shadow-2xl overflow-hidden slide-in-right"> <!-- Kotak keras selebar HP yang punya batas mutlak sehingga isi tak tumpah ke luar -->
+        
+        <!-- BAGIAN 1: BAR KEPALA (Header Aplikasi) -->
+        <div class="w-full h-[100px] pt-12 px-6 flex items-center justify-between shrink-0 bg-[#F5F5F5]"> <!-- Papan kontrol atas, tebal dan statis -->
+            <div class="flex items-center"> <!-- Area Sisi Kiri (Tombol & Judul) -->
+                <!-- TOMBOL KEMBALI MUNDUR KE PROFIL -->
+                <a href="/profil" class="flex items-center text-[#0064F0] hover:opacity-80 active:scale-95 transition-all cursor-pointer"> <!-- Link berupa tanda Panah dengan efek transisi kelunturan warna -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2.5"> <!-- Bentuk lengkung Panah Kiri -->
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+                    </svg>
+                </a>
+                <span class="ml-2 font-bold text-[20px] text-[#0064F0]">Statistik Pengguna</span> <!-- Tulisan Penanda "Statistik Pengguna" -->
+            </div>
+            <!-- TOMBOL IKON BANTUAN/BAGIKAN (Sisi Kanan Atas) -->
+            <button class="text-[#0064F0] active:scale-95 transition-transform"> <!-- Tombol mati sekedar hiasan gir gerigi -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"> <!-- Gambar Garis Gear -->
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+            </button>
+        </div>
+
+        <!-- BAGIAN 2: RUANG ISI KONTEN (Papan Gulir ke bawah) -->
+        <div class="flex-grow overflow-y-auto hide-scrollbar flex flex-col pt-2 pb-10 px-6 gap-6 relative"> <!-- Tempat penampung data-data grafik, punya kemampuan bisa di scroll -->
+            
+            <!-- BLOK KARTU 1 (BESAR): TOTAL PENGELUARAN KEUANGAN (Bulan Ini) -->
+            <div class="w-full bg-[#0062E6] rounded-[10px] p-5 relative overflow-hidden shadow-md"> <!-- Kotak biru gelap tebal mendatar -->
+                <div class="relative z-10 text-white"> <!-- Bungkus teks agar melayang di atas hiasan grafis -->
+                    <p class="font-semibold text-[14px] mb-2 opacity-90">Total Pengeluaran Bulanan</p> <!-- Subjudul Atas -->
+                    <h2 id="total-pengeluaran" class="font-bold text-[32px] leading-tight mb-6">Rp 0</h2> <!-- Tulisan Uang Raksasa (Diubah oleh JavaScript dari database riwayat tiket) -->
+                    
+                    <div class="flex items-center gap-1.5 opacity-90"> <!-- Barisan Trend Naik / Turun Pengeluaran -->
+                        <svg id="trend-icon" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"> <!-- Panah Ikon naik -->
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                        </svg>
+                        <p id="trend-text" class="font-normal text-[11px]">Menghitung data...</p> <!-- Informasi Persentase kalkulasi bulan lalu VS bulan ini -->
+                    </div>
+                </div>
+                <!-- Hiasan Grafik Latar Belakang Kotak Biru (Ikon Database Pudar) -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="absolute -right-4 -bottom-4 w-32 h-32 text-white opacity-20" fill="currentColor" viewBox="0 0 24 24"> <!-- Ditempatkan tenggelam di ujung bawah kanan -->
+                    <path d="M4 6h16a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V8a2 2 0 012-2zm0 2v8h16V8H4zm4 4a4 4 0 118 0 4 4 0 01-8 0zm2 0a2 2 0 104 0 2 2 0 00-4 0z" />
+                </svg>
+            </div>
+
+            <!-- BLOK KARTU 2 & 3 (KEMBAR): TOTAL DURASI WAKTU & FREKUENSI SESI -->
+            <div class="flex gap-4 w-full h-[130px]"> <!-- Pembagi baris sejajar horisontal -->
+                
+                <!-- KOTAK KIRI (Kalkulasi Jam Bermukim/Durasi di area Parkir) -->
+                <div class="flex-1 bg-[#D9D9D9] rounded-[10px] p-4 flex flex-col justify-between shadow-sm"> <!-- Kotak Abu 1 -->
+                    <!-- Ikon Bulat -->
+                    <div class="w-8 h-8 bg-[#00D1FF] rounded-full flex items-center justify-center text-white">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"> <!-- Ikon Jam Analog -->
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <!-- Ruang Tulisan Info -->
+                    <div>
+                        <p class="font-normal text-[12px] text-gray-600 mb-1">Rata-rata Durasi</p> <!-- Subjudul -->
+                        <p class="font-bold text-[22px] text-black leading-none flex items-baseline gap-1"> <!-- Barisan gabungan Angka dan Teks -->
+                            <span id="rata-durasi">00:00</span> <!-- Area Angka Aktual Waktu (Bakal diganti JS) -->
+                            <span id="label-durasi" class="text-[10px] font-semibold text-gray-500">Jam / Minggu</span> <!-- Konteks Satuan Waktu Filter -->
+                        </p>
+                    </div>
+                </div>
+
+                <!-- KOTAK KANAN (Kalkulasi Berapa Kali Kunjungan) -->
+                <div class="flex-1 bg-[#D9D9D9] rounded-[10px] p-4 flex flex-col justify-between shadow-sm"> <!-- Kotak Abu 2 -->
+                    <!-- Ikon Bulat -->
+                    <div class="w-8 h-8 bg-[#00D1FF] rounded-full flex items-center justify-center text-white font-bold text-lg">P</div> <!-- Huruf P untuk Parkir -->
+                    <!-- Ruang Tulisan Info -->
+                    <div>
+                        <p class="font-normal text-[12px] text-gray-600 mb-1">Total Sesi Parkir</p> <!-- Subjudul -->
+                        <p class="font-bold text-[22px] text-black leading-none flex items-baseline gap-1"> <!-- Barisan Teks -->
+                            <span id="total-sesi">0</span> <!-- Area Angka Total Pergi ke Mal (Diganti JS) -->
+                            <span class="text-[14px] font-semibold">Sesi</span> <!-- Satuan Kunjungan -->
+                            <span id="label-sesi" class="text-[10px] font-semibold text-gray-500">/ Minggu</span> <!-- Konteks Rentang Waktu (Misal Per minggu/Per Bulan) -->
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- BLOK 4: KOTAK GRAFIK BATANG (Bar Chart Diagram) -->
+            <div class="w-full bg-white rounded-[10px] p-5 shadow-sm relative mt-2"> <!-- Area Kanvas Putih besar untuk menggambar diagram secara manual pakai CSS -->
+                
+                <div class="flex justify-between items-center mb-8"> <!-- Baris Judul Grafik -->
+                    <h3 class="font-bold text-[14px] text-black">Frekuensi Parkir</h3> <!-- Judul "Frekuensi" -->
+                    
+                    <!-- MENU TOMBOL DROPDOWN (Filter Pilihan Waktu) -->
+                    <div class="relative inline-block"> <!-- Membungkus seleksi pilihan filter (Minggu / Bulan) -->
+                        <!-- Pilihan Opsi, saat nilainya diganti Pengguna, langsung memanggil fungsi 'updateGrafik()' di JS untuk menghitung ulang semua di atas kertas -->
+                        <select id="filter-grafik" onchange="updateGrafik()" class="bg-[#EAF2FF] text-[#0062E6] font-semibold text-[10px] pl-3 pr-6 py-1.5 rounded-[30px] appearance-none outline-none cursor-pointer focus:ring-2 focus:ring-[#0062E6] transition-all">
+                            <option value="minggu">MINGGU INI</option> <!-- Opsi 7 Hari -->
+                            <option value="bulan">BULAN INI</option> <!-- Opsi 4 Pekan -->
+                        </select>
+                        <!-- Panah ke bawah hiasan murni di sudut dropdown -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 absolute right-2.5 top-1/2 -translate-y-1/2 text-[#0062E6] pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- WADAH PONDASI TUMBUHNYA TIANG GRAFIK -->
+                <div id="chart-bars" class="flex items-end justify-between h-[120px] border-b border-black pb-1 px-1"> <!-- Kotak kosong beralas lantai hitam (border bawah) -->
+                    <!-- (Mesin JS akan otomatis mencetak dan menjenjangkan tiang-tiang batang naik turun di ruang ini) -->
+                </div>
+
+                <!-- WADAH TUMBUHNYA LABEL NAMA TANGGAL DI BAWAH TIANG -->
+                <div id="chart-labels" class="flex justify-between text-[11px] font-semibold text-black mt-2 px-1"> <!-- Area penjabaran teks di bawah lantai -->
+                    <!-- (Mesin JS akan meletakkan label nama-nama Hari / Minggu persis di bawah kakinya tiang yang dibuat di atas) -->
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- PUSAT OTAK MATEMATIKA DAN LOGIKA PENGOLAHAN DATA (JAVASCRIPT) -->
+    <script>
+        const userData = JSON.parse(localStorage.getItem('user')); // Mengenali kembali identitas profil pengguna masuk
+        let dataTiketValidGlobal = []; // Memori penyimpanan sementara keranjang data riwayat dari database (Dikosongkan dlu)
+
+        // Setelah struktur dinding HTML jadi, jalankan awal permulaan...
+        document.addEventListener("DOMContentLoaded", () => {
+            if (!userData) { // Jaga-jaga perlindungan jika orang masuk menyelinap ke halaman ini tapi aslinya belum Login!
+                alert("Anda belum login."); 
+                window.location.href = "/login"; // Usir kembali ke gerbang login
+                return;
+            }
+            fetchStatistik(); // Jalankan panggil Tukang Pos
+        });
+
+        // FUNGSI TUKANG POS MEMBAWA PERMINTAAN REKAM JEJAK PARKIRAN KE DATABASE SERVER
+        async function fetchStatistik() {
+            try {
+                // Memanggil Endpoint Riwayat Parkir di Springboot dengan membubuhkan nomor ID sang pengguna saat ini
+                const response = await fetch(`/api/parkir/reservasi/user/${userData.id}`);
+                const result = await response.json(); // Membuka surat balasannya
+
+                if (result.status === 'success') { // Jika berhasil menyedot data
+                    // Saring! Tolak atau singkirkan riwayat yang transaksinya Batal. Sisakan yang Valid saja.
+                    dataTiketValidGlobal = result.data.filter(r => r.status !== 'Dibatalkan');
+                    
+                    kalkulasiInfoUtama(); // Jalankan Perintah Olah Kalkulasi PENGELUARAN Duit 
+                    updateGrafik();       // Jalankan Perintah Olah Kalkulasi GRAFIK Tiang dan Sesi
+                }
+            } catch (err) { // Jika Server Mati/Jatuh
+                console.error("Gagal menarik data:", err); 
+            }
+        }
+
+        // ====================================================================
+        // FUNGSI MATEMATIKA A: MENGHITUNG PENGELUARAN DAN TREND PERBANDINGAN
+        // ====================================================================
+        function kalkulasiInfoUtama() {
+            const sekarang = new Date(); // Ambil waktu kalender saat ini
+            const bulanIni = sekarang.getMonth(); // Analisa angka bulan berjalan (0-11)
+            const tahunIni = sekarang.getFullYear(); // Analisa tahunnya (Cth 2026)
+            
+            let totalPengeluaranBulanIni = 0; // Keranjang uang sekarang
+            let totalPengeluaranBulanLalu = 0; // Keranjang uang bulan kemarin
+
+            // Mari kita cek dan buka arsip riwayatnya satu per satu dari awal sampai habis (Iterasi)
+            dataTiketValidGlobal.forEach(tiket => {
+                if (tiket.status === 'Selesai') { // Pastikan mobilnya beneran udah keluar parkiran dan lunas (Selesai). Jangan yang baru Mampir pesen (Aktif)
+                    const tgl = new Date(tiket.waktu_pesan); // Ambil tanggal di bon nya
+                    
+                    if (tgl.getFullYear() === tahunIni && tgl.getMonth() === bulanIni) { // JIKA BON TERSEBUT DITERBITKAN DI BULAN DAN TAHUN INI
+                        totalPengeluaranBulanIni += (tiket.total_tarif || 0); // Maka masukin nilai harganya ke Keranjang Bulan Ini
+                    } else if ( // JIKA TIDAK... MARI KITA COBA CEK APAKAH INI BON BULAN LALU?
+                        (bulanIni === 0 && tgl.getFullYear() === tahunIni - 1 && tgl.getMonth() === 11) || // (Skenario Aneh: Kalau bulan ini Januari/0, bulan lalu adalah Desember/11 tahun lalu kan)
+                        (tgl.getFullYear() === tahunIni && tgl.getMonth() === bulanIni - 1) // (Skenario Biasa: Bulan lalu = bulan ini dikurangi satu)
+                    ) {
+                        totalPengeluaranBulanLalu += (tiket.total_tarif || 0); // Kumpulkan uangnya ke Keranjang Bulan Kemarin!
+                    }
+                }
+            });
+
+            // CETAK TOTAL UANG TERKUMPUL BULAN INI KE LAYAR PAPAN BIRU
+            document.getElementById('total-pengeluaran').textContent = `Rp ${totalPengeluaranBulanIni.toLocaleString('id-ID')}`;
+            
+            const trendText = document.getElementById('trend-text'); // Cari Teks Penjelas Grafik Trend
+            const trendIcon = document.getElementById('trend-icon'); // Cari Ikon Panahnya
+            
+            // LOGIKA PEMBANDING APAKAH LEBIH BOROS ATAU LEBIH HEMAT!
+            if (totalPengeluaranBulanLalu === 0) { // Kalau ternyata bulan lalu beneran nol/ga pernah main parkir
+                trendText.textContent = "Belum ada data bulan lalu."; // Jangan dibandingin.
+                trendIcon.style.display = "none"; // Sembunyikan ikon panah arah trennya
+            } else {
+                trendIcon.style.display = "block"; // Munculkan Trend Panah
+                // RUMUS MENCARI SELISIH PERSENTASE KENAIKAN/PENURUNAN HARGA ANTARA DUA WAKTU
+                let persentase = ((totalPengeluaranBulanIni - totalPengeluaranBulanLalu) / totalPengeluaranBulanLalu) * 100;
+                
+                if (persentase > 0) { // Jika hasilnya persentasenya Positif / Nambah Uang Keluar (Boros)
+                    trendText.textContent = `${Math.round(persentase)}% lebih tinggi dari bulan lalu`; // Sematkan teks teguran ini
+                    trendIcon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />`; // Kasih gambar SVG panah melesat Naik Meroket ke sudut kanan atas
+                } else { // Jika hasilnya malah minus/ngurang keluarnya (Lebih Hemat)
+                    trendText.textContent = `${Math.round(Math.abs(persentase))}% lebih hemat dari bulan lalu`; // Puji hemat pengguna ini
+                    trendIcon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" d="M13 17h8m0 0v-8m0 8l-8-8-4 4-6-6" />`; // Kasih gambar panah nyungsep menukik tajam ke sudut kanan bawah.
+                }
+            }
+        }
+
+        // ====================================================================
+        // FUNGSI MATEMATIKA B: MENGGAMBAR TIANG GRAFIK DAN NGITUNG RATA RATA
+        // (Bakal selalu dipanggil ulang setiap pilihan seleksi filter waktunya diganti!)
+        // ====================================================================
+        function updateGrafik() {
+            const filter = document.getElementById('filter-grafik').value; // Tanya, Pengguna itu milih lihat rentang 'minggu' atau 'bulan' ?
+            const sekarang = new Date();
+            const bulanIni = sekarang.getMonth();
+            const tahunIni = sekarang.getFullYear();
+            
+            let dataFrekuensi = []; // Array Memori untuk menampung data TINGGI per Tiang Batang nya
+            let labelGrafik = []; // Array Memori untuk mencetak TEXT di alas masing-masing Batang Nanti
+
+            // Variabel Hitung Keranjang Total di Periode Pilihan
+            let totalSesiPeriode = 0; // Seberapa sering bolak balik 
+            let totalDurasiPeriode = 0; // Total menit yang dia telantarkan kendaraannya
+            let tiketSelesaiPeriode = 0; // Total pesanan tuntas
+
+            // --- SKENARIO JIKA PILIHANNYA ADALAH "MINGGU INI" ---
+            if (filter === 'minggu') {
+                dataFrekuensi = [0, 0, 0, 0, 0, 0, 0]; // Siapkan wadah 7 tiang kosong melompong (Senin - Minggu)
+                labelGrafik = ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min']; // Tuliskan Nama 7 Hari di plang lantai dasarnya
+                
+                const seninMingguIni = getSeninMingguIni(sekarang); // Cari jejak kalender "Sebenarnya Hari Senin di Minggu ini tuh tanggal brapa aja?"
+
+                dataTiketValidGlobal.forEach(tiket => { // Baca ulang arsip riwayat parkir
+                    const tgl = new Date(tiket.waktu_pesan);
+                    if (tgl >= seninMingguIni) { // Jika bon itu lebih anyar / diterbitkan sesudah tanggal Hari Senin minggu ini
+                        let dayIndex = tgl.getDay();  // Intip dia parkir hari apa? (Di JS Sunday/Minggu = 0, Senin=1, Selasa=2)
+                        let targetIndex = dayIndex === 0 ? 6 : dayIndex - 1; // Putar Urutan agar array kita itu Senin=0, dan Minggu=6 (Sistem Indonesia)
+                        dataFrekuensi[targetIndex]++; // Nambah Tinggi Tiang untuk Hari Tersebut Sebanyak 1 Level!
+                        
+                        totalSesiPeriode++; // Nambah 1 sesi
+                        if(tiket.status === 'Selesai') {
+                            totalDurasiPeriode += (tiket.total_durasi || 0); // Kumpulkan menit-menit nya ke keranjang
+                            tiketSelesaiPeriode++; 
+                        }
+                    }
+                });
+
+                // Update Teks Layar agar nyambung konteksnya bahwa filter yang dilihat saat ini adalah / Minggu (Bukan bulan)
+                document.getElementById('label-sesi').textContent = "/ Minggu";
+                document.getElementById('label-durasi').textContent = "Jam / Minggu";
+
+            // --- SKENARIO JIKA PILIHANNYA ADALAH "BULAN INI" ---
+            } else if (filter === 'bulan') {
+                dataFrekuensi = [0, 0, 0, 0]; // Siapkan wadah untuk 4 Tiang Batang saja!
+                labelGrafik = ['M1', 'M2', 'M3', 'M4']; // Beri pelat plang nama "Minggu ke 1" sampai "Minggu ke 4"
+
+                dataTiketValidGlobal.forEach(tiket => { // Baca kembali arsip
+                    const tgl = new Date(tiket.waktu_pesan);
+                    if (tgl.getFullYear() === tahunIni && tgl.getMonth() === bulanIni) { // Jika bon beneran dibeli di bulan kalender ini
+                        const tanggal = tgl.getDate(); // Cek itu struk dibeli tanggal berapa
+                        
+                        // Menyesuaikan tangga dengan rentang minggu
+                        if (tanggal <= 7) dataFrekuensi[0]++; // Jika tanggal 1-7 (Masukkin Ke Tinggi Batang M1)
+                        else if (tanggal <= 14) dataFrekuensi[1]++; // Jika tanggal 8-14 (Masukin ke Tinggi Batang M2)
+                        else if (tanggal <= 21) dataFrekuensi[2]++; // Jika tgl 15-21 (Masuk Tiang M3)
+                        else dataFrekuensi[3]++; // Jika Akhir bulan... Tiang Terakhir (M4)
+
+                        totalSesiPeriode++;
+                        if(tiket.status === 'Selesai') {
+                            totalDurasiPeriode += (tiket.total_durasi || 0); // Kumpulkan semua jam
+                            tiketSelesaiPeriode++;
+                        }
+                    }
+                });
+
+                // Update Teks Layar menyesuaikan (Jadi /Bulan)
+                document.getElementById('label-sesi').textContent = "/ Bulan";
+                document.getElementById('label-durasi').textContent = "Jam / Bulan";
+            }
+
+            // Terapkan Total Sesi yg telah dikalkulasi ke dalam layar
+            document.getElementById('total-sesi').textContent = totalSesiPeriode;
+
+            // MENGHITUNG RATA RATA DURASI (Matematika)
+            if (tiketSelesaiPeriode > 0) { // Kalau parkir setidaknya 1 kali...
+                const avgMenit = Math.round(totalDurasiPeriode / tiketSelesaiPeriode); // Bagi Total Waktu / Sesi
+                const jam = Math.floor(avgMenit / 60); // Ambil Nilai Utuh Jam nya saja (Pecahan hilang)
+                const menit = avgMenit % 60; // Ambil Pecahan Sisanya sebagai Menit
+                // Susun dan tempel di layar format "JAM:MENIT" dengan bantual 'padStart' agar selalu ada angka nol (Contoh 02:05, bukan 2:5)
+                document.getElementById('rata-durasi').textContent = `${jam.toString().padStart(2, '0')}:${menit.toString().padStart(2, '0')}`;
+            } else { // Kalau tak ada sesi
+                document.getElementById('rata-durasi').textContent = `00:00`; 
+            }
+
+            // KIRIMKAN DATA KETINGGIAN TIANG GRAFIK DAN NAMA LABELNYA KE TUKANG GAMBAR ARSITEK (RENDER HTML CSS) 
+            renderGrafikHTML(dataFrekuensi, labelGrafik);
+        }
+
+        // FUNGSI TUKANG ARSITEK: MENYUNTIKAN KODE KOTAK DIV TIANG CSS SEHINGGA MUNCUL DI LAYAR
+        function renderGrafikHTML(dataFrekuensi, labelGrafik) {
+            const chartContainer = document.getElementById('chart-bars'); // Ambil lahan pondasi lantai hitam
+            const labelContainer = document.getElementById('chart-labels'); // Ambil lahan tulisan bawah tanah
+            
+            chartContainer.innerHTML = ''; // Babat abis dan Kosongkan seluruh bangunan Tiang yg mungkin sblumnya udah dibuat di layar
+            labelContainer.innerHTML = ''; // Babat abis tulisan yang lalu
+            
+            // Analisa, cari tahu nilai tertinggi dari batang-batang ini tuh berapa untuk dijadikan acuan batas tinggi Atap nya.
+            // Biar ga cebol, kita patok bahwa nilai minimal Atap itu harus bernilai 4 Sesi walaupun dia datanya cuma mampir 1 atau 0.
+            const maxVal = Math.max(...dataFrekuensi, 4); 
+            
+            // Proses Penanaman Tiang Besi Cor Satu Per Satu Berjejer
+            dataFrekuensi.forEach(nilai => {
+                // Skala tinggi CSS menggunakan hitungan Persen. Jadi kita convert brp Persen proporsi tinggi batangnya ke atap langit!
+                const persentaseTinggi = (nilai / maxVal) * 100;
+                // Tapi kalau ternyata nilainya Nol, jangan dibikin tinggi 0, kasih aja tinggi sedikiiitttt banget 2% biar ada keliatan gundukan abu dikit aja.
+                const tinggiFinal = nilai === 0 ? 2 : persentaseTinggi;
+
+                // Membikin Desain Cetakan semen Tiang Cor CSS Tailwind murni (Murni HTML, tanpa library berat Chart.js !)
+                const barHTML = `
+                    <div class="flex flex-col justify-end items-center h-full w-[16px] group relative mx-1">
+                        <!-- Ini Teks Muncul Melayang Kalau Di Sentuh Di Atas Tiangnya (Isinya total kunjungannya "X") -->
+                        <span class="absolute -top-6 bg-black text-white text-[9px] px-2 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity z-10">${nilai}x</span>
+                        <!-- Ini Wujud Batang Batubata nya! Mula-mula tingginya diset 0. Namun Data Persentase aslinya disembunyikan dalam saku "data-height" -->
+                        <div class="w-full bg-[#0062E6] rounded-[2px] transition-all duration-700 ease-out" style="height: 0%;" data-height="${tinggiFinal}%"></div>
+                    </div>
+                `;
+                chartContainer.innerHTML += barHTML; // Tancepkan Tiang ini secara paksa ke barisan lantai HTML!
+            });
+
+            // Menancapkan Teks Plang Label Hari di bawah masing masing Tiang cor
+            labelGrafik.forEach(label => {
+                labelContainer.innerHTML += `<span class="w-[16px] text-center mx-1">${label}</span>`;
+            });
+
+            // EFEK SULAP ANIMASI CSS BERJALAN MELONJAK TUMBUH!
+            setTimeout(() => { // Tunggu semen sedikitt aja biar kering
+                const bars = chartContainer.querySelectorAll('div > div'); // Panggilin satu-satu semua mandor Tiang yang tadi tertanam
+                bars.forEach(bar => {
+                    // Paksa tingginya (Height) membengkak naik melar secara nyata sesuai angka yang di simpen di saku 'data-height' tadi. (Karena pakai Transition Tailwind, jadinya dia melar kayak mancur / numbuh dari tanah)
+                    bar.style.height = bar.getAttribute('data-height');
+                });
+            }, 100); 
+        }
+
+        // FUNGSI PENDUKUNG MATEMATIKA: Alat Pelacak Jejak Hari Senin dari sebuah Minggu Berjalan
+        function getSeninMingguIni(d) {
+            const date = new Date(d); // Duplikasi tanggal hari ini
+            const day = date.getDay(); // (Misal: Rabu nilainya 3)
+            // Rumusnya: Mengurangi Tanggal Hari Ini, dikurangi Nomor Hari ini, lalu digeser sejauh 1 atau -6 langkah.  
+            const diff = date.getDate() - day + (day === 0 ? -6 : 1);
+            return new Date(date.setDate(diff)).setHours(0,0,0,0); // Ambil waktu nol detiknya tepat persis di subuh pas ayam berkokok berganti senin tsb.
+        }
+    </script>
+</body>
+</html>

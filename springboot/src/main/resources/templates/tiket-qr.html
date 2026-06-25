@@ -1,0 +1,274 @@
+<!DOCTYPE html> <!-- Ini adalah fondasi utama yang menyatakan bahwa web ini dirancang dengan standar HTML versi 5 terkini -->
+<html lang="id"> <!-- Bungkus utama halaman dengan aturan ejaan dan pembacaan bahasa Indonesia -->
+<head> <!-- Bagian atas tersembunyi untuk menyimpan rahasia pengaturan mesin browser -->
+    <meta charset="UTF-8"> <!-- Standarisasi pengkodean teks agar semua huruf, angka, simbol dan emoji di seluruh dunia dapat tercetak normal (UTF-8) -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"> <!-- Perintah agar lebar aplikasi pas mengikuti layar HP dan mengunci/melarang pengguna mencubit layar (zoom in/out) -->
+    <meta name="theme-color" content="#F1F1F1"> <!-- Mewarnai bilah bar atas di HP Android (status bar) dengan warna kelabu keputihan -->
+    
+    <title>Parkirin - QR Keluar</title> <!-- Teks tebal penamaan yang nempel di tab internet browser -->
+    <link rel="icon" href="/img/favicon.png" type="image/png"> <!-- Memanggil stiker mungil (favicon) ke sudut Tab Browser -->
+
+    <script src="https://cdn.tailwindcss.com"></script> <!-- Mengakses alat pengatur desain kilat (Tailwind CSS) yang disediakan gratis lewat internet -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script> <!-- !!! MENGAKSES ALAT PIHAK KETIGA PEMBUAT QR CODE: 'qrcode.js' UNTUK MENGGAMBAR KODE MATRIKS SECARA OTOMATIS !!! -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet"> <!-- Mengimpor huruf cantik nan estetik (Montserrat) pinjaman dari Google -->
+
+    <style> 
+        body { font-family: 'Montserrat', sans-serif; background-color: #F1F1F1; margin: 0; overscroll-behavior-y: none; user-select: none; } /* Setel abjad utama, warna lantai dasar kelabu, tepian nol, hilangkan daya pantul layar HP, dan cegah layar bisa di block biru gara-gara gak sengaja ketekan lama */
+        .hide-scrollbar::-webkit-scrollbar { display: none; } /* Jurus ampuh sakti mandraguna menghilangkan wujud batang rel gulir kanan (scrollbar) pada Google Chrome dan kawanannya */
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; } /* Jurus pamungkas kedua khusus peramban gaya lama seperti Firefox dan Edge lawas */
+        .slide-in-right { animation: slideInRight 0.3s ease-out forwards; } /* Perintah pemutaran cuplikan video animasi geser yang dinamai 'slideInRight' */
+        @keyframes slideInRight { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } } /* Rumus animasinya: Start dari pudar dan di kanan layar, berakhir utuh penuh memusat ke tengah */
+        
+        /* Tiga Trik CSS membuat cekungan mangkok navigasi palsu (Ini tidak terpakai lagi aslinya karena menu bawah sudah kita copot dari halaman ini, tapi biarkan saja) */
+        .nav-curve { position: absolute; top: -1px; left: 50%; transform: translateX(-50%); width: 86px; height: 38px; background-color: #F1F1F1; border-bottom-left-radius: 43px; border-bottom-right-radius: 43px; border: 1px solid #D9D9D9; border-top: none; z-index: 10; }
+        .nav-curve::before, .nav-curve::after { content: ""; position: absolute; top: 0; width: 14px; height: 14px; background-color: transparent; }
+        .nav-curve::before { left: -14px; border-top-right-radius: 14px; border-right: 1px solid #D9D9D9; border-top: 1px solid #D9D9D9; box-shadow: 4px -4px 0 4px #F1F1F1; }
+        .nav-curve::after { right: -14px; border-top-left-radius: 14px; border-left: 1px solid #D9D9D9; border-top: 1px solid #D9D9D9; box-shadow: -4px -4px 0 4px #F1F1F1; }
+        
+        .dashed-line { border-top: 2px dashed #C4C4C4; } /* Membuat garis pemisah bolong-bolong (putus-putus) seperti kupon lotre */
+        #qrcode-container canvas, #qrcode-container img { margin: 0 auto; } /* Memaksa wujud gambar kotak barcode yang diproduksi JS nanti ditaruh di letak terpusat tengah */
+        
+        @keyframes fadeOut { from { opacity: 1; } to { opacity: 0.3; } } /* Animasi ngilangin pelan pelan ke angka transparan 30% */
+        /* Efek Hukuman bagi QR yang masa hidup 10 menit nya berakhir! (Animasi ngilang, dikasih filter warna mati kelabu (grayscale 100%), dan dikaburkan dengan bayangan kaca (blur 2px)) */
+        .qr-expired { animation: fadeOut 0.5s forwards; filter: grayscale(1) blur(2px); } 
+    </style>
+</head>
+<body class="flex justify-center h-screen text-gray-800 antialiased bg-gray-200 overflow-hidden"> <!-- Layar dibatasi dan difokuskan memusat layaknya ukuran simulasi HP di tengah monitor laptop / komputer -->
+
+    <!-- BODI BINGKAI HP VIRTUAL (Kotak Utama Penampung Segala) -->
+    <div class="w-full max-w-[402px] bg-[#F5F5F5] h-full relative flex flex-col shadow-2xl overflow-hidden slide-in-right"> <!-- Kotak yang meniru ukuran HP (402 piksel maks) dengan bayangan tebal elegan (shadow 2xl) di belakangnya -->
+
+        <!-- BAGIAN 1: KEPALA TOPI HEADER (Menu Atas) -->
+        <div class="w-full h-[100px] pt-12 px-4 flex items-center shrink-0"> <!-- Kotak tebal 100 piksel penganjal atap yang tak akan bisa mengecil -->
+            <!-- TOMBOL PANAH MUNDUR BALIK KE HALAMAN TIKET LIST  -->
+            <a href="/tiket" class="flex items-center text-[#0064F0] hover:opacity-80 active:scale-95 transition-all cursor-pointer"> <!-- Link mundur yang mengkerut (active:scale-95) klo dihimpit jari jempol -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2.5"> <!-- Menggambar ikon panah bengkok ngadep kiri manual pakai kordinat SVG -->
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+                </svg>
+            </a>
+            <span class="ml-2 font-bold text-[20px] text-[#0064F0]">Tiket Anda</span> <!-- Teks sapaan Judul Biru menyala -->
+        </div>
+
+        <!-- BAGIAN 2: PAPAN KONTEN YANG BISA DIGULIR MENGULUR KE BAWAH (Tempat Bersemayam Lembar Karcis) -->
+        <div class="flex-grow overflow-y-auto hide-scrollbar flex flex-col items-center pt-2 pb-32 relative px-6"> <!-- Lahan elastis tempat seluruh isi informasi bernaung. Digunakan jurus penghilang Scrollbar disini. -->
+
+            <!-- KOTAK ALARM PENGHITUNG DETIK MUNDUR (Timer 10 Menit) -->
+            <div class="w-full bg-[#F5F5F5] py-3 px-4 mb-2"> <!-- Baris panjang peringatan -->
+                <span class="font-medium text-[13px] text-black">Tiket kadaluarsa dalam : </span> <!-- Tulisan Penjelas Teks -->
+                <span id="countdown-timer" class="font-bold text-[13px] text-black">10:00</span> <!-- Area Angka Detak Jam (Akan dibajak JS yang terus mengurangi angkanya tiap detik) -->
+            </div>
+
+            <!-- GARIS SOBEKAN KWITANSI PATAH PATAH -->
+            <div class="w-full dashed-line mb-6"></div> <!-- Tali pembatas imajiner visual -->
+
+            <!-- KOTAK INTI: KANVAS TEMPAT MUNCULNYA LUKISAN QR CODE AJAIB -->
+            <!-- *Ssst! Ada rahasia jalan pintas (Cheat bypassScan) diselipkan ke gambar QR ini. Kalau kau tekan gambarnya pakai klik mouse, ia pura pura anggap mesin parkiran mall udah sukses nekan / ngebaca dia!* -->
+            <div id="qrcode-container" onclick="bypassScan()" class="flex justify-center mb-5 cursor-pointer hover:opacity-80 transition-opacity" title="Klik QR ini untuk Simulasi Scan Gate"></div>
+
+            <!-- TEKS BUKTI SERTIFIKAT TANDA LUNAS (ID TIKET) -->
+            <h3 class="font-bold text-[14px] text-black mb-0 text-center">ID TIKET :</h3> <!-- Subjudul Tegas -->
+            <span id="display-ticket-id" class="font-medium text-[13px] text-gray-600 mb-4 text-center">Memuat...</span> <!-- Lahan kosong buat mesin JS menyematkan Nomor ID Rahasia Pesanan (Misal PRK-991A-XXX) -->
+
+            <!-- PERINTAH AKSI FINAL KEPADA PENGUNJUNG -->
+            <h2 class="font-bold text-[18px] text-black mb-5 text-center">Pindai di Pintu Keluar</h2> <!-- Tulisan tebal nyuruh Deketin HP Ke Alat Palang Pintu Otomatis Parkiran Keluar -->
+
+            <!-- INFO AREA PARKIR DIMANA MOBIL IA NONGKRONG TADI -->
+            <div class="flex flex-col items-center mb-4"> <!-- Memusatkan baris-baris tulisan -->
+                <span class="font-medium text-[13px] text-gray-500">Lokasi Parkir :</span> <!-- Subteks -->
+                <span id="display-lokasi" class="font-bold text-[14px] text-black text-center">Memuat...</span> <!-- Lahan JS untuk cetak tulisan "Lantai P2, Slot B" -->
+                <span class="font-medium text-[13px] text-black">Rita Supermall</span> <!-- Tempat Tujuan (Statis) -->
+            </div>
+
+            <!-- INFO KEPEMILIKAN MOBILNYA (Biar Ga Ketuker Bawa Keluar Mobil Orang Lain!) -->
+            <div class="flex flex-col items-center mb-5">
+                <span class="font-medium text-[13px] text-gray-500">Detail Kendaraan :</span> <!-- Subteks -->
+                <span id="display-plate" class="font-bold text-[14px] text-black">Memuat...</span> <!-- Lahan JS buat cetak Plat Kaleng -->
+                <span id="display-vehicle-info" class="font-medium text-[13px] text-black">Memuat...</span> <!-- Lahan Teks Buat Cetak Merek dan Tipe Kendaraannya -->
+            </div>
+
+            <!-- GARIS DATAR PENUTUP TEBAL -->
+            <div class="w-full border-t border-gray-300 mb-4"></div>
+
+            <!-- TEKS BIRU TOMBOL HYPERLINK MENUJU ARAH JALAN KELUAR -->
+            <a href="#" class="font-semibold text-[14px] text-[#0064F0] hover:opacity-80 transition-all mb-4">Navigasi ke Lokasi Parkir</a> <!-- Tombol belum berfungsi nuju ke Gmaps -->
+
+        </div> <!-- Tutup Lapisan Kertas Gulir -->
+
+        <!-- ALAT POP-UP KOTAK PERINGATAN GLOBAL / TEGURAN SERBA GUNA -->
+        <div id="customModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black bg-opacity-40 backdrop-blur-sm transition-opacity opacity-0"> <!-- Kain hitam pudar penutup cahaya dunia layar -->
+            <div id="customModalContent" class="bg-white w-[280px] rounded-[20px] p-6 flex flex-col items-center shadow-2xl transform scale-90 transition-transform duration-300"> <!-- Lembar kertas teguran warna putih terpusat tengah -->
+                <!-- Ikon Variasi Hijau Ceria (Senang/Lulus) -->
+                <div id="modalIconSuccess" class="w-14 h-14 bg-green-100 rounded-full hidden items-center justify-center mb-4"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg></div> <!-- Ceklis / Contreng -->
+                <!-- Ikon Variasi Merah Garang (Marah/Gagal/Error) -->
+                <div id="modalIconError" class="w-14 h-14 bg-red-100 rounded-full hidden items-center justify-center mb-4"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg></div> <!-- Silang Tanda X -->
+                <h3 id="modalTitle" class="text-[18px] font-bold text-black mb-2 text-center">Judul</h3> <!-- Lahan cetak teks subjudul errornya -->
+                <p id="modalMessage" class="text-[12px] font-medium text-gray-500 text-center mb-6 leading-relaxed">Pesan</p> <!-- Lahan panjang lebar jabaran ngomel-ngomel nya -->
+                <button id="modalBtn" class="w-full bg-[#0141A3] hover:bg-blue-800 text-white font-bold py-2.5 rounded-[12px] text-[12px] transition-colors shadow-md active:scale-95">Mengerti</button> <!-- Pintu keluar atau tombol lompat jauh untuk membuang peringatan ini -->
+            </div>
+        </div>
+
+    </div>
+
+    <!-- PUSAT KERJA KECERDASAN OTAK MESIN TIKET (JAVASCRIPT) -->
+    <script>
+        let countdownInterval = null; // Keranjang memori saklar Timer Waktu agar bisa dimati hidupkan secara remot jarak jauh.
+        let ticketData = null; // Tempat Penampungan Profil Data Keseluruhan mobil ini (Dari Memori Laci)
+        let modalRedirectUrl = null; // Menyimpan link lompatan dari pemanggil kotak merah teguran.
+
+        // ============================================
+        // FUNGSI TUKANG BIKIN PERINGATAN KOTAK ERROR DI TENGAH LAYAR
+        // ============================================
+        function showCustomAlert(type, title, message, redirectUrl = null) {
+            modalRedirectUrl = redirectUrl; // Taruh link pelontar
+            const modal = document.getElementById('customModal');
+            const modalContent = document.getElementById('customModalContent');
+
+            document.getElementById('modalTitle').textContent = title; // Tempel tulisan judul
+            document.getElementById('modalMessage').textContent = message; // Tempel isi ocehan
+
+            // SAKLAR LAMPU INDIKATOR
+            if (type === 'success') { // Jika Perintah Minta Ijo
+                document.getElementById('modalIconSuccess').style.display = 'flex'; // Ijo nyala
+                document.getElementById('modalIconError').style.display = 'none'; // Merah mati
+            } else { // Jika Galak / Merah
+                document.getElementById('modalIconSuccess').style.display = 'none'; // Ijo mati
+                document.getElementById('modalIconError').style.display = 'flex'; // Merah idup
+            }
+
+            // PROSES MELEDAKAN JURUS ANIMASI MEMUNCULKAN DARI ALAM GAIB
+            modal.classList.remove('hidden'); // Cabut nyawa gaib
+            modal.classList.add('flex'); // Paksa memusat
+            setTimeout(() => { // Tahan kedipan mikrosekon
+                modal.classList.remove('opacity-0'); // Bongkar Baju tembus pandang pudar
+                modal.classList.add('opacity-100'); // Padatkan bodi
+                modalContent.classList.remove('scale-90'); // Hilangin efek mungil
+                modalContent.classList.add('scale-100'); // Gembungkan letup membesar ke ukuran normal 
+            }, 10);
+        }
+
+        // AKSI JIKA TOMBOL "MENGERTI" DI KOTAK MERAH/HIJAU TADI DI KLIK
+        document.getElementById('modalBtn').addEventListener('click', () => {
+            if (modalRedirectUrl) { // JIKA TADI SI PEMANGGIL NYELIPIN LINK USIRAN (Lompat Pindah Haluan)
+                window.location.href = modalRedirectUrl; // MENTAL KESANA! TINGGALKAN DIMENSI WEB INI!
+            } else { // JIKA TIDAK ADA SURUHAN LOMPAT (Cuma notif biasa)
+                // Tarik pelan-pelan ke alam bawah transparan kembaii..
+                const modal = document.getElementById('customModal');
+                const modalContent = document.getElementById('customModalContent');
+                modal.classList.remove('opacity-100');
+                modal.classList.add('opacity-0'); // Pelan pelan pudar warnanya
+                modalContent.classList.remove('scale-100');
+                modalContent.classList.add('scale-90'); // Menciut
+                setTimeout(() => {
+                    modal.classList.add('hidden'); // Pindahkan alam ghaib (Hidden) setelah beres
+                    modal.classList.remove('flex');
+                }, 300);
+            }
+        });
+
+        // ============================================
+        // LOGIKA UTAMA OTOMATIS: BERJALAN SAAT HALAMAN SELESAI DIREKA OLEH HP (ON-LOAD)
+        // ============================================
+        document.addEventListener("DOMContentLoaded", () => {
+            // PERTAMA: COBA OBOK OBOK LACI MEMORI BROWSER. ADa ga sih catetan kalau orang ini punya Sertifikat Pembebasan / Karcis yg udah Lunas dicetak tadi pas bayar??
+            const raw = localStorage.getItem('paid_ticket_qr'); // Pakai kata kunci laci "paid_ticket_qr"
+            if (!raw) { // JIKA TIDAK KETEMU (Entah dia blom lunas tapi nekat mampir link sini lewat celah bug)
+                // Tampar pakai peringatan merah lalu tendang kembali dia nyusruk ke halaman Dashboard Beranda Utama.
+                showCustomAlert('error', 'Tidak Ditemukan', 'Data QR tiket tidak ditemukan. Silakan kembali.', '/user-dashboard');
+                return; // Matikan seluruh logika sisa barisan dibawah!
+            }
+
+            // Kalo ketemu sertifikatnya di memori? Terjemahkan data text acak balau itu jadi Objek JS yg bisa dibaca!
+            ticketData = JSON.parse(raw);
+
+            // TULIS-TULIS DATA PROFIL MOBILNYA KE HTML SEKARANG JUGA!
+            document.getElementById('display-ticket-id').textContent = ticketData.id; // Tulis Kode ID Struknya (PRK-XXX)
+
+            const lokasi = `${ticketData.lantai}, ${ticketData.slot}`; // Gabung kalimat lantai (Lantai B2, Slot A)
+            document.getElementById('display-lokasi').textContent = lokasi; // Tulis alamat tsb.
+
+            document.getElementById('display-plate').textContent = ticketData.vehicle.plate; // Tulis Platnya (Z 9991 K)
+
+            const jenisLabel = ticketData.vehicle.jenis === 'mobil' ? 'Tipe Mobil' : 'Tipe Motor'; // Pisahkan kata awalan berdasarkan kelas bannya.
+            document.getElementById('display-vehicle-info').textContent = `${jenisLabel} : ${ticketData.vehicle.name}`; // Tulis info spek (Tipe Motor: Vario)
+
+            // !!! MENGAKSES MESIN PENGGAMBAR BARCODE DARI PIHAK KE-3 (Library QRCode.js) !!!
+            new QRCode(document.getElementById("qrcode-container"), {
+                text: ticketData.id, // Inti Saripati dari Pola Garis QR codenya tak lain dan tak bukan berisi murni Teks ID Transaksi (Cth: PRK-XCYR-21) agar nanti dibaca scan kamera pintu keluar langsung ketemu!
+                width: 200, // Lebar persegi 200 piksel
+                height: 200, // Tinggi jg harus sama simetris
+                colorDark: "#000000", // Tinta garisnya hitam legam
+                colorLight: "#ffffff", // Kertas alasnya Putih 
+                correctLevel: QRCode.CorrectLevel.H // Level kualitas error teratas (High) Biar QR-nya gampang dipindai walaupun kamera HP nya butut/kabur/kena gores dikit tetep kena tangkep pola.
+            });
+
+            // TERAKHIR: MULAI TEKAN TOMBOL JAM PASIR (Mulai perhitungan mundur bom waktu 10 Menit sejak ia melunasi bayaran tadi)
+            mulaiCountdown();
+        });
+
+        // ============================================
+        // MESIN WAKTU 10 MENIT MUNDUR (COUNTDOWN TIMER ARGO)
+        // ============================================
+        function mulaiCountdown() {
+            const BATAS_WAKTU_MS = 10 * 60 * 1000; // Formula konversi Milisekon Matematika: 10 menit dikali 60 detik dikali 1000 milisekon 
+            const waktuBayar = ticketData.paidAt; // Liat data Stempel Waktu (Jam, Menit) berapa tepatnya saat tadi layar kasir midtrans mencetak sertifikat lunas ini?
+
+            // BUAT DETAK JANTUNG OTOMATIS: Ulang dan putar barisan hitungan matematika dibawah ini setiap jeda 1000 ms (1 Detik persis) tiada henti!
+            countdownInterval = setInterval(() => {
+                const now = Date.now(); // Liat Detik Dunia Asli saat Jantung ini baru berdenyut!
+                const elapsed = now - waktuBayar; // Hitung kalkulasi: Udah brapa lama uang dia masuk ke kasir kita sampe detik dia narik nafas sekarang (Waktu Terbuang / Elapsed)
+                const remaining = BATAS_WAKTU_MS - elapsed; // Sisa Nyawa = 10 Menit Mutlak (BATAS_WAKTU_MS) DIKURANGIN Waktu Terbuang.
+
+                // HUKUMAN MATI: JIKA SISA NYAWANYA MINUS ATAU NOL. WAKTU 10 MENITNYA HABIS SEBELUM KENDARAANNYA NGELEWATIN PALANG PINTU!
+                if (remaining <= 0) {
+                    clearInterval(countdownInterval); // Matikan paksa bunyi putaran putaran detak jantung mesin di atas! Diam seketika.
+                    document.getElementById('countdown-timer').textContent = '00:00'; // Cetak angka nihil mutlak
+                    document.getElementById('countdown-timer').classList.add('text-red-500'); // Warnai teks nol tadi jadi merah darah mentereng!
+
+                    // PENYIKSAAN VISUAL KE GAMBAR QR CODENYA! (Tarik Jubah Kutukan CSS 'qr-expired' ke badan wadah QR Codenya)
+                    const qrContainer = document.getElementById('qrcode-container'); 
+                    qrContainer.classList.add('qr-expired'); // Maka seketika gambarnya jadi kusam kelabu layu dan pudar nyaru seperti efek kaca burem (Lihat ke line baris CSS bagian atas layar tadi)
+                    
+                    // COPOT PAKSA KEMAMPUAN FITUR JALAN PINTAS CHEAT NYA AGAR ORANG ITU TAK BISA LAGI NEKAN BARCODENYA !
+                    qrContainer.onclick = null; // Copot fungsi klik
+                    qrContainer.classList.remove('cursor-pointer', 'hover:opacity-80'); // Hapus ciri ciri wujud kursor interaktifnya.
+
+                    // HUKUMAN MATI PALING KEJAM: BONGKAR LACI HP NYA, DAN BAKAR MUSNAHKAN SERTIFIKAT TANDA LUNAS MILIKNYA SEBAGAI BUKTI KEHANGUSANNYA!!!
+                    localStorage.removeItem('paid_ticket_qr'); // Delete file! Mampus kau terkurung di basemen harus ngadu ke satpam bayar sisa waktu tunggakan barusan gara-gara nongkrong ngopi pas mau keluar. wkwkw.
+
+                    // Tampar orangnya secara frontal kalau waktu tiket ini sudah dihanguskan, dan pelontarnya menendang dia balik nyusruk ke halaman Muka (Dashboard Rumah)!
+                    showCustomAlert('error', 'QR Kadaluarsa', 'QR Code Anda telah melewati batas waktu 10 menit dan sudah tidak berlaku.', '/user-dashboard');
+                    return; // Stop kode sisanya.
+                }
+
+                // JIKA BELUM HABIS? MASIH ADA WAKTU! (LANJUTKAN HITUNG TULIS KE LAYAR DETIK DEMI DETIK)
+                const mins = Math.floor(remaining / 60000); // Tumbuk halus ampas Milisekon sisa nyawa jadi angka Menit wajar
+                const secs = Math.floor((remaining % 60000) / 1000); // Sisa dari penumbukan menit dijadikan angka Detik berjalan murni
+                // Gabung dan Cetak ke layar HP. (Cth:  "07:22"). Pakai padStart agar kalo detiknya cma 5 jadi nulis "05" bukan "5" doang
+                document.getElementById('countdown-timer').textContent = `${mins}:${secs.toString().padStart(2, '0')}`; 
+
+                // FITUR PERINGATAN DARURAT: JIKA TERNYATA UMUR DIA SISA KURANG DARI 2 MENIT (< 120.000 ms) TAPI ORANGNYA MASIH ANTEUNG NGEBACA LAYAR..
+                if (remaining < 120000) { 
+                    document.getElementById('countdown-timer').classList.add('text-red-500'); // Ganti warna teks timer nya diam diam menjadi merah darah untuk ngasih peringatan kepanikan. (Woy Buruan lari ke gerbang!)
+                }
+            }, 1000); // Interval pemutar denyut tiap detik
+        }
+
+        // ============================================
+        // FITUR KOTAK SULAP UJI COBA DEVELOPER (BYPASS SCAN KELUAR)
+        // ============================================
+        // Ini adalah Cheat! Sengaja dipasang di Kotak QR klo kita klik pakai mouse/jari, seakan-akan Mesin Palang Gerbang Keluar udah ngebaca Kode Kita!
+        function bypassScan() {
+            if (!ticketData) return; // Jika ga ada info apa apa dibatalin dlu..
+
+            clearInterval(countdownInterval); // Matikan Timer Bom waktu mundur 10 Menit di atas biar ga muter menuhin memory. Kita udah selamat!
+            const ticketId = ticketData.id; // Catet Nomer Kodenya di dompet memori sesaat.
+            
+            // OPERASI BERSIH BERSIH : CABUT SERTIFIKAT TANDA LUNAS KITA DARI INGATAN HP! Karena kita mau keluar alam bebas, kita gaperlu nyimpen nyimpen karcis lunas ini selamanya lagi sampe kiamat. 
+            localStorage.removeItem('paid_ticket_qr'); 
+
+            // Ucapkan Selamat Lulus Ujian Kehidupan. Lepas belenggu penderitaannya, kemudian lemparkan jasadnya berselancar terbang melompati dimensi ke Halaman "ULASAN BINTANG" (/ulasan?id=PRK_XXXX) sambil nitip kode ID Bon nya terakhir kali. MERDEKA!
+            showCustomAlert('success', 'Gate Terbuka!', 'Simulasi scan berhasil. Silakan keluar dari area parkir.', `/ulasan?id=${ticketId}`);
+        }
+    </script>
+</body>
+</html>

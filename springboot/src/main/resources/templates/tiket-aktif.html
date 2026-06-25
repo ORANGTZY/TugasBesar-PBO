@@ -1,0 +1,328 @@
+<!DOCTYPE html> <!-- Pendefinisian bahwa halaman web ini memakai struktur standar HTML versi 5 -->
+<html lang="id"> <!-- Akar dokumen ini dengan spesifikasi aturan berbahasa Indonesia -->
+<head> <!-- Bagian hulu tersembunyi yang menyimpan pengaturan mesin peramban internet -->
+    <meta charset="UTF-8"> <!-- Berfungsi agar browser paham membaca huruf, simbol dan emoji unik (UTF-8) -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"> <!-- Perintah menekan wujud web tetap responsif di layar HP dan mustahil di zoom/cubit oleh jari pengguna -->
+    <meta name="theme-color" content="#F5F5F5"> <!-- Mengganti warna bilah atas HP Android agar selaras abu muda -->
+    
+    <title>Parkirin - Tiket Anda</title> <!-- Teks tebal yang tertera di label Tab Web Browser -->
+    <link rel="icon" href="/img/favicon.png" type="image/png"> <!-- Memanggil stiker mungil (favicon) ke sudut Tab Browser -->
+
+    <script src="https://cdn.tailwindcss.com"></script> <!-- Memanggil alat pembantu desain kilat (Tailwind CSS) secara online dari internet -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet"> <!-- Mengimpor huruf cantik gaya 'Montserrat' sumbangan dari Google -->
+    
+    <style> 
+        body { font-family: 'Montserrat', sans-serif; background-color: #F1F1F1; margin: 0; overscroll-behavior-y: none; user-select: none; } /* Setel wujud huruf Montserrat, latar luar diset abu pucat, tepian layar dirapatkan, efek layar mantul dimatikan, dan blok blokan warna biru dari tulisan dicegah! */
+        .hide-scrollbar::-webkit-scrollbar { display: none; } /* Resep jitu membuang jejak batang guling (scrollbar) di peramban Google Chrome/Safari */
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; } /* Resep pamungkas serupa ditujukan untuk Firefox dan Edge Lama */
+        .slide-in-right { animation: slideInRight 0.3s ease-out forwards; } /* Perintah menjalankan cuplikan animasi efek masuk layar (Slide In) */
+        @keyframes slideInRight { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } } /* Naskah animasinya = Mulai dari tembus pandang pudar, di koordinat agak kanan lalu ke tengah */
+        
+        .dashed-line { background-image: linear-gradient(to right, #D9D9D9 50%, transparent 50%); background-size: 10px 2px; background-repeat: repeat-x; height: 2px; width: 100%; } /* Ramuan menggambar Garis Patah-patah mirip sobekan bon kwitansi pakai efek gradasi warna transparan CSS */
+        /* Ramuan Sulit Menggambar Efek Lengkungan "U" Melengkung ke Dalam pada Menu Navbar Bawah */
+        .nav-curve { position: absolute; top: -1px; left: 50%; transform: translateX(-50%); width: 86px; height: 38px; background-color: #F1F1F1; border-bottom-left-radius: 43px; border-bottom-right-radius: 43px; border: 1px solid #D9D9D9; border-top: none; z-index: 10; } /* Badan mangkok cekungan lubang tombol tengah bulat  */
+        .nav-curve::before, .nav-curve::after { content: ""; position: absolute; top: 0; width: 14px; height: 14px; background-color: transparent; } /* Pembuatan sayap bayangan palsu penghubung sudut di mangkok cekungan tsb */
+        .nav-curve::before { left: -14px; border-top-right-radius: 14px; border-right: 1px solid #D9D9D9; border-top: 1px solid #D9D9D9; box-shadow: 4px -4px 0 4px #F1F1F1; } /* Sayap Kiri agar pinggiran kiri menempel dan menyatu mulus bagai huruf S */
+        .nav-curve::after { right: -14px; border-top-left-radius: 14px; border-left: 1px solid #D9D9D9; border-top: 1px solid #D9D9D9; box-shadow: -4px -4px 0 4px #F1F1F1; } /* Sayap Kanan penyempurna lengkungan */
+    </style>
+</head>
+<body class="flex justify-center h-screen text-gray-800 antialiased bg-gray-200 overflow-hidden"> <!-- Layar utama yang membatasi wilayah dengan warna abu-abu kehitaman layaknya tepian meja PC sungguhan -->
+
+    <!-- KERANGKA FISIK LAYAR HP (Wadah Utama Aplikasi) -->
+    <div class="w-full max-w-[402px] bg-[#F1F1F1] h-full relative flex flex-col shadow-2xl overflow-hidden slide-in-right"> <!-- Kotak yang membatasi wujud agar maksimal berukuran mirip bentuk proporsi bodi smartphone dengan bayangan 2xl -->
+        
+        <!-- BAGIAN 1: TOPI KEPALA HALAMAN (Bar Putih Tebal Atas) -->
+        <div class="w-full h-[100px] bg-[#F5F5F5] pt-12 px-4 flex items-center z-20 shrink-0"> <!-- Papan statis pengganjal atas setinggi 100 pixel -->
+            <!-- TOMBOL PANAH MUNDUR KE DAFTAR TIKET -->
+            <a href="/tiket" class="flex items-center text-[#0064F0] hover:opacity-80 active:scale-95 transition-all cursor-pointer"> <!-- Tautan Arah kembali menekan tombol history mundur peramban -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" /></svg> <!-- Menggambar Tanda Kurung siku Kiri penunjuk arah -->
+            </a>
+            <span class="ml-2 font-bold text-[20px] text-[#0064F0]">Tiket Anda</span> <!-- Sapaan Sub Judul Halaman -->
+        </div>
+
+        <!-- BAGIAN 2: RUANG KERTAS TIKET UTAMA (Papan Panjang yang bisa Ditarik Gulir) -->
+        <div class="flex-grow overflow-y-auto hide-scrollbar z-10 flex flex-col pb-32 bg-[#F5F5F5] mt-2 relative"> <!-- Bagian isi panjang berlatar pucat yang memegang semua rincian karcis -->
+            
+            <!-- BLOK KARTU PENGHITUNG WAKTU MUNDUR KADALUARSA (Timer) -->
+            <div id="timer-container" class="w-full px-4 py-3 flex items-center justify-start gap-2"> <!-- Barisan ruang horizontal perata tengah peringatan -->
+                <span class="text-[11px] font-normal text-black">Tiket kedaluwarsa dalam :</span> <!-- Teks Panduan/Sapaan -->
+                <span id="timer-display" class="text-[12px] font-bold text-black tracking-wide">Memuat...</span> <!-- Ruang kosong di pojok kanan khusus untuk diisi JS berupa perhitungan Jam:Menit:Detik Mundur! -->
+            </div>
+            
+            <!-- HIASAN GARIS SOBEKAN KWITANSI PATAH PATAH -->
+            <div class="dashed-line"></div> <!-- Penanda pemisah visual mirip kertas karcis sobek bioskop -->
+
+            <!-- BLOK TENGAH TIKET (Isi Utama Berupa Kotak QR Code dan Info Mobil) -->
+            <div class="w-full flex flex-col items-center pt-8 pb-4 px-4"> <!-- Blok yang menengahkan semua elemen di dalamnya secara lurus ke bawah -->
+                
+                <!-- LAYAR GAMBAR QR CODE! (Bisa Di Pencet Untuk Nge-Cheat Masuk Gate) -->
+                <!-- Fungsi onclick="bypassScan()" Adalah kunci rahasia untuk melompati tahap nunggu di depan Gerbang Fisik. Jika diklik, HP ngirim sinyal pura-pura nyatakan bahwa mesin berhasil nge-scan! -->
+                <div onclick="bypassScan()" class="w-[212px] h-[212px] bg-white p-2 rounded-lg shadow-sm border border-gray-200 flex items-center justify-center mb-6 cursor-pointer hover:bg-blue-50 transition-colors relative group" title="Klik untuk simulasi Scan Gerbang">
+                    <!-- Foto Hitam Putih Kode Matriks QR yang disuntikan dari luar -->
+                    <img id="qr-code" src="" alt="QR Code Loading..." class="w-full h-full object-contain group-active:scale-95 transition-transform">
+                    <!-- Filter Tudung Hitam yang Muncul Khusus di Layar PC Kalau Mouse mendekat di atas gambar -->
+                    <div id="qr-overlay-text" class="absolute inset-0 bg-black bg-opacity-70 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity rounded-lg text-[13px] font-bold text-center px-4 pointer-events-none">
+                        Klik untuk Simulasi Scan Masuk <!-- Peringatan Petunjuk Tersembunyi (Cheat) -->
+                    </div>
+                </div>
+                
+                <!-- BUKTI ALPHANUMERIK KODE (ID TRANSAKSI TIKET) -->
+                <span class="text-[14px] font-bold text-black">ID TIKET :</span> <!-- Label statis "ID Tiket :" -->
+                <span id="ticket-id" class="text-[14px] font-bold text-black mb-6">...</span> <!-- Lahan kosong untuk menggoreskan deretan acak kode ID Pesanan Tiket (Misal PRK-93U9-1A) -->
+
+                <!-- Instruksi Tulisan Besar -->
+                <h2 class="text-[20px] font-bold text-black mb-6">Pindai di Pintu Masuk</h2> <!-- Perintah Lugas kepada pengguna apa yang harus diperbuat di depan palang parkir aslinya -->
+
+                <!-- RINCIAN ALAMAT TEMPAT GEDUNG DAN SPOTNYA -->
+                <div class="text-center mb-6"> <!-- Rata tengah info alamat -->
+                    <p class="text-[14px] font-medium text-black">Lokasi Parkir :</p> <!-- Subjudul Alamat -->
+                    <p id="ticket-location" class="text-[14px] font-medium text-black leading-tight mt-1">...</p> <!-- Lahan mencetak Lantai dan Blok (Cth: Lantai B2, Slot 5) -->
+                </div>
+
+                <!-- RINCIAN MOTOR/MOBIL SIAPA INI (Identitas Pemesan Mencegah Pencurian) -->
+                <div class="text-center"> <!-- Rata tengah Data Kendaraan -->
+                    <p class="text-[14px] font-medium text-black">Detail Kendaraan :</p> <!-- Subjudul Kendaraan -->
+                    <p id="ticket-plat" class="text-[14px] font-medium text-black mt-1">...</p> <!-- Lahan Kosong Pelat (Cth: B 1111 XXX) -->
+                    <p id="ticket-vehicle-type" class="text-[14px] font-medium text-black">...</p> <!-- Lahan Tipe (Cth: Honda Brio) -->
+                </div>
+            </div>
+
+            <!-- TOMBOL FITUR PENDUKUNG (Navigasi GPS Ke Mal) -->
+            <div class="w-full flex justify-center mt-2 mb-8"> <!-- Dipusatkan di titik tengan layar sentuh paling bawah di lembar kertas putih -->
+                <!-- Hyperlink murni belom fungsi ke Google Maps  -->
+                <a href="#" class="text-[12px] font-semibold text-[#0064F0] hover:underline active:scale-95 transition-all flex items-center gap-1"> <!-- Link Biru yang bereaksi kelap-kelip menciut jika digigit jempol (active scale) -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"> <!-- Gambar Ikon Ujung Panah Petunjuk Maps Arah Belok -->
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                    Navigasi ke Lokasi Parkir <!-- Instruksi Ajakannya -->
+                </a>
+            </div>
+
+        </div>
+
+        <!-- BAGIAN 3: BILAH NAVIGASI BAWAH (Menu Dasar Aplikasi dengan Lingkaran Timbul Di Tengah) -->
+        <div class="absolute bottom-0 w-full max-w-[402px] h-[75px] bg-[#F5F5F5] border-t border-[#D9D9D9] rounded-t-[19px] z-20 shadow-[0_-5px_15px_rgba(0,0,0,0.05)]"> <!-- Kotak keras pengganjal dasar kaki aplikasi dengan atap melengkung rapi (rounded) -->
+            <div class="relative w-full h-full px-8 flex items-center justify-center"> <!-- Area pendaratan utama barisan 3 tombol icon Menu Menu  -->
+                <!-- HIASAN CEKUNGAN LUBANG TENGAH TEMPAT MANGKOK TOMBOL MUNCUL -->
+                <div class="nav-curve"></div> <!-- Elemen ini murni hasil manipulasi efek bayangan dan lengkung CSS saja untuk memakan bodi lurus tadi -->
+                
+                <!-- SUSUNAN BARIS TIGA TOMBOL ICON (Dashboard - Tiket - Profil) -->
+                <div class="flex w-full justify-between items-end pb-3 z-30"> <!-- Berbaris berjauhan memojok secara rata (Space Between) -->
+                    <!-- 1. Tombol Kiri (Kembali Lari ke Dashboard Utama Rumah) -->
+                    <a href="/user-dashboard" class="flex flex-col items-center justify-end cursor-pointer relative z-30 w-[60px] hover:opacity-80 transition-all"> <!-- Ruang Lingkup Tombol -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-[28px] w-[28px] text-[#D9D9D9] mb-[5px]" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3L2 12h3v8h6v-6h2v6h6v-8h3L12 3z"/></svg> <!-- Ikon Rumah Kecil pudar abu abu -->
+                        <span class="text-[#D9D9D9] font-semibold text-[12px] leading-none">Utama</span> <!-- Teks Utama pudar -->
+                    </a>
+                    
+                    <!-- 2. Celah Bolong Tombol Tengah (Karena diganti tombol Melayang Raksasa) -->
+                    <div class="flex flex-col items-center justify-end relative z-30 w-[60px]"> <!-- Lingkup yang dipesan untuk jarak kosongnya doang di jejeran 3 ini -->
+                        <div class="h-[28px] mb-[5px]"></div> <!-- Spasi Pengganjal kosong  -->
+                        <span class="text-[#00D1FF] font-semibold text-[12px] leading-none">Tiket</span> <!-- Karena sekarang halamannya di menu tiket, maka teks Tiketnya Nyala Biru Turqoise -->
+                    </div>
+                    
+                    <!-- 3. Tombol Kanan (Lari ke Profil Info Akun) -->
+                    <a href="/profil" class="flex flex-col items-center justify-end cursor-pointer relative z-30 w-[60px] hover:opacity-80 transition-all"> <!-- Lingkup Tombol User  -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-[28px] w-[28px] text-[#D9D9D9] mb-[5px]" viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg> <!-- Ikon Kepala Badan Orang kelabu -->
+                        <span class="text-[#D9D9D9] font-semibold text-[12px] leading-none">Pengguna</span> <!-- Teks Kelabu -->
+                    </a>
+                </div>
+
+                <!-- 4. SI TOMBOL MELAYANG RAKSASA TENGAH! (Tombol Menu Cepat Lihat Tiket) -->
+                <!-- Ini adalah tombol yang terpisah dari deretan ketiga baris tadi, dia diletakan diatur letak posisinya (absolute) melayang di atas cekungan "nav-curve" (Mangkok tadi) -->
+                <a href="/tiket" class="flex flex-col items-center cursor-pointer absolute top-[-26px] left-1/2 -translate-x-1/2 z-40 transition-transform active:scale-95"> <!-- Tombol Lingkaran Besar ngotot di taruh di pusat tengah, menabrak baris. -->
+                    <div class="bg-[#0141A3] w-[61px] h-[61px] rounded-full flex flex-col items-center justify-center shadow-[0_5px_10px_rgba(1,65,163,0.3)]"> <!-- Warna bola bola biru tua pekat bersinar kemegahan -->
+                        <!-- Bentuk gambar karcis kecil rakitan murni div CSS -->
+                        <div class="w-[32px] h-[29px] flex flex-col justify-between overflow-hidden rounded-[3px]"> <!-- Menggambar persegi bergaris-garis isi kertas karcis -->
+                            <div class="w-full h-[13px] bg-[#F5F5F5]"></div><div class="w-full h-[3px] bg-transparent"></div><div class="w-full h-[13px] bg-[#F5F5F5]"></div> <!-- Pita 1-2-3 putih -->
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- ALAT POP-UP PERINGATAN GLOBAL (Kotak Penyetop untuk segala jenis kesalahan / pesan / error) -->
+        <div id="customModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black bg-opacity-40 backdrop-blur-sm transition-opacity opacity-0"> <!-- Kain hitam pudar menutupi sekeliling aplikasi (Modal)  -->
+            <div id="customModalContent" class="bg-white w-[280px] rounded-[20px] p-6 flex flex-col items-center shadow-2xl transform scale-90 transition-transform duration-300"> <!-- Area Putih Pusat Pesannya -->
+                <!-- Ikon Variasi Hijau (Bila Laporannya Sukses/Mantap) -->
+                <div id="modalIconSuccess" class="w-14 h-14 bg-green-100 rounded-full hidden items-center justify-center mb-4"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg></div> <!-- Tanda Centang Checklist Hijau -->
+                <!-- Ikon Variasi Merah (Bila Laporannya Marah/Error) -->
+                <div id="modalIconError" class="w-14 h-14 bg-red-100 rounded-full hidden items-center justify-center mb-4"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg></div> <!-- Tanda Silang Segitiga Merah X -->
+                
+                <h3 id="modalTitle" class="text-[18px] font-bold text-black mb-2 text-center">Judul</h3> <!-- Lahan cetak teks judul penamparan -->
+                <p id="modalMessage" class="text-[12px] font-medium text-gray-500 text-center mb-6 leading-relaxed">Pesan modal disini</p> <!-- Area lahan menjabarkan sebab akibat teguran tersebut secara panjang lebar -->
+                <button id="modalBtn" class="w-full bg-[#0141A3] hover:bg-blue-800 text-white font-bold py-2.5 rounded-[12px] text-[12px] transition-colors shadow-md active:scale-95">Mengerti</button> <!-- Pintu Keluar Modal: Menutup peringatan, atau bisa disetel membanting paksa pintu ke halaman lain! -->
+            </div>
+        </div>
+
+    </div>
+
+    <!-- PUSAT OTAK MESIN DAN LOGIKA ALUR KERJA (JAVASCRIPT) -->
+    <script>
+        // MEMORI GLOBAL HALAMAN
+        let modalRedirectUrl = null; // Memori untuk mencatat, habis dia nutup peringatan kotak, haruskah mesin memindahkannya ke tempat lain?
+        let isExpiredTriggered = false; // Penanda/Gembok Saklar untuk mencegah supaya kalau Waktu Kadaluarsa Habis, dia nggak panggil-panggil Server berkali-kali meneror layaknya orang gila.
+        
+        // FUNGSI TUKANG PAMER PERINGATAN (MODAL MAKER)
+        // Cara panggil gampang: showCustomAlert('error', 'Cih!', 'Kau gagal sobat!', '/login')
+        function showCustomAlert(type, title, message, redirectUrl = null) {
+            modalRedirectUrl = redirectUrl; // Simpan link kembalian kalau ada yang nyelipin di argumen
+            const modal = document.getElementById('customModal'); // Cari Kain Hitam Latar
+            const modalContent = document.getElementById('customModalContent'); // Cari Kartu Putih nya
+            
+            document.getElementById('modalTitle').textContent = title; // Tempel Judul teguran ke Layar Putih
+            document.getElementById('modalMessage').textContent = message; // Tempel Panjang Celotehan tegurannya ke Layar
+
+            // Mainkan Saklar Ganti Lampu Ikon Warna (Hijau atau Merah?)
+            if (type === 'success') { // Jika Mintanya Laporan 'sukses'
+                document.getElementById('modalIconSuccess').style.display = 'flex'; // Nyalain Ikon Ceklis Hijau
+                document.getElementById('modalIconError').style.display = 'none'; // Matikan Ikon Silang Merah
+            } else { // Jika selain itu (Berarti ya Marah kan)
+                document.getElementById('modalIconSuccess').style.display = 'none'; // Matikan Ikon Ceklis
+                document.getElementById('modalIconError').style.display = 'flex'; // Nyalain Silang Merah
+            }
+
+            // PROSES MUNCUL DARI ALAM GAIB MENGGUNAKAN ANIMASI MENGEMBANG TRANSISI CSS!
+            modal.classList.remove('hidden'); // Lepas dari ikatan Gaib / Tidak ada wujud wujudnya. (Jadi flex / memusat di tengah nyata)
+            modal.classList.add('flex');
+            setTimeout(() => { // Tahan nafas sedikit
+                modal.classList.remove('opacity-0'); // Hilangkan jubah pudar transparan! Tampil Nyata!
+                modal.classList.add('opacity-100'); 
+                modalContent.classList.remove('scale-90'); // Hilangkan kekerdilan bentuknya yang kecil menyusut
+                modalContent.classList.add('scale-100'); // Gembungkan dia kayak efek letupan "Pop!" ke Layar Muka.
+            }, 10);
+        }
+
+        // AKSI PENONTON KETIKA TOMBOL "MENGERTI" DI KOTAK PERINGATAN ITU DITEKAN JARI NYA
+        document.getElementById('modalBtn').addEventListener('click', () => {
+            if (modalRedirectUrl) { // JIKA TERNYATA TADI SANG PEMANGGIL MENGIRIM PESAN URL UNTUK PINDAH ALAM
+                window.location.href = modalRedirectUrl; // LANGSUNG LOMPAT ALIH HALUAN KESANA TANPA BABIBU! (Misal diusir dari Parkiran ke Menu Utama)
+            } else { // TAPI KALAU GAK ADA URL PINDAH NYA (Artinya Cuma sekedar notif peringatan ringan nyebelin doang)
+                // Yaudah jalankan jurus membalik animasi yang tadi... Menciut pelan-pelan lalu menghilang tembus pandang ke alam gaib kembali. (Ditutup layarnya)
+                const modal = document.getElementById('customModal');
+                const modalContent = document.getElementById('customModalContent');
+                modal.classList.remove('opacity-100');
+                modal.classList.add('opacity-0'); // Pakai Jubah Transparan
+                modalContent.classList.remove('scale-100');
+                modalContent.classList.add('scale-90'); // Bikin badannya menciut kempes pelan pelan
+                setTimeout(() => { // Setelah efek kelar meresap di mata...
+                    modal.classList.add('hidden'); // Taruh lagi ke kuburan dunia gaib
+                    modal.classList.remove('flex'); // Cabut nyawanya dari peradaban
+                }, 300);
+            }
+        });
+
+        // ============================================
+        // MESIN INTI AWAL (SAAT HALAMAN WEB SELESAI DIMUAT OLEH HP)
+        // ============================================
+        document.addEventListener("DOMContentLoaded", () => {
+            // MENGOREK-NGOREK DATA DI ALAMAT URL (LINK ATAS)
+            const urlParams = new URLSearchParams(window.location.search); // Pakai alat pencari jejak rahasia di link (Tanda ? dsb)
+            const ticketId = urlParams.get('id'); // Ambil ID Tiket nya dari link (Cth url: tiket-aktif?id=PRK-1234 -> Maka tiketId = PRK-1234 )
+
+            // MENCARI DATA BERKAS SI TIKET INI DI DALAM MEMORI LEMARI PENYIMPANAN HP (Browser Lokal)
+            const activeTickets = JSON.parse(localStorage.getItem('active_tickets')) || []; // Tarik semua tumpukan map arsip tiket yang pernah dibeli dan blom dibayar.
+            const activeTicket = activeTickets.find(t => t.id === ticketId); // Bongkar-bongkar map, adakah yang nama ID kertasnya cocok sama tiketId tadi?
+
+            // SKENARIO JIKA TERNYATA SI ORANG INI MASUK TAPI KERTASNYA KOSONG ATAU NGAKALIN URL LINK NYA!! (HACKER / BUG)
+            if (!activeTicket) {
+                // Tegur Keras! Dan suruh sistem usir dia mental kembali mental ke beranda daftar list karcisnya lagi.
+                showCustomAlert('error', 'Tiket Tidak Ditemukan', 'Sistem tidak dapat memuat detail tiket ini. Pastikan Anda mengaksesnya dari daftar tiket.', '/tiket');
+                return; // STOP! Jangan kerjakan instruksi di bawah ini sebarispun!
+            }
+
+            // KEAMANAN PERLINDUNGAN NEGARA (NAVIGASI)!
+            // JIKA TIKET INI TERNYATA SUDAH PERNAH DI SCAN (Orangnya udah masuk di Dalem Mal nongkrong)... NGAPAIN DIA DISINI?!! SINI TEMPAT BARU BOOKING!
+            if (activeTicket.isCheckedIn) { // Cek Status, Apakah dianya udah absen pintu pagar (Checked In) ?
+                // BANTING SETIR PAKSA SECARA DIAM-DIAM PINDAHKAN DIA KE LOKET KASIR (HALAMAN PEMBAYARAN) DENGAN MEMBAWA ID NYA.
+                window.location.replace(`/tiket-pembayaran?id=${ticketId}`); 
+                return; // STOP! Jangan Kerjakan hal lain disini, percuma nyawanya udah pindah dimensi Web.
+            }
+
+            // JIKA LULUS CEK SEMUA AMAN: MULAI CETAK MENCETAK KERTAS!
+            document.getElementById('ticket-id').textContent = activeTicket.id; // Tulis nama ID Kode nya ke atas HTML
+            // MENGGAMBAR MURAL QR CODE MATRIKS AJAIB pakai Bantuan Jasa Pihak Ketiga (Internet QR Server API). Mereka menggambar cepat sesuai nama ID Tiketnya (PRK-XXX) lalu dilempar sebagai file foto kemari seketika.
+            document.getElementById('qr-code').src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${activeTicket.id}&margin=10`;
+
+            const vehicle = activeTicket.vehicle; // Ambil dompet berkas profil kendaraannya
+            document.getElementById('ticket-plat').textContent = vehicle.plate; // Cetak plat kalengnya
+            const jenis = vehicle.jenis ? vehicle.jenis.charAt(0).toUpperCase() + vehicle.jenis.slice(1) : 'Kendaraan'; // Mainkan manipulasi pemotongan string mengubah 'motor' jadi 'Motor' biar bagus huruf besarnya.
+            document.getElementById('ticket-vehicle-type').textContent = `Tipe ${jenis} : ${vehicle.name}`; // Susun kalimat jadi tipe jenis dan merek (Cth: Tipe Motor : Honda Vario)
+
+            // MENULIS INFO TEMPAT KOTAK BLOK NYA DENGAN TEPAT
+            let slotText = vehicle.jenis === 'mobil' ? `${activeTicket.lantai}, Slot ${activeTicket.slot}` : `${activeTicket.lantai}, ${activeTicket.slot}`; // Beda mobil motor di frasa kata "Slot"
+            document.getElementById('ticket-location').innerHTML = `${slotText}<br>Rita Supermall`; // Beri spasi baris patah <br> lalu tambah nama Gedung tujuannya
+
+            // PERANGKAT BOM WAKTU PENGHANCUR TIKET OTOMATIS (Timer Kadaluarsa Booking)
+            const timerDisplay = document.getElementById('timer-display'); // Ambil layar bom waktunya
+
+            // MESIN WAKTU: SETEL DETAK JANTUNG BERKEDIP SETIAP 1000 Milisekon (1 DETIK SEKALI MUTER)
+            setInterval(() => {
+                if (isExpiredTriggered) return; // Jika pernah meledak, berhenti aja udah, biarin mati gausah dipaksa muter lagi.
+
+                const sekarang = Date.now(); // Tanya waktu di alam semesta real life itu detik ke berapa sekarang
+                const selisihWaktu = activeTicket.expiry - sekarang; // Hitung kalkulator selisih Detik Jadwal Meledak Dikurangi Detik sekarang 
+                
+                // JIKA TERNYATA DETIKNYA MINUS / NOL (MELEWATI BATAS WAKTU HABIS!!) DUARR!!!
+                if (selisihWaktu <= 0) {
+                    isExpiredTriggered = true; // Kunci gembok biar kode dibawah atas ga terulang error ngeloop infinite (Kiamat server)
+                    
+                    // Tampar orangnya pakai layar peringatan merah besar bahwa Waktunya kelar (Denda) 
+                    showCustomAlert('error', 'Waktu Habis', 'Waktu tiket telah habis (2 Jam). Tiket dibatalkan otomatis dan slot dikembalikan.', '/tiket');
+                    
+                    // OPSI BERSIH BERSIH DOSA: MUSNAHKAN DAN SITA KERTASNYA DARI LEMARI MEMORI LOKAL! (Karena orangnya telat ga dateng-dateng)
+                    let currentTickets = JSON.parse(localStorage.getItem('active_tickets')) || []; // Ambil Semua buku arsip
+                    currentTickets = currentTickets.filter(t => t.id !== ticketId); // Robek Halaman Kertas milik Dia ini, Sisakan halaman orang lain! (Filter Buang)
+                    localStorage.setItem('active_tickets', JSON.stringify(currentTickets)); // Taruh dan simpan ulang sisa buku arsip itu ke lemari lokal! SELESAI.
+
+                // JIKA BELUM HABIS? MASIH ADA WAKTU BERDETAK NYA
+                } else {
+                    // Matematika Pemisah Waktu ke Format Konvensional Jam, Menit, dan Detik Manusia
+                    const jam = Math.floor((selisihWaktu % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)); // Pecah Sisa Sisa Detik ke besaran Jam Tunggal
+                    const menit = Math.floor((selisihWaktu % (1000 * 60 * 60)) / (1000 * 60)); // Sisanya masukin menit
+                    const detik = Math.floor((selisihWaktu % (1000 * 60)) / 1000); // Sisanya baru pecah ruah ke detik murni
+                    // Cetak Tulis di layar Jam-nya pakai pola string ganda ('padStart') biar bentuk angka satuan jadi 2 angka terus (Misal Detik 4 jadi 04) (01:05:04)
+                    if(timerDisplay) timerDisplay.textContent = `${jam}:${menit.toString().padStart(2, '0')}:${detik.toString().padStart(2, '0')}`;
+                }
+            }, 1000); // Batas Jangka Interval putaran SetInterval() adalah Seribu mili (Satu Detik).
+        });
+
+        // FUNGSI JALAN PINTAS SULAP (CHEAT / BYPASS SIMULASI SCAN!)
+        // Ketika gambar QR hitam tadi di klik layarnya oleh mouse kita, dia manggil ini diam-diam di balik layar HP.
+        async function bypassScan() {
+            // Ambil ID tiket dulu dari dompet URL 
+            const urlParams = new URLSearchParams(window.location.search);
+            const ticketId = urlParams.get('id');
+
+            // Ambil Memori arsipnya juga biar tau kita lagi operasiin kertas siapa
+            let currentTickets = JSON.parse(localStorage.getItem('active_tickets')) || [];
+            let ticketIndex = currentTickets.findIndex(t => t.id === ticketId); // Cari Posisi urutan ke berapa sih tiket dia ini berada di laci nya?
+            if (ticketIndex === -1) return; // Kalau lenyap, balik kanan grak (Batal).
+
+            // MEMULAI OPERASI SANDIWARA: PURA PURA JADI MESIN SCANNER! (SIMULASI SCAN MASUK SECARA REAL-TIME DENGAN AWALAN Menit = 0)
+            try {
+                // Memerintahkan Tukang Pos (Fetch) untuk terbang ke Markas Server Database dan lapor pura-pura bahwa mobil ini udah Lewat Palang pintu dan di stempel petugas Gerbang.
+                const response = await fetch('/api/parkir/bypass-masuk', { // Jalur Api Pura-Pura NgeScan (Endpoint Sakti Buatan Sendiri)
+                    method: 'POST', // Kirim data laporan kedatangan 
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ kode_unik: ticketId, menit_parkir: 0 })  // Isi laporannya berupa Kode Rahasia Karcis dan Detak argonya dipaksa ngitung dari 0 (Baru mulai masuk gedung)
+                });
+
+                if(response.ok) { // Jika Server Database bilang "Laporan Kehadiran Diterima! Pintu Terbuka."
+                    // Ubah catetan Buku di lokal HP kita ini secara diam-diam bahwa dia udah sah jadi penghuni Dalem Mal.
+                    currentTickets[ticketIndex].isCheckedIn = true; // Stempel gemboknya dicentang Nyala!
+                    currentTickets[ticketIndex].checkInTime = Date.now(); // Tulis jejak jam brp dia masuk (Catet Waktu Server Jam HP nya)
+                    localStorage.setItem('active_tickets', JSON.stringify(currentTickets)); // Taruh lagi buku arsip perubahan rahasia ini ke Laci lemari HP (Simpan permanen)
+
+                    // SUKSES MENGKADALI SISTEM! SEKARANG OTOMATIS BANTING SETIR ARAH PAKSA MELEMPAR PENGGUNA KE HALAMAN LOKET PEMBAYARAN TAGIHAN BERJALAN ARGO (METERAN JALAN)!
+                    window.location.href = `/tiket-pembayaran?id=${ticketId}`; 
+                } else { // Jika Server Menolak Aksi Sandiwara (Mungkin Kodenya salah/Kadaluarsa)
+                    showCustomAlert('error', 'Gagal', 'Gagal melakukan simulasi scan masuk.'); // Tampar dengan Error Muka.
+                }
+            } catch (err) { // Jika Internet Kiamat Putus...
+                showCustomAlert('error', 'Error Server', 'Tidak dapat terhubung ke server.'); // Lapor bencana koneksi
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,472 @@
+<!DOCTYPE html> <!-- Pendefinisian bahwa fondasi bangunan web ini menggunakan cetakan standar HTML versi 5 terkini -->
+<html lang="id"> <!-- Akar dokumen ini dengan spesifikasi aturan berbahasa Indonesia secara mutlak -->
+<head> <!-- Area tak terlihat yang bertugas menyimpan segala pengaturan otak mesin peramban dan skrip penghubung dunia luar -->
+    <meta charset="UTF-8"> <!-- Standar pengkodean tulisan agar sanggup meramu aneka abjad, simbol, dan emoji internasional sedunia (UTF-8) tanpa kendala huruf aneh -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"> <!-- Perintah membatasi porsi layar web presisi selebar HP sejati serta mengekang niatan pengguna mencubit perbesar (zoom) paksa -->
+    <meta name="theme-color" content="#F5F5F5"> <!-- Mengganti kelir warna balok paling atas (notifikasi jam sinyal) HP Android agar senada rupa kelabu pudar aplikasi -->
+    
+    <title>Parkirin - Pembayaran</title> <!-- Judul teks sakral yang terpampang memanjang di bilah tab jendela peramban (browser) internet Anda -->
+    <link rel="icon" href="/img/favicon.png" type="image/png"> <!-- Memanggil bingkai foto mungil logo emblem ditaruh di pojok sudut kiri tab internet tersebut -->
+
+    <!-- !!! SKRIP KUNCI EMAS MIDTRANS (PIHAK KETIGA KASIR PEMBAYARAN ONLINE) !!! -->
+    <!-- Tukang antar yang menghubungkan dunia aplikasi kita dengan mesin pelayan raksasa (Midtrans). Dia membawa 'Client Key' (Kunci Gembok Rahasia) khusus untuk perizinan Sandbox (Latihan /Bukan Uang Asli) -->
+    <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="Mid-client-HEmTJ9HSLVhgaQzY"></script>
+
+    <script src="https://cdn.tailwindcss.com"></script> <!-- Mengakses alat bantu perwarnaan dan posisi sulap sekejap (Tailwind CSS) yang langsung dijemput dari alam maya -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet"> <!-- Mengimpor paksa mesin ketik huruf estetik bergaya 'Montserrat' sumbangan dari perpustakaan raksasa Google Fonts -->
+    
+    <style> 
+        body { font-family: 'Montserrat', sans-serif; background-color: #F1F1F1; margin: 0; overscroll-behavior-y: none; } /* Semua abjad patuh seragam jadi montserrat, latarnya keabuan, dipepet mepet rata batas nol, dan cegah sifat karet narik layar khas HP saat gulir ampas bawah */
+        .hide-scrollbar::-webkit-scrollbar { display: none; } /* Jurus ampuh dan sakti membuang penampakan bayangan rel gulir ke bawah (scrollbar) pada Browser bergenre Google Chrome/Safari iOS */
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; } /* Jurus pamungkas meredam hal serupa dikhususkan untuk keturunan browser Firefox Mozila serta Windows Edge jadul */
+        .slide-in-right { animation: slideInRight 0.3s ease-out forwards; } /* Perintah panggil instruktur cuplikan video animasi yang dinamai pergerakan masuk-kanan (slideInRight) */
+        @keyframes slideInRight { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } } /* Pembuatan struktur adegan: Dimulai wujud hantu melesat dari sisi kanan HP menuju poros nol sejati hingga kasat mata utuh padat merona */
+    </style>
+</head>
+<body class="flex justify-center h-screen text-gray-800 antialiased bg-gray-200 overflow-hidden"> <!-- Latar utama dunia laptop dibikin remang gelap, membungkus kotak layar utama simulasi HP dan dipaku mantap di puser layar tengah -->
+
+    <!-- KERANGKA FISIK LAYAR SMARTPHONE VIRTUAL (Pembungkus Utama Aplikasi) -->
+    <div class="w-full max-w-[402px] bg-[#F5F5F5] h-full relative flex flex-col shadow-2xl overflow-hidden slide-in-right"> <!-- Kotak yang membatasi wujud seukuran normal HP (Max 402px lebar), sisa diluar kotak di tebas hilang dipangkas rapi dengan hiasan bayangan belakang gelap -->
+        
+        <!-- BAGIAN 1: BAR PENGATUR NAVIGASI (Tope Atas Header) -->
+        <div class="w-full h-[100px] pt-12 px-4 flex items-center shrink-0"> <!-- Kotak statis udara tebal, mengganjal kokoh atap agar isi tak nabrak tembok -->
+            <!-- TOMBOL IKON PANAH MUNDUR MENGINTIP KEBELAKANG -->
+            <a href="javascript:history.back()" class="flex items-center text-[#0064F0] hover:opacity-80 active:scale-95 transition-all cursor-pointer"> <!-- Instruksi melompat paksa ke mesin lorong waktu riwayat penjelajahan internet sbelumnya (tombol back panah biru) -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2.5"> <!-- Menggores lukisan garis siku patah yang mengarah moncong tajam hadap kiri -->
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+                </svg>
+            </a>
+            <span class="ml-2 font-bold text-[20px] text-[#0064F0]">Tiket Anda</span> <!-- Tulisan Besar "Tiket Anda" biru membara mendominasi header judul -->
+        </div>
+
+        <!-- BAGIAN 2: LEMBAR UTAMA BON KASIR TAGIHAN PARKING (Wilayah Tengah yg bisa gulir tarik lepas bawah atas/scrollable) -->
+        <div class="flex-grow overflow-y-auto hide-scrollbar flex flex-col pt-4 pb-28 relative px-4"> <!-- Tempat panjang wadah penampung isi struk, punya sifat karet melar memanjang hingga ke bawah bumi dan disembunyikan rupa besi gulirnya -->
+            
+            <h2 class="font-semibold text-[16px] text-black mb-3">Tempat Parkir</h2> <!-- Judul subseksi 1: Tempat bernaung kendaraan malang mu -->
+            
+            <!-- BLOK KARTU 1: INFO LOKASI PARKING (Tempat Absensi Kendaraan Terakhir!) -->
+            <div class="w-full bg-[#F5F5F5] border border-[#D9D9D9] rounded-[11px] p-4 relative mb-6"> <!-- Bingkai garis abu halus di sekujur lekuk raga informasi pesanan kotak -->
+                <span id="display-date" class="font-semibold text-[10px] text-[#9E9898] block mb-2">Memuat...</span> <!-- Ruangan kosong siap dihajar mesin JS di bawah nanti yang menyuntikan kalimat Tanggal Waktu berkunjung nan aktual secara real/nyata sekarang! -->
+                
+                <div class="flex justify-between items-start mt-1"> <!-- Membelah dua kubu kerumunan barisan tulisan agar berhadap hadapan (Kubu Sudut Kiri VS Kubu Sudut Kanan) terbagi sejajar seimbang -->
+                    <!-- Info Kubu Kiri (Daerah Gedung dan Slot Target Lokasi ) -->
+                    <div class="flex flex-col gap-1"> <!-- Area membariskan dua teks menumpuk lurus vertikal -->
+                        <span class="font-bold text-[14px] text-black">Rita Supermall</span> <!-- Judul Nama Gedung Pusat perbelanjaan (Lokasi Induk Bangunan) -->
+                        <span id="display-slot" class="font-normal text-[13px] text-black">Memuat...</span> <!-- Kolom untuk JS menanamkan kalimat Lantai Brapa dan Nomer Papan Tancap / Blok Lahan pilihan pengunjung tsb -->
+                    </div>
+                    <!-- Info Kubu Kanan (Data Detail Jati Diri Rupa Kendaraan Tunggangan sang Pemilik Akun) -->
+                    <div class="flex flex-col gap-1 text-right"> <!-- Area baris tulisan bersusun, dan seluruh teksnya disuruh merapat mendorong bersandar ke tembok paling ufuk sisi kanan bodi -->
+                        <span id="display-vehicle-name" class="font-bold text-[14px] text-black">Memuat...</span> <!-- Lahan lahan untuk JS mengecap kan stempel nama pabrik pembuat kendaraannya (Cth Kasus: Merek Honda Jazz / Merek Honda Supra) -->
+                        <span id="display-vehicle-plate" class="font-medium text-[14px] text-black">...</span> <!-- Lahan JS memberikan cetak kombinasi susunan huruf angka Nomor Register kepolisian milik pribadi mobil/motor si tuan nya -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- BLOK KARTU 2: RINCIAN TAGIHAN ESTIMASI HARGA (Kotak Hitung Argo Berjalan / Argo Meter / Timer Live) -->
+            <div class="w-full bg-[#F5F5F5] border border-[#D9D9D9] rounded-[11px] p-4 relative flex flex-col shadow-sm"> <!-- Kotak utama bon struk dengan bayangan samar abu memisahkannya dengan dinding belakangnya -->
+                
+                <h3 id="bill-title" class="font-bold text-[14px] text-black mb-4">Memuat...</h3> <!-- Pengulangan teks keterangan Lantai dan Slot sebagai bukti cetak resi tagihan di bawah / bon nota kecil -->
+
+                <!-- Baris Biaya Jam Masuk Datang -->
+                <div class="flex justify-between items-center mb-1"> <!-- Barisan rincian 1 baris seimbang. -->
+                    <span class="font-normal text-[13px] text-black">Waktu Masuk</span> <!-- Tulisan statis penyiar info: "Waktu Kehadiran" -->
+                    <span id="waktu-masuk" class="font-bold text-[13px] text-[#0064F0]">...</span> <!-- Ruang buat naruh Teks stempel detik saat roda ngelewatin mesin gerbang Portal Awal masuk! -->
+                </div>
+                
+                <!-- Baris Biaya Jam Keluar/Skrg -->
+                <div class="flex justify-between items-center mb-4"> <!-- Sama formatnya belah berhadapan -->
+                    <span class="font-normal text-[13px] text-black">Waktu Sekarang</span> <!-- Tulisan statis penyiar info jam kini detik berjalan  -->
+                    <span id="waktu-keluar" class="font-bold text-[13px] text-black">...</span> <!-- Ruang yang bakal di pompa terus-menerus sama fungsi JS 'setInterval' agar waktu di layar ini melaju detik per detik kayak Jam Digital beneran hidup dan berdenyut! -->
+                </div>
+
+                <!-- Baris Biru Kelabu Hitung Penuh Duit Akhir Denda -->
+                <div class="w-full bg-[#E3E1ED] rounded-[6px] flex justify-between items-center px-4 py-2 mt-2 mb-4"> <!-- Area pelindung tebal nan solid (Warna biru abu kusam) tempat ditotalkannya semua uang biaya argo / tarif dasar campur lipatan overtime/tambahan jam lemburnya -->
+                    <span class="font-bold text-[14px] text-black">Total Tagihan</span> <!-- Tegasan nama Subtotal akhir perhitungan dompet uang kasir! -->
+                    <span id="total-tagihan" class="font-bold text-[14px] text-[#E53935]">Memuat...</span> <!-- Lahan ini juga dipompa per detik/menit. Angka Rp (Rupiahnya) bakal menanjak otomatis melonjak tinggi kalo parkirnya kelamaan! Warnanya diset merah menyala biar orang kaget panik disuruh segera bayar! -->
+                </div>
+
+                <!-- MESIN ANIMASI WAKTU BERJALAN DAN ICON BERDETAK DETAK -->
+                <div class="relative w-full mt-2 flex items-center justify-between"> <!-- Jejeran blok membagi ruang Kiri untuk Tulisan Lamanya Parkir dan Ruang Kanan untuk gambar jam Ikon Besar Putar -->
+                    
+                    <div class="flex flex-col"> <!-- Kubu Kiri yang berisi Dua Barisan Susun Atas Bawah. -->
+                        <!-- Tulisan Status + Lampu Indikator Kecil Bulat Berdenyut -->
+                        <span class="font-normal text-[12px] text-black mb-1 flex items-center gap-1">
+                            <span class="relative flex h-2 w-2"> <!-- Bingkai Titik Indikator Sinyal  -->
+                              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#0064F0] opacity-75"></span> <!-- Animasi murni CSS 'Ping' ciptaan tailwind! Dia ngeluarin gelombang cincin mekar pudar secara terus terusan seakan menunjukan nafas radar satelit bahwa Argo Parkirnya emang Murni SEDANG BERJALAN ON TERUS detik saat layar diliat!  -->
+                              <span class="relative inline-flex rounded-full h-2 w-2 bg-[#0064F0]"></span> <!-- Inti padat Titik Biru Tua Pusat Ledakan Denyutnya tsb berdiri mantap ngganjel di dasar  -->
+                            </span>
+                            Durasi Parkir Berjalan <!-- Kalimat Status  -->
+                        </span>
+                        <!-- ANGKA JAM METERAN ARGO BESAR (Teks Berubah Tiap Detik!) -->
+                        <span id="durasi-parkir" class="font-bold text-[18px] text-black leading-none whitespace-nowrap tracking-tight">Memuat...</span> <!-- Disini mesin JS bakal numpahin String gabungan pecahan jam,menit, detik yang dirakit di fungsi di bawah untuk dipajang besar -->
+                    </div>
+                    
+                    <!-- Ikon Bulatan Mangkok Abu di Kanan dengan Gambar Jam Dalamnya -->
+                    <div class="w-[50px] h-[50px] bg-[#E3E1ED] rounded-full flex items-center justify-center opacity-80 shrink-0 ml-2"> <!-- Lingkaran sempurna tebal dengan gambar SVG Jam Stopwatch Pengejar Waktu (Stopwatch) di dalamnya -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- BAGIAN 3: ALAT PENGENDALI AKHIR MENU BAWAH MELAYANG TERPAKU (Tombol Aksi Uang Keluar Dompet Pengguna) -->
+        <div class="absolute bottom-0 w-full h-[100px] bg-[#F5F5F5] flex flex-col justify-center px-6 z-20 pb-4"> <!-- Kotak alas tatakan ganjelan di lantai layar agar memotong dan mengambang tidak ikut tergilir hilang oleh tumpukan kertas panjang pesanan diatasnya -->
+            <!-- TOMBOL KLIK BAYAR KELUAR PARKIR! -->
+            <!-- Kalo ditekan, memicu 'tampilkanWarningPembayaran()'. Sengaja nggak langsung manggil API Server Midtrans, biar orangnya diwanti wanti dulu dengan layar Notif Pop up agar jangan mencet sembarangan pas belom nyampe di pintu gerbang palang keluar! -->
+            <button onclick="tampilkanWarningPembayaran()" class="w-full h-[60px] bg-[#0141A3] hover:bg-blue-800 rounded-[10px] flex items-center justify-center transition-all active:scale-95 shadow-md"> <!-- Biru Elektrik kebanggan memikat klik! Menciut per pir kalau di injek jari. -->
+                <span class="text-white font-semibold text-[16px] tracking-wide">Bayar & Keluar Parkir</span> <!-- Teks Perintah Peringatan Kasir Keluar! -->
+            </button>
+        </div>
+
+        <!-- ALAT POP-UP PERINGATAN GLOBAL BERFUNGSI UMUM (Teguran Custom Kesalahan/Sukses) -->
+        <!-- *Murni Modal Custom CSS yg disembunyikan pakai z-index tinggi. Bakal terhampar kain hitam di sekeliling layar klo dipanggil JS ShowCustomAlert(). * -->
+        <div id="customModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black bg-opacity-40 backdrop-blur-sm transition-opacity opacity-0"> 
+            <div id="customModalContent" class="bg-white w-[280px] rounded-[20px] p-6 flex flex-col items-center shadow-2xl transform scale-90 transition-transform duration-300">
+                <div id="modalIconSuccess" class="w-14 h-14 bg-green-100 rounded-full hidden items-center justify-center mb-4"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg></div> <!-- Centang Ijo Sukses -->
+                <div id="modalIconError" class="w-14 h-14 bg-red-100 rounded-full hidden items-center justify-center mb-4"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg></div> <!-- Tanda X Merah Gagal -->
+                <h3 id="modalTitle" class="text-[18px] font-bold text-black mb-2 text-center">Judul</h3> <!-- Lahan cetak teks judul -->
+                <p id="modalMessage" class="text-[12px] font-medium text-gray-500 text-center mb-6 leading-relaxed">Pesan modal disini</p> <!-- Lahan panjang jabaran info kesalahannya -->
+                <button id="modalBtn" class="w-full bg-[#0141A3] hover:bg-blue-800 text-white font-bold py-2.5 rounded-[12px] text-[12px] transition-colors shadow-md active:scale-95">Mengerti</button> <!-- Pintu Keluar Modal: Menutup notif tersebut -->
+            </div>
+        </div>
+
+        <!-- KHUSUS: ALAT POP-UP PERINGATAN MODAL "WARNING" SPESIAL SEBELUM KONFIRMASI TOMBOL BAYAR! -->
+        <!-- Modal kuning ini khusus dibuat untuk nyegat orang bego yang mencet tombol "Bayar" saat mereka masih ada di wc mal atau lagi di dalem restoran ngunyah (Belom OTW turun ke basemen ke pintu portal)  -->
+        <div id="warningModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black bg-opacity-40 backdrop-blur-sm transition-opacity opacity-0"> <!-- Kain hitam pembungkus latar sama kyk tadi-->
+            <div id="warningModalContent" class="bg-white w-[300px] rounded-[20px] p-6 flex flex-col items-center shadow-2xl transform scale-90 transition-transform duration-300"> <!-- Kartu Putih melayang yg agak lebih lebar dikit ketimbang modal biasa -->
+                
+                <div class="w-14 h-14 bg-yellow-100 rounded-full flex items-center justify-center mb-4"> <!-- Lingkaran Hiasan Kuning Cerah (Pertanda Hati-Hati, Bukan Error!) -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" /></svg> <!-- Ikon Segitiga Seru (Perhatian!) -->
+                </div>
+                
+                <h3 class="text-[16px] font-bold text-black mb-2 text-center">Perhatian!</h3> <!-- Judul teguran hati hati -->
+                <!-- Penjelasan Bahwa Tiket Habis dibayar cuma tahan nyala 10 Menit! Kasian kalo dia bayarnya di wc nanti QR code nya angus seblum ngelewatin gerbang keluar -->
+                <p class="text-[11px] font-medium text-gray-500 text-center mb-5 leading-relaxed">Harap lakukan pembayaran jika Anda sudah berada dekat gate keluar parkir. Setelah membayar, QR Code keluar hanya berlaku <b class="text-red-500">10 menit</b>. Jika melebihi batas waktu, QR akan hangus.</p> 
+                
+                <div class="flex gap-2 w-full"> <!-- Lahan belah dua untuk sepasang tombol kembar (Pilihan Ganda A atau B!) -->
+                    <!-- A: Opsi Menolak / Takut -->
+                    <button onclick="tutupWarning()" class="flex-1 bg-gray-200 hover:bg-gray-300 text-black font-bold py-2.5 rounded-[12px] text-[12px] transition-colors active:scale-95">Batal</button> <!-- Tombol abu abu kalem suruh tutup dan tunda pembayaran -->
+                    <!-- B: Opsi Nekat Tetap Mau Bayar (Bakal Lari manggil mesin duit 'bayarSekarang()') -->
+                    <button onclick="tutupWarning(); bayarSekarang();" class="flex-1 bg-[#0141A3] hover:bg-blue-800 text-white font-bold py-2.5 rounded-[12px] text-[12px] transition-colors shadow-md active:scale-95">Lanjut Bayar</button> <!-- Biru pekat memicu sistem MIDTRANS SNAP Terpanggil! -->
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- PUSAT OTAK MESIN JAM WAKTU DAN LOGIKA ALUR PEMBAYARAN KASIR (JAVASCRIPT) -->
+    <script>
+        // MEMORI VARIABEL GLOBAL YANG BERUBAH RUBAH MENGINGAT DATA SEPANJANG ORANG NONGKRONG DI HALAMAN INI
+        let finalDurasiMenit = 0; // Keranjang total brapa menit si pengunjung buang waktu. Angka ini muter naik terus!
+        let finalTotalTarif = 0; // Keranjang biaya Argo dalam nilai uang Rp murni. Ikut numpuk klau durasinya naik berjam jam!
+        let waktuMasukGlobal = null; // Keranjang nampung stempel jam kedatangan awal. Data ini ga brubah rubah jd patokan (Cth jam 09:00 pagi)
+        let jenisKendaraanGlobal = 'mobil'; // Memori menelan tipe ban roda yg dia pakai (Defaultnya kita setting Mobil, biar kalau ada bug, dia dicharge pake duit gede)
+        
+        // MEMBONGKAR RAHASIA MENCARI ID DARI ALAMAT URL WEB TERSEMBUNYI
+        const urlParams = new URLSearchParams(window.location.search);
+        const ticketId = urlParams.get('id'); // Sedot kode "?id=XXXX" dari batang alamat situs
+        // LALU INTIP KESAMAAN ID NYA SAMA DI BUKU MEMORI LOKAL BROWSER. ADa gak mobil dia yang masih utang belom bayar tagihan di sistem kita?
+        let activeTickets = JSON.parse(localStorage.getItem('active_tickets')) || []; // Tarik semua tumpukan map bon tiket utang
+        const activeTicket = activeTickets.find(t => t.id === ticketId); // Bongkar bongkar satu satu adakah yang cocok?
+
+        // FUNGSI TUKANG PAMER PERINGATAN (MODAL MAKER BIASA BUKAN WARNING KUNING)
+        let modalRedirectUrl = null; 
+        function showCustomAlert(type, title, message, redirectUrl = null) {
+            modalRedirectUrl = redirectUrl; // Simpan link tujuan bila terpaksa menendang orang
+            const modal = document.getElementById('customModal');
+            const modalContent = document.getElementById('customModalContent');
+            
+            document.getElementById('modalTitle').textContent = title; // Tempel Judulnya
+            document.getElementById('modalMessage').textContent = message; // Tempel Isi Teguran
+
+            if (type === 'success') { // Bila perintahnya tipe 'success'
+                document.getElementById('modalIconSuccess').style.display = 'flex'; // Ikon Ceklis idup
+                document.getElementById('modalIconError').style.display = 'none'; // Ikon Silang Merah Padam
+            } else { // Jika tipe galak (error/dll)
+                document.getElementById('modalIconSuccess').style.display = 'none';
+                document.getElementById('modalIconError').style.display = 'flex'; // Silang Merah Menyala
+            }
+
+            // MENGGUNAKAN TRIK SULAP CSS UNTUK MENAIKAN TABIR DAN MELEDAMKAN KOTAK PERINGATAN KE MUKA!
+            modal.classList.remove('hidden'); // Cabut nyawa gaib
+            modal.classList.add('flex'); // Paksa memusat di perut layar
+            setTimeout(() => { // Kasih jeda hitungan mikro detik agar browser sempet nafas ngolah animasi halus Tailwind css nya
+                modal.classList.remove('opacity-0'); // Bongkar Baju tembus pandang pudar
+                modal.classList.add('opacity-100'); // Padatkan ke bumi
+                modalContent.classList.remove('scale-90'); // Bongkar kutukan pengecilan susut kurus raga kertas nya
+                modalContent.classList.add('scale-100'); // Gembungkan letup membesar (Zoom up pop) ke ukuran normal !
+            }, 10);
+        }
+
+        // AKSI PENONTON: KLIK TOMBOL "MENGERTI" DI MODAL PERINGATAN TERSEBUT
+        document.getElementById('modalBtn').addEventListener('click', () => {
+            if (modalRedirectUrl) { // JIKA ADA LINK NYELIP ...
+                window.location.href = modalRedirectUrl; // LANGSUNG TENDANG DAN LOMPAT KESANA! TINGGALKAN DIMENSI INI.
+            } else { // JIKA CUMA PERINGATAN BIASA (Suruh orangnya benerin sendiri)
+                // Lakukan ilmu sihir pembalikan. Tutup kotaknya perlahan dengan halus kempis kempis...
+                const modal = document.getElementById('customModal');
+                const modalContent = document.getElementById('customModalContent');
+                modal.classList.remove('opacity-100');
+                modal.classList.add('opacity-0'); // Pakai baju Jubah Tembus Pandang lagi 
+                modalContent.classList.remove('scale-100');
+                modalContent.classList.add('scale-90'); // Sedot udara badannya jadi kerdil menciut
+                setTimeout(() => { // Tunggu semenit sampai debu lenyap
+                    modal.classList.add('hidden'); // Lempar balikin ke alam kubur
+                    modal.classList.remove('flex'); // Copot posisi pusat nya
+                }, 300);
+            }
+        });
+
+        // ===============================================
+        // FUNGSI OPERASIONAL KUSUS MEMANGGIL ATAU MENUTUP MODAL WARNING KUNING! (Yang ngingetin batas 10 Menit keluar gerbang)
+        // ===============================================
+        function tampilkanWarningPembayaran() {
+            const modal = document.getElementById('warningModal'); // Panggil Si Kuning Lebar
+            const content = document.getElementById('warningModalContent');
+            modal.classList.remove('hidden'); // Persis cara sulapnya kayak alert tadi
+            modal.classList.add('flex');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modal.classList.add('opacity-100');
+                content.classList.remove('scale-90');
+                content.classList.add('scale-100');
+            }, 10);
+        }
+
+        function tutupWarning() { // Cara bunuh nya jika orang membatalkan klik (Batal) !
+            const modal = document.getElementById('warningModal');
+            const content = document.getElementById('warningModalContent');
+            modal.classList.remove('opacity-100');
+            modal.classList.add('opacity-0');
+            content.classList.remove('scale-100');
+            content.classList.add('scale-90');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }, 300);
+        }
+
+        // ============================================
+        // MESIN INTI AWAL (SEGERA BEKERJA SAAT AWAL HALAMAN BERES DIGAMBAR LAYAR HP)
+        // ============================================
+        document.addEventListener("DOMContentLoaded", () => {
+             // SIDAK RAZIA !!
+             // Kalo di buku catatan bon bon aktif tadi, ternyata ID orang ini GAK PERNAH ADA atau KOSONG MELOMPONG. BERARTI INI ORANG PENYUSUP BUG!
+             if (!activeTicket) {
+                // Tembak mati di tempat pakai Tamparan Alert (Tendang balik ke beranda Dashboard utama)
+                showCustomAlert('error', 'Tidak Ditemukan', 'Sistem tidak dapat menemukan tiket ini.', '/user-dashboard');
+                return; // STOP! Mesin JS ngambek gak mau ngerjain kode sisaan di bawah gara gara nemu maling.
+            }
+
+            // Kalo Aman? MARI KITA TULIS TULIS KERTAS! MENGHITUNG PENANGGALAN BULAN TAHUN MANUAL BUATAN TANGAN SENDIRI
+            const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu']; // Kalender Lokal Terjemahan
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des']; 
+            const d = new Date(); // Tarik nafas Server Waktu jam Tangan HP sang Pemilik perangkat
+            // Rangkai kata demi kata dari keranjang array diatas, lalu pajang indah di Teks Keterangan Resi atas (Cth: "Sabtu, 21 Jan 2030")
+            document.getElementById('display-date').textContent = `${days[d.getDay()]}, ${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+
+            // MEMINDAH INFO INFO DATA SI MOBIL KE KERTAS DARI LEMARI MEMORI
+            const vehicle = activeTicket.vehicle; // Sedot Profil info nya.
+            // Rubah Paksa dan Seragamkan catetan jenis kendaraannya jadi HURUF KECIL SEMUA pakai ilmu 'toLowerCase' (Biar tak ada kasus M-otor berantem lawan m-otor di sistem hitung rumus argo nanti)
+            jenisKendaraanGlobal = vehicle.jenis ? vehicle.jenis.toLowerCase() : 'mobil'; 
+
+            document.getElementById('display-vehicle-name').textContent = vehicle.name; // Tulis cap merek pabrik (Honda)
+            document.getElementById('display-vehicle-plate').textContent = vehicle.plate; // Tulis Kaleng plat nya (AD 222 A)
+
+            // SUSUN KALIMAT LOKASI YANG TEPAT KARENA KOSA KATA MOBIL DAN MOTOR ITU BEDA STRUKTUR AREA PANGGILAN LAHANNYA
+            let slotText = vehicle.jenis === 'mobil' ? `${activeTicket.lantai}, Slot ${activeTicket.slot}` : `${activeTicket.lantai}, ${activeTicket.slot}`;
+            document.getElementById('display-slot').textContent = slotText; // Tulis ke lahan Atas HTML
+            document.getElementById('bill-title').textContent = slotText; // Tulis buat copiannya ke Tagihan Bawah Bon HTML
+
+            // SURUH TUKANG POS BERANGKAT KE DATABASE SERVER API NYARI TAU TENTANG JAM BRP SIALAN INI MOBIL PERTAMA MASUK!!
+            tarikInformasiTagihan(); 
+        });
+
+        // FUNGSI TUKANG POS TERBANG NANYA JAM ABSENSI MASUK / CHECK-IN AWAL
+        async function tarikInformasiTagihan() {
+            try {
+                // Ketok pintu Endpoint API Controller nge-Cek Info Absensi Bon si Ticket ID itu.
+                const response = await fetch(`/api/parkir/checkout-info/${ticketId}`); 
+                const result = await response.json(); // Bongkar isi balasan pelayan Backend Server
+                
+                if (result.status === 'success') { // Jika berhasil terbongkar mulus catetan rahasia database SQL Nya...
+                    // Simpan Berkas Waktu Check-In yg dicolong dari database itu masukin ke saku baju (Variabel Global Tadi yg namanya 'waktuMasukGlobal') biar inget trus.
+                    waktuMasukGlobal = new Date(result.waktu_masuk); 
+
+                    // Tampilkan Waktu Check In statis yang nggak goyang rubah itu ke atas kertas resi agar Pengguna sadar diri dia masuk jam brp (Biar ga demo nuduh aplikasi boongin argo jamnya)
+                    document.getElementById('waktu-masuk').textContent = waktuMasukGlobal.toLocaleTimeString('id-ID', {hour: '2-digit', minute:'2-digit'}) + ' WIB';
+
+                    // NYALAKAN MESIN BUBUT PEMOTONG ARGOMETRER UANG DUIT !! Waktu dan Duit mulai berdenyut nambah sekarang.
+                    mulaiHitungDurasiBerjalan(); 
+                }
+            } catch (err) { // Jika kiamat internet
+                console.error("Gagal menarik data dari server", err); // Misi Gagal Tukang Pos Mati d Tengah Jalan
+            }
+        }
+
+        // ========================================================
+        // MESIN ARGOMETER: LOGIKA TIMER DURASI DAN HARGA YANG BERJALAN MAJU (LIVE) PER DETIK! (Otak Utama Keserakahan Aplikasi Kasir!)
+        // ========================================================
+        function mulaiHitungDurasiBerjalan() {
+            // Tentukan Tarif Pajak per Jenis Ban (Kalau dia terekam pakai Mobil, Patokan tarif Per Jam bayar cebeng 10k! Kalau Motor Cuma 3000!)
+            const tarifPertama = jenisKendaraanGlobal === 'mobil' ? 10000 : 3000; 
+            // Pajak Denda Overtime nya (Kalau mobil tiap molor sean jam nambah Goceng 2000, klo motor Seribu bae)
+            const tarifBerikutnya = jenisKendaraanGlobal === 'mobil' ? 2000 : 1000;
+
+            // MULAI NYALAKAN JANTUNG BUATAN (SetInterval). Denyutkan urat nadi baris perintah ini secara berkala dan diulang ulang tiada henti setiap 1000 mili sekon / Tiap Detik
+            setInterval(() => {
+                const now = new Date(); // Curi pandang detak waktu absolut dunia real life di jam saat jantung ini muter (Berkedut)
+                
+                // Menghitung selisih waktu mutlak antara waktu absolut barusan dengan Stempel Jam Masuk yang disimpen dalem Saku Baju (Global Variable) tadi. Itung dlm bentuk milidetik.
+                const diffMs = now.getTime() - waktuMasukGlobal.getTime();
+                const diffSecs = Math.floor(diffMs / 1000); // Konversi sisaan jadi Detik Penuh
+                const diffMins = Math.floor(diffSecs / 60); // Konversi jadi brapa Menit Penuh
+                
+                const hours = Math.floor(diffSecs / 3600); // Pecahan buat Tulis Jam brapa (Dari konversi jumlah detik dibagi 3600)
+                const mins = Math.floor((diffSecs % 3600) / 60); // Pecahan nulis sisa menit brapa 
+                const secs = diffSecs % 60; // Pecahan sisa murni detik brapa.
+
+                // 1. Perbarui tampilan Waktu "Jam Dunia Sekarang" terus berjalan di resi bon agar kerasa kesan Live Real timenya.
+                document.getElementById('waktu-keluar').textContent = now.toLocaleTimeString('id-ID', {hour: '2-digit', minute:'2-digit', second: '2-digit'}) + ' WIB';
+
+                // 2. Rangkai Tulisan Durasi Terparkir 
+                let durasiTeks = ''; // Keranjang untaian kata
+                if (hours > 0) durasiTeks += `${hours} Jam `; // Kalau dia diem 0 jam di mal, ya kata 'Jam' nya ga usah disebut/muncul. Kalau ada, tambahin kata.
+                durasiTeks += `${mins} Menit ${secs} Detik`; // Timpah dan Jejalin aja sisaan menit detik dibelakangnya panjang lebar
+                document.getElementById('durasi-parkir').textContent = durasiTeks; // Panggilin angka teks untaian itu numpuk rubah gantiin teks layar lama yg jadul setiap sedetik!
+
+                // 3. KALKULATOR TUKANG PAJAK BERAKSI! Pungutan Harga Terbuntel Secara Real-Time (Per Jam, aturan Denda per 30 menit)
+                let totalHarga = tarifPertama; // Default keranjang uang, Jam pertama selalu bayar DP Penuh walau dia baru singgah sedetik. 1 Jam awal = Bayar Setoran.
+                
+                if (diffMins > 60) { // Cek Jika ternyata Menit nongkrong dia udah melebihi 60 (Artinya sudah masuk jam ke 2) MASA DENDA DI MULAI!
+                    const sisaMenit = diffMins - 60; // Buang menit sejaman awal dia nongkrong. Ambil sisaan kotor menit berlebihnya.
+                    const jamPenuh = Math.floor(sisaMenit / 60); // Hitung, dari sisaan kotor itu.. Ada brapa kelompok Kelipatan Jam Utuh 60 menitan yang kelewat? 
+                    const sisaDiJamIni = sisaMenit % 60; // Hitung sisa receh menitan yang numpang nongkrong nanggung di jam yg baru
+
+                    // Paksa Dompetnya diporotin dengan lipatan Ganda sebanyak berapa jam ia nunggak! (Tambah Jam penuh x Harga Overtime)
+                    totalHarga += jamPenuh * tarifBerikutnya; 
+                    
+                    if (sisaDiJamIni > 30) { // Cek sisaan receh menit dia nanggung td, klo dia molor lebih dari Setengah Jam (30)..
+                        totalHarga += tarifBerikutnya; // Tembak dan Paksa bayar penuhi tarif satu jam overtime penuh walau belom abis 60mnt (Hukum Pasar! Lewat 30 menit = kena tarif 1 jam)
+                    }
+                }
+
+                // Terjemahkan Angka sadis yang didapet dari kalkulasi otak jahat tsb pake format Uang (Ribuan titik Rp). Tempel ke Muka Papan Teks "Total Tagihan" yang Berwarna Merah Menyala!
+                document.getElementById('total-tagihan').textContent = `Rp ` + totalHarga.toLocaleString('id-ID');
+
+                // Simpan Maling-maling angka kalkulasi ini ke kantong kresek Saku Baju Dalam Memori Global kita untuk disiapin buat dimasukin ke mesin Gesek Kasir Midtrans ntar!
+                finalDurasiMenit = diffMins; 
+                finalTotalTarif = totalHarga; 
+            }, 1000); // 1000 ms = Denyutan Loop ini Mutar Berkedut menggerogoti umur tiap sebiji Detik!
+        }
+
+        // ============================================
+        // MESIN KASIR: FUNGSI TOMBOL AKHIR DIEKSEKUSI PENGGUNA YANG SETUJU KEHILANGAN UANG (Proses Midtrans SNAP!)
+        // ============================================
+        async function bayarSekarang() {
+            const btn = document.querySelector('button'); // Cekal tombol birunya biar lemas
+            btn.innerHTML = `<span class="text-white font-semibold text-[16px]">Memproses...</span>`; // Ganti wujudnya jadi status loading agar orang tak kesetanan klik dobel beruntun mencet (Bisa error saldo keruk double nanti)
+            
+            try {
+                // MISI 1 KASIR: Memesan Surat Jaminan Transaksi (Token) Ke Tuhan Penguasa Uang, Server Midtrans. Pintu dihubungi lewat Backend Springboot kita yang panggil fungsi get-snap-token
+                const reqToken = await fetch('/api/parkir/get-snap-token', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    // Kirim bekal tumbal ke backend kita nerusin pesanan ke midtrans: Ini Lo Nomer Tiket orangnya, Dan ini lho Duit Jumlah yg harus dipalak dari dompet dia!
+                    body: JSON.stringify({ 
+                        kode_unik: ticketId,
+                        total_tarif: finalTotalTarif
+                    })
+                });
+
+                const resToken = await reqToken.json(); // Bongkar Jaminan Token Rahasia dr Server Pembayaran Uang 
+
+                if (resToken.status === 'success') { // Jika Midtrans bilang OKE, Orang ini boleh ber-transaksi (Surat Tokennya Tembus!)
+                    const currentOrderId = resToken.order_id; // Colong dan Catat kode bukti Struk Belanjanya untuk direkap pembukuan akhir ntar 
+                    
+                    // MEMBONGKAR DAN MEMANGGIL KOTAK GERBANG JENDELA GAIB PEMBAYARAN MIDTRANS ASLI DARI SNAP.JS !!!! (Akan muncul UI pilihan Bayar Pakai Dana, BCA, GoPay dsb numpuk di layar HP)
+                    window.snap.pay(resToken.token, {
+                        // KALO ORANGNYA UDAH KELAR BAYAR TRANFSER / SUKSES DUIT MASUK KE KANTONG KITA!
+                        onSuccess: function(result) {
+                            // LARI DAN SELESAIKAN PROSEDURAL CATETAN DATABASE ! (Panggil fungsi tutup rekening selesaikanPesananDatabase) dengan ngirim jenis duit (Misal: qris) dan Nomor Bon nya.
+                            selesaikanPesananDatabase(result.payment_type, currentOrderId);
+                        },
+                        // KALO ORANGNYA MASIH GANTUNG DUIT / NYETAK BILLING / NUNDA PERGI KE INDOMARET
+                        onPending: function(result) {
+                            showCustomAlert('error', 'Menunggu Pembayaran', 'Selesaikan pembayaran Anda menggunakan metode yang dipilih.'); // Tampar sadarin suruh lunasin dlu di aplikasi banking dia.
+                            btn.innerHTML = `<span class="text-white font-semibold text-[16px]">Bayar & Keluar Parkir</span>`; // Normalin kembali bentuk tombol biru yang tadi berubah jadi tulisan Loading.
+                        },
+                        // KALO KARTUNYA KOSONG / DENIAL / ERROR SALDO GA CUKUP
+                        onError: function(result) {
+                            showCustomAlert('error', 'Pembayaran Gagal', 'Proses pembayaran Anda tidak berhasil.'); // Tertawakan miskin
+                            btn.innerHTML = `<span class="text-white font-semibold text-[16px]">Bayar & Keluar Parkir</span>`; // Normalin tombol
+                        },
+                        // KALO ORANGNYA KABUR PAS DISURUH MILIH CARA BAYAR (Nutup Kotak Layar Midtrans / Cancel)
+                        onClose: function() {
+                            showCustomAlert('error', 'Dibatalkan', 'Anda menutup jendela layar sebelum menyelesaikan pembayaran.'); // Tegur kemalasannya
+                            btn.innerHTML = `<span class="text-white font-semibold text-[16px]">Bayar & Keluar Parkir</span>`; // Normalin tombol
+                        }
+                    });
+                } else { // Jika Sedari Awal pesen tiket Jaminan Transaksi midtrans udah Gagal di Tolak!
+                    showCustomAlert('error', 'Gagal', 'Tidak dapat memuat metode pembayaran dari server.'); // Usir error
+                    btn.innerHTML = `<span class="text-white font-semibold text-[16px]">Bayar & Keluar Parkir</span>`; // Normalin
+                }
+
+            } catch (e) { // Bila bencana Gempa bumi internet mati terputus tengah jalan
+                showCustomAlert('error', 'Error Server', 'Koneksi ke sistem Midtrans gagal.');
+                btn.innerHTML = `<span class="text-white font-semibold text-[16px]">Bayar & Keluar Parkir</span>`;
+            }
+        }
+
+        // ============================================
+        // TAHAPAN FINAL SETELAH TERIMA UANG KASIR MASUK (LUNAS): MEMBERSIHKAN JEJAK BUKU ARSIP DI DATABASE DAN MELUNASI UTANG ORANG NYA!
+        // ============================================
+        async function selesaikanPesananDatabase(paymentMethod, orderId) {
+            try {
+                // Perintahkan Kurir Laporan Akhir nembus ke Markas Endpoint Bayar Pelunasan Database di Server Sendiri 
+                const response = await fetch('/api/parkir/bayar', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    // Bawa semua bukti kejahatan kalkulasi dan dompet yang dirampas tadi! Serta Nama Struk belanja Midtransnya.
+                    body: JSON.stringify({ 
+                        kode_unik: ticketId,
+                        total_durasi: finalDurasiMenit,    
+                        total_tarif: finalTotalTarif,
+                        order_id: orderId,              
+                        payment_type: paymentMethod     
+                    })
+                });
+
+                if(response.ok) { // Jika Server Kita (Backend) menstempel LUNAS di berkas data mobil ini!! YAY!! BEBAS!!
+                    
+                    // SITA DAN BONGKAR PEMBERSIHAN FILE ARSIP SAMPAH UTANG BON BELOM LUNAS MILIK ORANG INI DI HP NYA! 
+                    activeTickets = activeTickets.filter(t => t.id !== ticketId); // Buang kertas kotornya dri daftar tumpukan lemari
+                    localStorage.setItem('active_tickets', JSON.stringify(activeTickets)); // Simpen bersih sisaan bon hutang
+
+                    // BIKIN KERTAS BARU ! (MEMBUAT SERTIFIKAT TIKET LUNAS/QR CODE KELUAR GERBANG BEBAS) LALU SIMPAN DI DOMPET SAKU HP PENGGUNA.
+                    const qrData = {
+                        id: ticketId,
+                        lantai: activeTicket.lantai,
+                        slot: activeTicket.slot,
+                        vehicle: activeTicket.vehicle,
+                        paidAt: new Date().getTime() // Stempel Waktu Sertifikat Pembebasan Lunas Asli Diciptakan saat detik ini juga (Awal Mula Argometer 10 Menit Keluar Gerbang Nanti Dihitung !!)
+                    };
+                    // Tanamkan Dompet Simpenan Sertifikat Kebebasan Lunas tsb di brankas ingatan memori browser HP 
+                    localStorage.setItem('paid_ticket_qr', JSON.stringify(qrData)); 
+                    
+                    // Tampar kasih Notifikasi Hijau Tanda Kemerdekaan! dan Paksa Pindah Ruang Dimensi Layar ke Halaman 'Tiket-QR' yang khusus nampilin QR KELUAR PINTU GERBANG (Eksklusif buat Orang yg Lunas)
+                    showCustomAlert('success', 'Pembayaran Berhasil!', 'Terima kasih telah menggunakan Parkirin.', `/tiket-qr?id=${ticketId}`);
+                }
+            } catch (e) { // Jika gagal konek ke database padahal uang uda nyedot Midtrans
+                // Panik! (Untung aja uangnya ttp masuk ke Rekening Kita wkwkw, orangnya suruh nunggu atau lapor admin mall)
+                showCustomAlert('error', 'Peringatan', 'Pembayaran lunas, tapi gagal memperbarui data server Anda.'); 
+            }
+        }
+    </script>
+</body>
+</html>

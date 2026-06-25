@@ -1,0 +1,215 @@
+<!DOCTYPE html> <!-- Deklarasi bahwa ini adalah dokumen HTML5 -->
+<html lang="id"> <!-- Elemen akar halaman, bahasa Indonesia -->
+<head> <!-- Bagian kepala halaman -->
+    <meta charset="UTF-8"> <!-- Encoding UTF-8 agar teks Indonesia tampil benar -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"> <!-- Tampilan responsif di HP -->
+    <meta name="theme-color" content="#B9C7DF"> <!-- Warna tema browser di Android -->
+    <meta name="apple-mobile-web-app-capable" content="yes"> <!-- Izinkan sebagai web app di iPhone -->
+    
+    <title>Parkirin - Pemesanan</title> <!-- Judul tab browser -->
+    <link rel="icon" href="/img/favicon.png" type="image/png"> <!-- Ikon tab browser -->
+
+    <script src="https://cdn.tailwindcss.com"></script> <!-- Tailwind CSS dari internet -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet"> <!-- Font Montserrat -->
+    
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script> <!-- Library Leaflet untuk menghitung jarak GPS -->
+
+    <style> 
+        body {
+            background-color: #F1F1F1; /* Latar abu-abu muda */
+            font-family: 'Montserrat', sans-serif; /* Font Montserrat */
+            overscroll-behavior-y: none; /* Cegah scroll berlebih */
+            margin: 0; /* Tanpa margin */
+        }
+
+        .slide-in-right {
+            animation: slideIn 0.3s ease-out forwards; /* Animasi geser masuk dari kanan */
+        }
+        @keyframes slideIn { /* Definisi animasi geser masuk */
+            from { opacity: 0; transform: translateX(20px); } /* Mulai dari kanan, transparan */
+            to { opacity: 1; transform: translateX(0); } /* Berakhir normal */
+        }
+
+        .hide-scrollbar::-webkit-scrollbar { display: none; } /* Sembunyikan scrollbar Chrome/Safari */
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; } /* Sembunyikan scrollbar IE/Firefox */
+    </style>
+</head>
+<body class="flex justify-center h-screen text-gray-800 antialiased bg-gray-200"> <!-- Badan halaman: tengah, tinggi penuh -->
+
+    <!-- WADAH UTAMA HALAMAN BOOKING -->
+    <div class="w-full max-w-[402px] bg-[#F1F1F1] h-full relative flex flex-col shadow-2xl overflow-hidden slide-in-right"> <!-- Wadah utama dengan animasi -->
+        
+        <!-- LATAR BIRU-ABU DI BAGIAN ATAS HALAMAN -->
+        <div class="absolute top-0 left-0 w-full h-[204px] bg-[#B9C7DF] z-0"></div> <!-- Blok warna latar atas -->
+
+        <!-- HEADER: Tombol kembali dan judul -->
+        <div class="w-full pt-12 pb-4 px-4 z-10 flex items-center"> <!-- Bar atas halaman -->
+            <a href="javascript:history.back()" class="text-[#0064F0] hover:opacity-80 active:scale-95 transition-all cursor-pointer mr-3"> <!-- Tautan kembali ke halaman sebelumnya -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2.5"> <!-- Ikon panah kembali -->
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" /> <!-- Bentuk panah kiri -->
+                </svg>
+            </a>
+            <h1 class="text-[20px] font-bold text-[#0064F0]">Pemesanan</h1> <!-- Judul halaman -->
+        </div>
+
+        <!-- AREA KONTEN YANG BISA DIGULIR -->
+        <div class="flex-grow overflow-y-auto hide-scrollbar z-10 px-4 pt-6 pb-24"> <!-- Konten yang bisa digulir -->
+            
+            <!-- KARTU INFO LOKASI PARKIR -->
+            <div class="w-full bg-[#F5F5F5] border border-[#D9D9D9] rounded-[15px] flex flex-col shadow-sm mb-8"> <!-- Kartu informasi lokasi parkir -->
+                
+                <!-- BARIS INFO NAMA DAN HARGA -->
+                <div class="flex justify-between items-start px-4 pt-4 pb-3"> <!-- Baris atas kartu -->
+                    <div class="flex flex-col"> <!-- Kolom info lokasi -->
+                        <div class="flex items-center gap-3"> <!-- Baris nama dan jarak -->
+                            <span class="text-[#0F172A] font-semibold text-[12px]">RITA Supermall</span> <!-- Nama lokasi parkir -->
+                            <div class="flex items-baseline"> <!-- Wadah teks jarak -->
+                                <span id="park-distance" class="text-[#0F172A] font-semibold text-[11px] leading-none">...</span> <!-- Jarak ke lokasi — diisi JavaScript -->
+                                <span class="text-[#0F172A] font-semibold text-[5px] ml-[1px]">Km</span> <!-- Satuan jarak -->
+                            </div>
+                        </div>
+                        <span class="text-[#D9D9D9] font-semibold text-[10px] mt-1">Kab. Banyumas</span> <!-- Kota lokasi parkir -->
+                    </div>
+
+                    <!-- HARGA TARIF -->
+                    <div class="flex items-baseline"> <!-- Wadah teks harga -->
+                        <span class="text-black font-semibold text-[7px] mr-1">IDR</span> <!-- Label mata uang -->
+                        <span class="text-black font-semibold text-[11px] leading-none">2.000</span> <!-- Harga tarif parkir -->
+                    </div>
+                </div>
+
+                <div class="w-full h-0 border-t border-[#D9D9D9]"></div> <!-- Garis pemisah horizontal -->
+
+                <!-- BARIS INFO: Tipe Parkir | Rating | Ketersediaan -->
+                <div class="flex items-center justify-between h-[30px] px-2 relative"> <!-- Baris bawah kartu info -->
+                    <!-- KOLOM TIPE PARKIR -->
+                    <div class="w-1/3 flex justify-center border-r border-[#D9D9D9] py-1"> <!-- Kolom 1/3: tipe parkir -->
+                        <span class="text-[#D9D9D9] font-semibold text-[10px]">Parking</span> <!-- Label tipe parkir -->
+                    </div>
+
+                    <!-- KOLOM RATING BINTANG (5 bintang abu-abu) -->
+                    <div class="w-1/3 flex justify-center border-r border-[#D9D9D9] py-1 gap-1"> <!-- Kolom 1/3: rating -->
+                        <!-- Lima ikon bintang abu-abu sebagai dekorasi rating -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 text-[#D9D9D9]" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg> <!-- Bintang 1 -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 text-[#D9D9D9]" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg> <!-- Bintang 2 -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 text-[#D9D9D9]" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg> <!-- Bintang 3 -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 text-[#D9D9D9]" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg> <!-- Bintang 4 -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 text-[#D9D9D9]" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg> <!-- Bintang 5 -->
+                    </div>
+
+                    <!-- KOLOM KETERSEDIAAN SLOT -->
+                    <div class="w-1/3 flex justify-center items-center py-1 gap-1.5"> <!-- Kolom 1/3: ketersediaan -->
+                        <span class="text-[#00D7FF] font-semibold text-[10px]">Tersedia</span> <!-- Label tersedia -->
+                        <div class="bg-[#00D5FF] px-1.5 py-[1px] rounded-[10px]"> <!-- Lencana jumlah slot tersedia -->
+                            <span id="booking-slots" class="text-[#F5F5F5] font-semibold text-[10px] leading-none">.../200</span> <!-- Jumlah slot — diisi JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- INFO HARGA/TARIF PARKIR -->
+            <div class="flex flex-col mb-4"> <!-- Wadah info tarif -->
+                <h2 class="text-black font-semibold text-[14px] mb-4">Harga</h2> <!-- Judul section harga -->
+                
+                <!-- TARIF MOTOR -->
+                <div class="mb-4"> <!-- Wadah tarif motor -->
+                    <h3 class="text-black font-semibold text-[14px] mb-2">Tarif Motor</h3> <!-- Judul tarif motor -->
+                    <p class="text-black font-semibold text-[10px] mb-1">Jam Pertama IDR <span id="tarif-motor-pertama">...</span></p> <!-- Harga jam pertama motor — diisi JavaScript -->
+                    <p class="text-black font-semibold text-[10px]">Jam Berikutnya IDR <span id="tarif-motor-berikutnya">...</span>/jam</p> <!-- Harga jam berikutnya motor — diisi JavaScript -->
+                </div>
+
+                <!-- TARIF MOBIL -->
+                <div> <!-- Wadah tarif mobil -->
+                    <h3 class="text-black font-semibold text-[14px] mb-2">Tarif Mobil</h3> <!-- Judul tarif mobil -->
+                    <p class="text-black font-semibold text-[10px] mb-1">Jam Pertama IDR <span id="tarif-mobil-pertama">...</span></p> <!-- Harga jam pertama mobil — diisi JavaScript -->
+                    <p class="text-black font-semibold text-[10px]">Jam Berikutnya IDR <span id="tarif-mobil-berikutnya">...</span>/jam</p> <!-- Harga jam berikutnya mobil — diisi JavaScript -->
+                </div>
+            </div>
+
+        </div>
+
+        <!-- FOOTER: Tombol Lanjutkan -->
+        <div class="absolute bottom-0 w-full h-[81px] bg-[#F5F5F5] flex flex-col justify-center px-4 z-20 shadow-[0_-5px_15px_rgba(0,0,0,0.05)] border-t border-gray-200"> <!-- Bar bawah halaman -->
+            <div class="text-center mb-1 -mt-2"> <!-- Teks bantuan di atas tombol -->
+                <span class="text-black font-semibold text-[7px]">Bermasalah? <a href="#" class="text-[#0064F0]">Hubungi Kami</a></span> <!-- Tautan bantuan -->
+            </div>
+            <a href="/booking-pilih-kendaraan" class="w-full h-[36px] bg-[#0141A3] hover:bg-blue-900 rounded-[10px] flex items-center justify-center transition-all active:scale-95 shadow-sm block text-center"> <!-- Tombol lanjutkan ke pilih kendaraan -->
+                <span class="text-white font-semibold text-[12px] leading-[36px]">Lanjutkan</span> <!-- Teks tombol -->
+            </a>
+        </div>
+
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() { // Jalankan setelah halaman siap
+            // 1. Logika Kalkulasi Jarak Geolocation
+            const ritaLat = -7.4255; // Koordinat lintang RITA Supermall
+            const ritaLng = 109.2303; // Koordinat bujur RITA Supermall
+            const distanceTextElement = document.getElementById('park-distance'); // Ambil elemen teks jarak
+
+            if ("geolocation" in navigator) { // Jika browser mendukung geolokasi
+                navigator.geolocation.getCurrentPosition(
+                    function(position) { // Jika izin lokasi diberikan
+                        const userLat = position.coords.latitude; // Koordinat lintang pengguna
+                        const userLng = position.coords.longitude; // Koordinat bujur pengguna
+
+                        const userLatLng = L.latLng(userLat, userLng); // Buat objek koordinat pengguna (Leaflet)
+                        const destLatLng = L.latLng(ritaLat, ritaLng); // Buat objek koordinat tujuan (Leaflet)
+                        
+                        const distanceInKm = (userLatLng.distanceTo(destLatLng) / 1000).toFixed(2); // Hitung jarak dalam km (2 desimal)
+                        distanceTextElement.textContent = distanceInKm; // Tampilkan jarak
+                    },
+                    function(error) { // Jika izin lokasi ditolak
+                        distanceTextElement.textContent = "-"; // Tampilkan tanda strip
+                    },
+                    { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 } // Akurasi tinggi, timeout 10 detik
+                );
+            } else { // Jika browser tidak mendukung geolokasi
+                distanceTextElement.textContent = "-"; // Tampilkan tanda strip
+            }
+
+            // 2. Memanggil Fungsi Fetch Tarif dari Database
+            fetchTarif(); // Ambil data tarif dari server
+
+            fetch('/api/parkir/availability/1') // Ambil data ketersediaan slot dari API
+                .then(res => res.json()) // Ubah respons dari JSON
+                .then(result => {
+                    if(result.status === 'success') { // Jika berhasil
+                        document.getElementById('booking-slots').textContent = `${result.data.available_slots}/${result.data.total_slots}`; // Tampilkan slot tersedia
+                    }
+                }).catch(err => console.error(err)); // Catat error jika gagal
+        });
+
+        // FUNGSI MENGAMBIL TARIF DARI API DATABASE (BACKEND)
+        async function fetchTarif() { // Fungsi untuk mengambil data tarif parkir dari server
+            try {
+                // Endpoint ini harus dibuat di file Backend Node.js/PHP Anda
+                // Contoh: SELECT * FROM tarif
+                const response = await fetch('/api/tarif'); // Kirim permintaan ke API tarif
+                const result = await response.json(); // Ubah respons dari JSON
+                
+                if(result.data && result.data.length > 0) { // Jika ada data tarif
+                    result.data.forEach(item => { // Proses setiap data tarif
+                        // Memasukkan angka tarif ke dalam elemen HTML sesuai jenis kendaraan
+                        if (item.jenis_kendaraan.toLowerCase() === 'motor') { // Jika jenis kendaraan motor
+                            document.getElementById('tarif-motor-pertama').textContent = item.tarif_jam_pertama.toLocaleString('id-ID'); // Tampilkan tarif jam pertama motor
+                            document.getElementById('tarif-motor-berikutnya').textContent = item.tarif_jam_berikutnya.toLocaleString('id-ID'); // Tampilkan tarif jam berikutnya motor
+                        } else if (item.jenis_kendaraan.toLowerCase() === 'mobil') { // Jika jenis kendaraan mobil
+                            document.getElementById('tarif-mobil-pertama').textContent = item.tarif_jam_pertama.toLocaleString('id-ID'); // Tampilkan tarif jam pertama mobil
+                            document.getElementById('tarif-mobil-berikutnya').textContent = item.tarif_jam_berikutnya.toLocaleString('id-ID'); // Tampilkan tarif jam berikutnya mobil
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error('Gagal mengambil data tarif dari server:', error); // Catat error jika gagal
+                
+                // Fallback (Nilai Cadangan) jika server database mati
+                document.getElementById('tarif-motor-pertama').textContent = "3.000"; // Nilai cadangan tarif motor jam pertama
+                document.getElementById('tarif-motor-berikutnya').textContent = "1.000"; // Nilai cadangan tarif motor jam berikutnya
+                document.getElementById('tarif-mobil-pertama').textContent = "10.000"; // Nilai cadangan tarif mobil jam pertama
+                document.getElementById('tarif-mobil-berikutnya').textContent = "2.000"; // Nilai cadangan tarif mobil jam berikutnya
+            }
+        }
+    </script>
+</body>
+</html>

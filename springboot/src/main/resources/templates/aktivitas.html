@@ -1,0 +1,221 @@
+<!DOCTYPE html> <!-- Deklarasi bahwa ini adalah dokumen HTML5 -->
+<html lang="id"> <!-- Elemen akar halaman, bahasa Indonesia -->
+<head> <!-- Bagian kepala halaman -->
+    <meta charset="UTF-8"> <!-- Encoding UTF-8 agar teks Indonesia tampil benar -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"> <!-- Tampilan responsif di HP -->
+    <meta name="theme-color" content="#F5F5F5"> <!-- Warna tema browser di Android -->
+    <title>Parkirin - Aktivitas</title> <!-- Judul tab browser -->
+    <link rel="icon" href="/img/favicon.png" type="image/png"> <!-- Ikon tab browser -->
+
+    <script src="https://cdn.tailwindcss.com"></script> <!-- Tailwind CSS dari internet -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet"> <!-- Font Montserrat -->
+    
+    <style> 
+        body { background-color: #F1F1F1; font-family: 'Montserrat', sans-serif; overscroll-behavior-y: none; margin: 0; } /* Latar, font, dan pengaturan scroll */
+        .slide-in-right { animation: slideIn 0.3s ease-out forwards; } /* Animasi geser masuk dari kanan */
+        @keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } } /* Definisi animasi geser masuk */
+        .fade-in { animation: fadeIn 0.2s ease-in-out forwards; } /* Animasi muncul perlahan */
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } } /* Definisi animasi muncul dengan sedikit geser ke atas */
+        .hide-scrollbar::-webkit-scrollbar { display: none; } /* Sembunyikan scrollbar Chrome/Safari */
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; } /* Sembunyikan scrollbar IE/Firefox */
+
+        /* Cekungan tengah navbar bawah */
+        .nav-curve { position: absolute; top: -1px; left: 50%; transform: translateX(-50%); width: 86px; height: 38px; background-color: #F1F1F1; border-bottom-left-radius: 43px; border-bottom-right-radius: 43px; border: 1px solid #D9D9D9; border-top: none; z-index: 10; }
+        .nav-curve::before, .nav-curve::after { content: ""; position: absolute; top: 0; width: 14px; height: 14px; background-color: transparent; } /* Elemen dekoratif sudut cekungan */
+        .nav-curve::before { left: -14px; border-top-right-radius: 14px; border-right: 1px solid #D9D9D9; border-top: 1px solid #D9D9D9; box-shadow: 4px -4px 0 4px #F1F1F1; } /* Sudut kiri */
+        .nav-curve::after { right: -14px; border-top-left-radius: 14px; border-left: 1px solid #D9D9D9; border-top: 1px solid #D9D9D9; box-shadow: -4px -4px 0 4px #F1F1F1; } /* Sudut kanan */
+    </style>
+</head>
+<body class="flex justify-center h-screen text-gray-800 antialiased bg-gray-200 overflow-hidden"> <!-- Badan halaman: tengah, tinggi penuh, tanpa overflow -->
+
+    <!-- WADAH UTAMA HALAMAN AKTIVITAS -->
+    <div class="w-full max-w-[402px] bg-[#F1F1F1] h-full relative flex flex-col shadow-2xl overflow-hidden slide-in-right"> <!-- Wadah utama dengan animasi geser masuk dari kanan -->
+        
+        <!-- HEADER: Tombol kembali dan judul -->
+        <div class="bg-[#F5F5F5] w-full pt-10 pb-2 px-4 z-10 border-b border-gray-200"> <!-- Bar atas halaman -->
+            <div class="flex items-center justify-between mb-4"> <!-- Baris header -->
+                <div class="flex items-center"> <!-- Wadah tombol kembali dan judul -->
+                    <a href="/user-dashboard" class="text-[#0064F0] hover:opacity-80 active:scale-95 transition-all cursor-pointer mr-3"> <!-- Tombol kembali ke dashboard -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2.5"> <!-- Ikon panah kiri -->
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" /> <!-- Bentuk panah kiri -->
+                        </svg>
+                    </a>
+                    <h1 class="text-[20px] font-bold text-[#0064F0]">Aktivitas</h1> <!-- Judul halaman -->
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB NAVIGATOR: Aktivitas | Riwayat -->
+        <div class="w-full flex bg-[#F5F5F5] relative z-10 shadow-sm shrink-0"> <!-- Baris tab navigasi -->
+            <!-- TAB AKTIVITAS (aktif secara default) -->
+            <div id="btn-aktivitas" onclick="switchTab('aktivitas')" class="w-1/2 flex flex-col items-center justify-center pt-3 cursor-pointer"> <!-- Tombol tab Aktivitas -->
+                <span id="txt-aktivitas" class="text-[12px] font-semibold text-[#0062E6] mb-3">Aktivitas</span> <!-- Teks tab — biru = aktif -->
+                <div id="line-aktivitas" class="w-full h-[3px] bg-[#0062E6] transition-colors duration-300"></div> <!-- Garis bawah biru = tab aktif -->
+            </div>
+
+            <!-- TAB RIWAYAT (tidak aktif secara default) -->
+            <div id="btn-riwayat" onclick="switchTab('riwayat')" class="w-1/2 flex flex-col items-center justify-center pt-3 cursor-pointer"> <!-- Tombol tab Riwayat -->
+                <span id="txt-riwayat" class="text-[12px] font-semibold text-gray-400 mb-3">Riwayat</span> <!-- Teks tab — abu = tidak aktif -->
+                <div id="line-riwayat" class="w-full h-[3px] bg-transparent transition-colors duration-300"></div> <!-- Garis bawah transparan = tab tidak aktif -->
+            </div>
+        </div>
+
+        <!-- AREA KONTEN TAB -->
+        <div class="flex-grow overflow-y-auto hide-scrollbar p-4 bg-[#F5F5F5] pb-28"> <!-- Area konten yang bisa digulir -->
+            <div id="view-aktivitas" class="block fade-in space-y-3"></div> <!-- Konten tab Aktivitas — diisi oleh JavaScript -->
+            <div id="view-riwayat" class="hidden fade-in space-y-3"></div> <!-- Konten tab Riwayat — tersembunyi, diisi oleh JavaScript -->
+        </div>
+
+        <!-- NAVBAR BAWAH -->
+        <div class="absolute bottom-0 w-full max-w-[402px] h-[75px] bg-[#F5F5F5] border-t border-[#D9D9D9] rounded-t-[19px] z-20 shadow-[0_-5px_15px_rgba(0,0,0,0.05)]"> <!-- Bar navigasi bawah -->
+            <div class="relative w-full h-full px-8 flex items-center justify-center"> <!-- Wadah konten navbar -->
+                <div class="nav-curve"></div> <!-- Cekungan di tengah -->
+                <div class="flex w-full justify-between items-end pb-3 z-30"> <!-- Baris ikon navigasi -->
+                    <!-- IKON UTAMA -->
+                    <a href="/user-dashboard" class="flex flex-col items-center justify-end w-[60px] hover:opacity-80 transition-all"> <!-- Tautan ke dashboard -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-[28px] w-[28px] text-[#D9D9D9] mb-[5px]" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3L2 12h3v8h6v-6h2v6h6v-8h3L12 3z"/></svg> <!-- Ikon rumah abu-abu -->
+                        <span class="text-[#D9D9D9] font-semibold text-[12px] leading-none">Utama</span> <!-- Label Utama -->
+                    </a>
+                    <div class="w-[60px]"></div> <!-- Ruang kosong untuk tombol tiket bulat -->
+                    <!-- IKON PENGGUNA -->
+                    <a href="/profil" class="flex flex-col items-center justify-end w-[60px] hover:opacity-80 transition-all"> <!-- Tautan ke profil -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-[28px] w-[28px] text-[#D9D9D9] mb-[5px]" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg> <!-- Ikon orang abu-abu -->
+                        <span class="text-[#D9D9D9] font-semibold text-[12px] leading-none">Pengguna</span> <!-- Label Pengguna -->
+                    </a>
+                </div>
+                <!-- TOMBOL TIKET BULAT -->
+                <a href="/tiket" class="absolute top-[-26px] left-1/2 -translate-x-1/2 z-40 hover:scale-95 transition-transform"> <!-- Tautan ke tiket di tengah navbar -->
+                    <div class="bg-[#0141A3] w-[61px] h-[61px] rounded-full flex flex-col items-center justify-center shadow-md"> <!-- Lingkaran biru -->
+                        <div class="w-[32px] h-[29px] flex flex-col justify-between overflow-hidden rounded-[3px]"> <!-- Ikon tiket -->
+                            <div class="w-full h-[13px] bg-[#F5F5F5]"></div> <!-- Bagian atas tiket -->
+                            <div class="w-full h-[13px] bg-[#F5F5F5]"></div> <!-- Bagian bawah tiket -->
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const userData = JSON.parse(localStorage.getItem('user')); // Ambil data pengguna dari penyimpanan lokal browser
+
+        document.addEventListener("DOMContentLoaded", () => { // Jalankan setelah halaman siap
+            if (userData) { // Jika pengguna sudah login
+                fetchAktivitasData(); // Ambil data aktivitas dari server
+            }
+        });
+
+        async function fetchAktivitasData() { // Fungsi untuk mengambil data aktivitas parkir pengguna
+            const viewAktivitas = document.getElementById('view-aktivitas'); // Ambil wadah konten tab Aktivitas
+            const viewRiwayat = document.getElementById('view-riwayat'); // Ambil wadah konten tab Riwayat
+            
+            try {
+                // Menarik Data dari Database (Tabel Reservasi)
+                const response = await fetch(`/api/parkir/reservasi/user/${userData.id}`); // Ambil semua reservasi pengguna dari API
+                const result = await response.json(); // Ubah respons dari JSON ke objek JavaScript
+
+                if (result.status === 'success' && result.data.length > 0) { // Jika berhasil dan ada data
+                    let htmlAktivitas = ''; // Penampung HTML kartu aktivitas aktif
+                    let htmlRiwayat = ''; // Penampung HTML kartu riwayat selesai/batal
+                    let countAktivitas = 0; // Penghitung jumlah aktivitas aktif
+                    let countRiwayat = 0; // Penghitung jumlah riwayat
+
+                    let activeTicketsLocal = JSON.parse(localStorage.getItem('active_tickets')) || []; // Ambil tiket aktif dari penyimpanan lokal
+                    let updatedActiveTickets = activeTicketsLocal.filter(localTicket => { // Saring tiket lokal yang masih aktif di database
+                        const dbMatch = result.data.find(dbItem => dbItem.kode_unik === localTicket.id); // Cari kecocokan dengan data database
+                        return dbMatch && (dbMatch.status === 'Aktif' || dbMatch.status === 'Menunggu'); // Hanya simpan jika masih Aktif atau Menunggu
+                    });
+                    localStorage.setItem('active_tickets', JSON.stringify(updatedActiveTickets)); // Simpan kembali tiket yang masih relevan
+
+                    result.data.forEach(item => { // Proses setiap data reservasi satu per satu
+                        // LOGIKA PARSING WAKTU DARI DATABASE
+                        const dateObjPesan = new Date(item.waktu_pesan); // Ubah waktu pesan dari string menjadi objek tanggal
+                        const dateFormatted = dateObjPesan.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }); // Format tanggal dalam bahasa Indonesia
+                        const timePesan = dateObjPesan.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) + ' WIB'; // Format jam dalam bahasa Indonesia
+                        
+                        let infoWaktuDetail = ''; // Variabel untuk teks waktu detail sesuai status
+                        
+                        if (item.status === 'Aktif' || item.status === 'Menunggu') { // Jika reservasi masih aktif atau menunggu
+                            infoWaktuDetail = `Dipesan: ${timePesan}`; // Tampilkan waktu pemesanan
+                        } else if (item.status === 'Selesai') { // Jika reservasi sudah selesai
+                            const timeSelesai = item.waktu_check_out ? new Date(item.waktu_check_out).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) + ' WIB' : timePesan; // Ambil waktu check-out jika ada
+                            infoWaktuDetail = `Selesai: ${timeSelesai}`; // Tampilkan waktu selesai
+                        } else { // Jika reservasi dibatalkan
+                            // Untuk Status Dibatalkan (Waktu auto-cancel dari DB / Estimasi Kedatangan)
+                            const timeBatal = item.estimasi_kedatangan ? new Date(item.estimasi_kedatangan).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) + ' WIB' : timePesan; // Ambil waktu estimasi jika ada
+                            infoWaktuDetail = `Dibatalkan: ${timeBatal}`; // Tampilkan waktu pembatalan
+                        }
+
+                        const slotFormatted = item.blok === 'Mobil' ? `Slot ${item.no_slot}` : `${item.blok}`; // Format teks slot: "Slot 1" untuk mobil, nama blok untuk motor
+
+                        const cardHTML = ` <!-- Template HTML untuk satu kartu reservasi -->
+                            <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm flex justify-between items-center">
+                                <div>
+                                    <h4 class="font-bold text-[13px] text-black">${item.nama_area}</h4> <!-- Nama area parkir -->
+                                    <p class="text-[11px] text-gray-500 mt-0.5">${item.lantai}, ${slotFormatted}</p> <!-- Lantai dan nomor slot -->
+                                    <p class="text-[10px] text-gray-400 mt-2 leading-relaxed font-medium">
+                                        ${dateFormatted} • ${infoWaktuDetail} <br>  <!-- Tanggal dan waktu reservasi -->
+                                        Kode: ${item.kode_unik} <!-- Kode unik reservasi -->
+                                    </p>
+                                </div>
+                                <div class="text-right">
+                                    <span class="px-2 py-1 rounded-md text-[9px] font-bold uppercase ${
+                                        item.status === 'Aktif' ? 'bg-green-100 text-green-600' : /* Badge hijau untuk status Aktif */
+                                        item.status === 'Selesai' ? 'bg-blue-100 text-blue-600' : /* Badge biru untuk status Selesai */
+                                        'bg-red-100 text-red-600' /* Badge merah untuk status Dibatalkan */
+                                    }">${item.status}</span> <!-- Teks status reservasi -->
+                                </div>
+                            </div>
+                        `;
+
+                        if (item.status === 'Aktif' || item.status === 'Menunggu') { // Jika masih aktif/menunggu
+                            htmlAktivitas += cardHTML; // Tambahkan ke konten tab Aktivitas
+                            countAktivitas++; // Tambah penghitung aktivitas aktif
+                        } else { // Jika sudah selesai atau dibatalkan
+                            htmlRiwayat += cardHTML; // Tambahkan ke konten tab Riwayat
+                            countRiwayat++; // Tambah penghitung riwayat
+                        }
+                    });
+
+                    viewAktivitas.innerHTML = htmlAktivitas || `<p class="text-center text-xs text-gray-400 mt-10">Tidak ada aktivitas parkir berjalan.</p>`; // Tampilkan kartu aktivitas atau pesan kosong
+                    viewRiwayat.innerHTML = htmlRiwayat || `<p class="text-center text-xs text-gray-400 mt-10">Belum ada riwayat transaksi.</p>`; // Tampilkan kartu riwayat atau pesan kosong
+                    
+                    document.getElementById('txt-aktivitas').textContent = `Aktivitas (${countAktivitas})`; // Perbarui jumlah di label tab Aktivitas
+                    document.getElementById('txt-riwayat').textContent = `Riwayat (${countRiwayat})`; // Perbarui jumlah di label tab Riwayat
+                } else { // Jika tidak ada data sama sekali
+                    const emptyState = `<p class="text-center text-xs text-gray-400 mt-10">Belum ada data transaksi.</p>`; // Pesan kosong
+                    viewAktivitas.innerHTML = emptyState; // Tampilkan di tab Aktivitas
+                    viewRiwayat.innerHTML = emptyState; // Tampilkan di tab Riwayat
+                }
+            } catch (error) {
+                console.error("Gagal menarik data aktivitas:", error); // Catat error jika gagal mengambil data
+            }
+        }
+
+        function switchTab(tabName) { // Fungsi untuk beralih antara tab Aktivitas dan Riwayat
+            const viewAktivitas = document.getElementById('view-aktivitas'); // Ambil elemen konten Aktivitas
+            const viewRiwayat = document.getElementById('view-riwayat'); // Ambil elemen konten Riwayat
+            const lineAktivitas = document.getElementById('line-aktivitas'); // Ambil garis bawah tab Aktivitas
+            const lineRiwayat = document.getElementById('line-riwayat'); // Ambil garis bawah tab Riwayat
+            const txtAktivitas = document.getElementById('txt-aktivitas'); // Ambil teks label tab Aktivitas
+            const txtRiwayat = document.getElementById('txt-riwayat'); // Ambil teks label tab Riwayat
+
+            if (tabName === 'riwayat') { // Jika beralih ke tab Riwayat
+                viewAktivitas.classList.replace('block', 'hidden'); // Sembunyikan konten Aktivitas
+                viewRiwayat.classList.replace('hidden', 'block'); // Tampilkan konten Riwayat
+                lineAktivitas.classList.replace('bg-[#0062E6]', 'bg-transparent'); // Hapus garis biru dari Aktivitas
+                lineRiwayat.classList.replace('bg-transparent', 'bg-[#0062E6]'); // Tambahkan garis biru ke Riwayat
+                txtAktivitas.classList.replace('text-[#0062E6]', 'text-gray-400'); // Abu-abukan teks Aktivitas
+                txtRiwayat.classList.replace('text-gray-400', 'text-[#0062E6]'); // Birukan teks Riwayat
+            } else { // Jika beralih ke tab Aktivitas
+                viewRiwayat.classList.replace('block', 'hidden'); // Sembunyikan konten Riwayat
+                viewAktivitas.classList.replace('hidden', 'block'); // Tampilkan konten Aktivitas
+                lineRiwayat.classList.replace('bg-[#0062E6]', 'bg-transparent'); // Hapus garis biru dari Riwayat
+                lineAktivitas.classList.replace('bg-transparent', 'bg-[#0062E6]'); // Tambahkan garis biru ke Aktivitas
+                txtRiwayat.classList.replace('text-[#0062E6]', 'text-gray-400'); // Abu-abukan teks Riwayat
+                txtAktivitas.classList.replace('text-gray-400', 'text-[#0062E6]'); // Birukan teks Aktivitas
+            }
+        }
+    </script>
+</body>
+</html>

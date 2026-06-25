@@ -1,0 +1,345 @@
+<!DOCTYPE html> <!-- Deklarasi bahwa ini adalah dokumen HTML5 -->
+<html lang="id"> <!-- Elemen akar halaman, bahasa Indonesia -->
+<head> <!-- Bagian kepala halaman -->
+    <meta charset="UTF-8"> <!-- Encoding UTF-8 agar teks Indonesia tampil benar -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"> <!-- Tampilan responsif di HP -->
+    <meta name="theme-color" content="#F1F1F1"> <!-- Warna tema browser di Android -->
+    <meta name="apple-mobile-web-app-capable" content="yes"> <!-- Izinkan sebagai web app di iPhone -->
+    
+    <title>Parkirin - Profil Pengguna</title> <!-- Judul tab browser -->
+    <link rel="icon" href="/img/favicon.png" type="image/png"> <!-- Ikon tab browser -->
+    
+    <script src="https://cdn.tailwindcss.com"></script> <!-- Tailwind CSS dari internet -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet"> <!-- Font Montserrat -->
+    
+    <style> 
+        body { font-family: 'Montserrat', sans-serif; background-color: #F1F1F1; margin: 0; overscroll-behavior-y: none; } /* Font dan latar */
+        
+        .hide-scrollbar::-webkit-scrollbar { display: none; } /* Sembunyikan scrollbar Chrome/Safari */
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; } /* Sembunyikan scrollbar IE/Firefox */
+
+        /* Cekungan di tengah navbar bawah */
+        .nav-curve { position: absolute; top: -1px; left: 50%; transform: translateX(-50%); width: 86px; height: 38px; background-color: #F1F1F1; border-bottom-left-radius: 43px; border-bottom-right-radius: 43px; border: 1px solid #D9D9D9; border-top: none; z-index: 10; }
+        .nav-curve::before, .nav-curve::after { content: ""; position: absolute; top: 0; width: 14px; height: 14px; background-color: transparent; } /* Elemen dekoratif sudut cekungan */
+        .nav-curve::before { left: -14px; border-top-right-radius: 14px; border-right: 1px solid #D9D9D9; border-top: 1px solid #D9D9D9; box-shadow: 4px -4px 0 4px #F1F1F1; } /* Sudut kiri cekungan */
+        .nav-curve::after { right: -14px; border-top-left-radius: 14px; border-left: 1px solid #D9D9D9; border-top: 1px solid #D9D9D9; box-shadow: -4px -4px 0 4px #F1F1F1; } /* Sudut kanan cekungan */
+        
+        .fade-in { animation: fadeIn 0.3s ease-out forwards; } /* Animasi muncul perlahan */
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } } /* Definisi animasi fade-in */
+    </style>
+</head>
+<body class="flex justify-center h-screen text-gray-800 antialiased bg-gray-200"> <!-- Badan halaman: tengah, tinggi penuh -->
+
+    <!-- WADAH UTAMA HALAMAN PROFIL -->
+    <div class="w-full max-w-[402px] bg-[#F1F1F1] h-full relative flex flex-col shadow-2xl overflow-hidden fade-in"> <!-- Wadah utama dengan animasi fade-in -->
+        
+        <!-- AREA KONTEN YANG BISA DIGULIR -->
+        <div class="flex-grow overflow-y-auto hide-scrollbar pb-24"> <!-- Area konten yang bisa digulir -->
+            
+            <!-- JUDUL "AKUN" -->
+            <div class="w-full pt-10 px-5 mb-4"> <!-- Wadah judul -->
+                <h1 class="text-[16px] font-bold text-black uppercase tracking-wide">Akun</h1> <!-- Judul halaman profil -->
+            </div>
+
+            <!-- INFO PROFIL PENGGUNA -->
+            <div class="w-full h-[100px] bg-[#D8F6FF] px-5 flex items-center justify-between"> <!-- Baris info pengguna berlatar biru muda -->
+                <div class="flex items-center gap-4"> <!-- Wadah foto dan info teks -->
+                    <!-- FOTO PROFIL -->
+                    <div class="w-[59px] h-[59px] rounded-full overflow-hidden border-2 border-white shadow-sm bg-gray-300"> <!-- Lingkaran foto profil -->
+                        <img id="profile-pic" src="https://i.pravatar.cc/150?img=11" alt="Profile" class="w-full h-full object-cover"> <!-- Foto profil (diubah jika ada foto tersimpan) -->
+                    </div>
+                    
+                    <div class="flex flex-col"> <!-- Wadah teks info pengguna -->
+                        <div class="flex items-center gap-2"> <!-- Baris nama dan tombol edit -->
+                            <span id="profile-name" class="font-semibold text-[13px] text-black">Memuat...</span> <!-- Nama pengguna — diisi JavaScript -->
+                            <a href="/edit-profil"> <!-- Tautan ke halaman edit profil -->
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-[14px] w-[14px] text-black cursor-pointer hover:opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"> <!-- Ikon pensil edit -->
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /> <!-- Bentuk ikon pensil -->
+                                </svg>
+                            </a>
+                        </div>
+                        <span id="profile-phone" class="font-medium text-[12px] text-black mt-1">Memuat...</span> <!-- Nomor telepon — diisi JavaScript -->
+                        <span id="profile-email" class="font-medium text-[12px] text-black mt-[2px]">Memuat...</span> <!-- Email — diisi JavaScript -->
+                    </div>
+                </div>
+
+                <!-- BADGE POIN REWARD -->
+                <div class="bg-[#00D5FF] px-2 py-1 rounded-[10px] flex items-center gap-1 shadow-sm mt-[-40px]"> <!-- Lencana poin berwarna cyan -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-[10px] w-[10px] text-white" viewBox="0 0 20 20" fill="currentColor"> <!-- Ikon bintang kecil -->
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /> <!-- Bentuk bintang -->
+                    </svg>
+                    <span class="display-poin text-[9px] font-bold text-white">Points : 0</span> <!-- Jumlah poin — diperbarui JavaScript -->
+                </div>
+            </div>
+
+            <!-- SECTION PENGATURAN AKUN -->
+            <div class="mt-8"> <!-- Wadah section pengaturan -->
+                <h2 class="px-5 text-[16px] font-bold text-black mb-2">Pengaturan Akun</h2> <!-- Judul section -->
+                
+                <!-- MENU ATUR PIN -->
+                <a href="/atur-pin" class="px-5 w-full h-[50px] border-b border-[#D9D9D9] flex items-center justify-between cursor-pointer hover:bg-gray-200 transition-colors block"> <!-- Baris menu Atur PIN -->
+                    <div class="flex items-center gap-4"> <!-- Wadah ikon dan teks -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"> <!-- Ikon PIN -->
+                            <rect x="3" y="6" width="18" height="12" rx="2" /> <!-- Kotak PIN -->
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M7 10v4h2v-4H7zm4 4h2v-2h-2v2zm0-4h2v2h-2v-2zm4 4h2v-4h-2v4z" /> <!-- Angka di PIN -->
+                        </svg>
+                        <span class="font-semibold text-[14px] text-black">Atur Pin</span> <!-- Label menu -->
+                    </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#0C172B]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg> <!-- Ikon panah kanan -->
+                </a>
+
+                <!-- MENU KENDARAAN -->
+                <a href="/kendaraan" class="px-5 w-full h-[50px] border-b border-[#D9D9D9] flex items-center justify-between cursor-pointer hover:bg-gray-200 transition-colors block"> <!-- Baris menu Kendaraan -->
+                    <div class="flex items-center gap-4"> <!-- Wadah ikon dan teks -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"> <!-- Ikon kendaraan -->
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M8 7h8M5 11h14l-1.5 5h-11L5 11zM7 11V7a2 2 0 012-2h6a2 2 0 012 2v4M6 16v2a1 1 0 001 1h2a1 1 0 001-1v-2m4 0v2a1 1 0 001 1h2a1 1 0 001-1v-2" /> <!-- Bentuk ikon kendaraan -->
+                        </svg>
+                        <span class="font-semibold text-[14px] text-black">Kendaraan Anda</span> <!-- Label menu -->
+                    </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#0C172B]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg> <!-- Ikon panah kanan -->
+                </a>
+
+                <!-- MENU GANTI BAHASA -->
+                <div class="px-5 w-full h-[50px] border-b border-[#D9D9D9] flex items-center justify-between cursor-pointer hover:bg-gray-200 transition-colors"> <!-- Baris menu Ganti Bahasa -->
+                    <div class="flex items-center gap-4"> <!-- Wadah ikon dan teks -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"> <!-- Ikon globus -->
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" /> <!-- Bentuk ikon terjemahan -->
+                        </svg>
+                        <span class="font-semibold text-[14px] text-black">Ganti Bahasa</span> <!-- Label menu -->
+                    </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#0C172B]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg> <!-- Ikon panah kanan -->
+                </div>
+            </div>
+
+            <!-- SECTION BANTUAN -->
+            <div class="mt-8"> <!-- Wadah section bantuan -->
+                <h2 class="px-5 text-[16px] font-bold text-black mb-2">Bantuan</h2> <!-- Judul section -->
+                
+                <!-- MENU BUKU PANDUAN -->
+                <div class="px-5 w-full h-[50px] border-b border-[#D9D9D9] flex items-center justify-between cursor-pointer hover:bg-gray-200 transition-colors"> <!-- Baris menu Buku Panduan -->
+                    <div class="flex items-center gap-4"> <!-- Wadah ikon dan teks -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"> <!-- Ikon buku -->
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /> <!-- Bentuk ikon buku -->
+                        </svg>
+                        <span class="font-semibold text-[14px] text-black">Buku Panduan</span> <!-- Label menu -->
+                    </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#0C172B]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg> <!-- Ikon panah kanan -->
+                </div>
+
+                <!-- MENU FAQ -->
+                <a href="/faq" class="px-5 w-full h-[50px] border-b border-[#D9D9D9] flex items-center justify-between cursor-pointer hover:bg-gray-200 transition-colors block"> <!-- Baris menu FAQ -->
+                    <div class="flex items-center gap-4"> <!-- Wadah ikon dan teks -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"> <!-- Ikon chat/obrolan -->
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /> <!-- Bentuk ikon chat -->
+                        </svg>
+                        <span class="font-semibold text-[14px] text-black">FAQ</span> <!-- Label menu FAQ -->
+                    </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#0C172B]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg> <!-- Ikon panah kanan -->
+                </a>
+
+                <!-- MENU CUSTOMER SERVICE -->
+                <a href="/layanan-pelanggan" class="px-5 w-full h-[50px] border-b border-[#D9D9D9] flex items-center justify-between cursor-pointer hover:bg-gray-200 transition-colors block"> <!-- Baris menu Customer Service -->
+                    <div class="flex items-center gap-4"> <!-- Wadah ikon dan teks -->
+                        <img src="/img/elemencs.png" alt="Customer Service" class="h-6 w-6 object-contain"> <!-- Ikon customer service dari gambar -->
+                        <span class="font-semibold text-[14px] text-black">Customer Service</span> <!-- Label menu -->
+                    </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#0C172B]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"> <!-- Ikon panah kanan -->
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /> <!-- Bentuk panah -->
+                    </svg>
+                </a>
+            </div>
+
+            <!-- SECTION LAINNYA -->
+            <div class="mt-8 mb-8"> <!-- Wadah section lainnya -->
+                <h2 class="px-5 text-[16px] font-bold text-black mb-2">Lainnya</h2> <!-- Judul section -->
+                
+                <!-- MENU STATISTIK -->
+                <a href="/statistik" class="px-5 w-full h-[50px] border-b border-[#D9D9D9] flex items-center justify-between cursor-pointer hover:bg-gray-200 transition-colors"> <!-- Baris menu Statistik -->
+                    <div class="flex items-center gap-4"> <!-- Wadah ikon dan teks -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"> <!-- Ikon grafik batang -->
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /> <!-- Bentuk ikon grafik -->
+                        </svg>
+                        <span class="font-semibold text-[14px] text-black">Statistik Pengguna</span> <!-- Label menu -->
+                    </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#0C172B]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg> <!-- Ikon panah kanan -->
+                </a>
+                
+                <!-- MENU KELUAR AKUN -->
+                <div onclick="prosesLogout()" class="px-5 w-full h-[50px] flex items-center justify-between cursor-pointer hover:bg-red-50 transition-colors mt-2 rounded-lg"> <!-- Baris menu Keluar — akan menampilkan modal konfirmasi -->
+                    <div class="flex items-center gap-4"> <!-- Wadah ikon dan teks -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#E53935]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"> <!-- Ikon keluar merah -->
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /> <!-- Bentuk ikon keluar -->
+                        </svg>
+                        <span class="font-bold text-[14px] text-[#E53935]">Keluar Akun</span> <!-- Teks menu keluar berwarna merah -->
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- NAVBAR BAWAH -->
+        <div class="absolute bottom-0 w-full max-w-[402px] h-[75px] bg-[#F5F5F5] border-t border-[#D9D9D9] rounded-t-[19px] z-20 shadow-[0_-5px_15px_rgba(0,0,0,0.05)]"> <!-- Bar navigasi bawah -->
+            <div class="relative w-full h-full px-8 flex items-center justify-center"> <!-- Wadah konten navbar -->
+                
+                <div class="nav-curve"></div> <!-- Cekungan di tengah navbar -->
+
+                <div class="flex w-full justify-between items-end pb-3 z-30"> <!-- Baris ikon navigasi -->
+                    
+                    <!-- IKON UTAMA (tidak aktif) -->
+                    <a href="/user-dashboard" class="flex flex-col items-center justify-end cursor-pointer relative z-30 w-[60px] hover:opacity-80 transition-all"> <!-- Tautan ke dashboard -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-[28px] w-[28px] text-[#D9D9D9] mb-[5px]" viewBox="0 0 24 24" fill="currentColor"> <!-- Ikon rumah — tidak aktif -->
+                            <path d="M12 3L2 12h3v8h6v-6h2v6h6v-8h3L12 3z"/> <!-- Bentuk rumah -->
+                        </svg>
+                        <span class="text-[#D9D9D9] font-semibold text-[12px] leading-none">Utama</span> <!-- Label Utama -->
+                    </a>
+
+                    <!-- KOLOM TIKET (kosong) -->
+                    <div class="flex flex-col items-center justify-end relative z-30 w-[60px]"> <!-- Wadah kosong untuk tiket -->
+                        <div class="h-[28px] mb-[5px]"></div> <!-- Ruang kosong -->
+                        <span class="text-[#D9D9D9] font-semibold text-[12px] leading-none">Tiket</span> <!-- Label Tiket -->
+                    </div>
+
+                    <!-- IKON PENGGUNA (aktif) -->
+                    <a href="/profil" class="flex flex-col items-center justify-end cursor-pointer relative z-30 w-[60px]"> <!-- Tautan ke profil (halaman ini) -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-[28px] w-[28px] text-[#00D1FF] mb-[5px]" viewBox="0 0 24 24" fill="currentColor"> <!-- Ikon orang — aktif (cyan) -->
+                            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/> <!-- Bentuk ikon orang -->
+                        </svg>
+                        <span class="text-[#00D1FF] font-semibold text-[12px] leading-none">Pengguna</span> <!-- Label Pengguna — aktif -->
+                    </a>
+                </div>
+
+                <!-- TOMBOL TIKET BULAT -->
+                <a href="/tiket" class="flex flex-col items-center cursor-pointer absolute top-[-26px] left-1/2 -translate-x-1/2 z-40 transition-transform active:scale-95"> <!-- Tombol tiket di tengah navbar -->
+                    <div class="bg-[#0141A3] w-[61px] h-[61px] rounded-full flex flex-col items-center justify-center shadow-[0_5px_10px_rgba(1,65,163,0.3)]"> <!-- Lingkaran biru -->
+                        <div class="w-[32px] h-[29px] flex flex-col justify-between overflow-hidden rounded-[3px]"> <!-- Ikon tiket -->
+                            <div class="w-full h-[13px] bg-[#F5F5F5]"></div> <!-- Bagian atas tiket -->
+                            <div class="w-full h-[3px] bg-transparent"></div> <!-- Garis tengah tiket -->
+                            <div class="w-full h-[13px] bg-[#F5F5F5]"></div> <!-- Bagian bawah tiket -->
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- MODAL KONFIRMASI KELUAR -->
+        <div id="logoutModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black bg-opacity-40 backdrop-blur-sm transition-opacity opacity-0"> <!-- Latar modal konfirmasi keluar -->
+            <div id="logoutModalContent" class="bg-white w-[300px] rounded-[20px] p-6 flex flex-col items-center shadow-2xl transform scale-90 transition-transform duration-300"> <!-- Kotak konten modal -->
+                
+                <!-- Ikon keluar merah -->
+                <div class="w-14 h-14 bg-red-100 rounded-full flex items-center justify-center mb-4"> <!-- Lingkaran ikon merah -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-[#E53935]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"> <!-- Ikon keluar merah -->
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /> <!-- Bentuk ikon keluar -->
+                    </svg>
+                </div>
+                
+                <h3 class="text-[18px] font-bold text-black mb-2">Keluar Akun?</h3> <!-- Judul modal konfirmasi -->
+                <p class="text-[12px] font-medium text-gray-500 text-center mb-6 leading-relaxed"> <!-- Pesan konfirmasi -->
+                    Apakah Anda yakin ingin keluar? Anda harus login kembali untuk masuk ke aplikasi.
+                </p>
+                
+                <!-- TOMBOL AKSI -->
+                <div class="flex w-full gap-3"> <!-- Baris dua tombol -->
+                    <button onclick="tutupModalLogout()" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-2.5 rounded-[12px] text-[12px] transition-colors active:scale-95"> <!-- Tombol Batal -->
+                        Batal
+                    </button>
+                    <button onclick="eksekusiLogout()" class="flex-1 bg-[#E53935] hover:bg-red-700 text-white font-bold py-2.5 rounded-[12px] text-[12px] transition-colors shadow-md active:scale-95"> <!-- Tombol Konfirmasi Keluar -->
+                        Ya, Keluar
+                    </button>
+                </div>
+
+            </div>
+        </div>
+        
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() { // Jalankan setelah halaman siap
+            // Ambil data user dari localStorage
+            const userData = localStorage.getItem('user'); // Ambil data pengguna tersimpan di browser
+            
+            if(userData) { // Jika pengguna sudah login
+                const user = JSON.parse(userData); // Ubah dari JSON ke objek JavaScript
+                
+                // Menampilkan nama lengkap, nomor HP, dan Email sesuai data lokal
+                document.getElementById('profile-name').textContent = user.nama || "Pengguna"; // Tampilkan nama (atau "Pengguna" jika kosong)
+                document.getElementById('profile-email').textContent = user.email || "-"; // Tampilkan email (atau "-" jika kosong)
+                
+                // Mengambil key yang BENAR: user.no_telepon (berdasarkan backend Login/Register)
+                // Fallback ke user.telepon jika versi lama masih tersimpan
+                document.getElementById('profile-phone').textContent = user.no_telepon || user.telepon || "-"; // Tampilkan nomor telepon
+
+                // Menampilkan Foto Profil jika ada di localStorage
+                const savedPic = localStorage.getItem('foto_profil_' + user.id); // Cek apakah ada foto profil tersimpan
+                    if(savedPic) { // Jika ada foto tersimpan
+                        document.getElementById('profile-pic').src = savedPic; // Ganti foto profil dengan yang tersimpan
+                    }
+            }
+        });
+
+        // Perbarui poin setiap kali halaman dimuat
+        document.addEventListener("DOMContentLoaded", () => { // Jalankan setelah halaman siap
+            tarikPoinTerbaru(); // Ambil data poin terbaru dari server
+        });
+
+        async function tarikPoinTerbaru() { // Fungsi untuk mengambil poin terbaru dari database
+            const userDataLocal = JSON.parse(localStorage.getItem('user')); // Ambil data pengguna dari penyimpanan lokal
+            if(!userDataLocal) return; // Hentikan jika belum login
+
+            try {
+                // Tarik poin asli dari Database MySQL
+                const response = await fetch(`/api/parkir/poin/${userDataLocal.id}`); // Kirim permintaan ke API poin
+                const result = await response.json(); // Ubah respons dari JSON
+
+                if (result.status === 'success') { // Jika berhasil
+                    // Temukan semua elemen teks poin di layar dan ubah angkanya
+                    const elemenPoin = document.querySelectorAll('.display-poin'); // Ambil semua elemen poin
+                    elemenPoin.forEach(el => {
+                        el.textContent = `Points: ${result.points}`; // Perbarui teks poin
+                    });
+
+                    // Perbarui juga data di localStorage agar sinkron
+                    userDataLocal.points = result.points; // Update poin di data lokal
+                    localStorage.setItem('user', JSON.stringify(userDataLocal)); // Simpan kembali
+                }
+            } catch (error) {
+                console.error("Gagal sinkronisasi poin: ", error); // Catat error jika gagal
+            }
+        }
+
+        function prosesLogout() { // Fungsi untuk menampilkan modal konfirmasi keluar
+            const modal = document.getElementById('logoutModal'); // Ambil elemen modal
+            const modalContent = document.getElementById('logoutModalContent'); // Ambil konten modal
+            
+            modal.classList.remove('hidden'); // Tampilkan modal
+            modal.classList.add('flex'); // Gunakan flex layout
+            
+            setTimeout(() => { // Tunggu 10ms agar transisi bisa berjalan
+                modal.classList.remove('opacity-0'); // Buat latar terlihat
+                modal.classList.add('opacity-100'); // Transparansi penuh
+                modalContent.classList.remove('scale-90'); // Hapus efek mengecil
+                modalContent.classList.add('scale-100'); // Ukuran normal
+            }, 10);
+        }
+
+        function tutupModalLogout() { // Fungsi untuk menutup modal konfirmasi keluar
+            const modal = document.getElementById('logoutModal'); // Ambil elemen modal
+            const modalContent = document.getElementById('logoutModalContent'); // Ambil konten modal
+            
+            modal.classList.remove('opacity-100'); // Mulai memudar
+            modal.classList.add('opacity-0'); // Transparan
+            modalContent.classList.remove('scale-100'); // Mulai mengecil
+            modalContent.classList.add('scale-90'); // Mengecil 10%
+            
+            setTimeout(() => { // Tunggu 300ms agar animasi selesai
+                modal.classList.add('hidden'); // Sembunyikan modal
+                modal.classList.remove('flex'); // Hapus display flex
+            }, 300);
+        }
+
+        function eksekusiLogout() { // Fungsi yang benar-benar mengeluarkan pengguna dari akun
+            localStorage.removeItem('user'); // Hapus data pengguna dari penyimpanan lokal browser
+            window.location.href = "/login"; // Arahkan ke halaman login
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,256 @@
+<!DOCTYPE html> <!-- Deklarasi bahwa ini adalah dokumen HTML5 -->
+<html lang="id"> <!-- Elemen akar dengan bahasa Indonesia -->
+<head> <!-- Bagian kepala halaman untuk pengaturan meta dan library -->
+    <meta charset="UTF-8"> <!-- Standar pengkodean karakter -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"> <!-- Responsif untuk perangkat seluler, larang zoom -->
+    <meta name="theme-color" content="#FAF8FF"> <!-- Warna tema browser Android -->
+    <meta name="apple-mobile-web-app-capable" content="yes"> <!-- Mendukung aplikasi web di iOS -->
+    
+    <title>Parkirin - Langganan</title> <!-- Judul halaman di tab browser -->
+    <link rel="icon" href="/img/favicon.png" type="image/png"> <!-- Ikon web favicon -->
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com"> <!-- Pra-koneksi ke server font Google -->
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> <!-- Pra-koneksi crossorigin -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"> <!-- Impor font Montserrat -->
+    
+    <script src="https://cdn.tailwindcss.com"></script> <!-- Menggunakan Tailwind CSS -->
+
+    <style> 
+        /* Terapkan Montserrat ke seluruh elemen body */
+        body { 
+            font-family: 'Montserrat', sans-serif; /* Font default */
+            background-color: #F1F1F1; /* Warna latar belakang abu-abu */
+            margin: 0; /* Menghilangkan margin bawaan */
+            overscroll-behavior-y: none; /* Mencegah pantulan scroll di mobile */
+        }
+        
+        /* Sembunyikan scrollbar tapi tetap bisa di-scroll */
+        .hide-scrollbar::-webkit-scrollbar { display: none; } /* Untuk Chrome/Safari */
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; } /* Untuk Firefox/IE */
+        
+        /* Animasi masuk dari bawah */
+        .slide-up { animation: slideUp 0.4s ease-out forwards; }
+        @keyframes slideUp { 
+            from { opacity: 0; transform: translateY(20px); } /* Mulai dari bawah dan pudar */
+            to { opacity: 1; transform: translateY(0); } /* Selesai di posisi normal dan jelas */
+        }
+
+        /* Efek cahaya berpendar (Glow) untuk Kartu Premium */
+        .glow-premium {
+            background: linear-gradient(90deg, rgba(0, 85, 201, 0.2) 0%, rgba(0, 127, 156, 0.2) 100%); /* Warna gradien biru ke tosca */
+            filter: blur(8px); /* Mengaburkan warna agar terlihat seperti cahaya */
+        }
+    </style>
+</head>
+<body class="flex justify-center h-screen text-gray-800 antialiased bg-gray-200"> <!-- Body aplikasi di tengah layar -->
+
+    <div class="w-full max-w-[402px] bg-[#FAF8FF] h-screen relative flex flex-col shadow-2xl overflow-hidden slide-up"> <!-- Wadah bergaya ponsel -->
+        
+        <!-- Header (Bagian Atas) -->
+        <div class="w-full h-[72px] px-6 flex items-center justify-between bg-[#FAF8FF]/90 backdrop-blur-md z-50 shrink-0 border-b border-gray-100"> <!-- Navbar dengan efek blur transparan -->
+            <!-- Tombol Kembali -->
+            <a href="javascript:history.back()" class="w-10 h-10 flex items-center justify-start cursor-pointer hover:opacity-70 active:scale-95 transition-all"> <!-- Tombol panah kembali -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#131B2E]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"> <!-- Ikon panah kiri -->
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+            </a>
+            
+            <h1 class="text-[18px] font-bold text-[#131B2E] tracking-tight">Langganan</h1> <!-- Judul Halaman Tengah -->
+            
+            <!-- Tombol Pengaturan / Lanjut (Ikon Kanan) -->
+            <button class="w-10 h-10 flex items-center justify-end cursor-pointer hover:opacity-70 active:scale-95 transition-all"> <!-- Tombol opsi -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-[22px] w-[22px] text-[#414755]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"> <!-- Ikon pengaturan/bantuan (info) -->
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+            </button>
+        </div>
+
+        <!-- Area Konten yang Bisa di Scroll -->
+        <div class="flex-1 overflow-y-auto hide-scrollbar z-10 flex flex-col px-6 pt-4 pb-12 relative"> <!-- Bagian isi yang bisa digulir -->
+            
+            <!-- Judul Pemasaran Utama -->
+            <div class="mb-10"> <!-- Ruang judul atas -->
+                <h1 class="text-[44px] leading-[48px] font-bold text-[#131B2E] tracking-[-1.1px]"> <!-- Teks judul besar dan tebal -->
+                    Pilih Masa Depan<br> <!-- Teks baris satu -->
+                    <span class="text-[#0055C9]">Parkir Anda.</span> <!-- Teks baris dua warna biru -->
+                </h1>
+                <p class="mt-4 text-[16px] leading-[26px] text-[#414755] font-medium pr-4"> <!-- Subjudul penjelasan -->
+                    Nikmati kecepatan dan keamanan maksimal dengan Velocity Blue. <!-- Teks penjelasan -->
+                </p>
+            </div>
+
+            <!-- Kartu Langganan: PREMIUM (RECOMMENDED) -->
+            <div class="relative w-full mb-6"> <!-- Kotak paket Premium -->
+                <div class="absolute -inset-1 rounded-[32px] glow-premium z-0"></div> <!-- Efek bercahaya biru di sekitar kartu -->
+                
+                <div class="relative bg-white rounded-[28px] border border-[#0055C9]/10 shadow-[0_1px_2px_rgba(0,0,0,0.05)] p-8 z-10"> <!-- Isi kotak kartu Premium (latar putih, di atas glow) -->
+                    
+                    <div class="flex justify-between items-start mb-6"> <!-- Bagian kepala kartu -->
+                        <div class="flex flex-col"> <!-- Teks keterangan kartu -->
+                            <span class="text-[12px] font-bold text-[#0055C9] uppercase tracking-[1.2px]">Recommended</span> <!-- Label 'Rekomendasi' kecil biru -->
+                            <h2 class="text-[30px] font-black text-[#131B2E] leading-tight mt-1">Premium</h2> <!-- Nama Paket: Premium -->
+                        </div>
+                        <div class="w-12 h-12 bg-[#0055C9]/10 rounded-[20px] flex items-center justify-center shrink-0"> <!-- Wadah ikon bintang -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#0055C9]" viewBox="0 0 20 20" fill="currentColor"> <!-- Ikon bintang solid -->
+                                <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.381z" clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Daftar Keuntungan Paket Premium -->
+                    <div class="flex flex-col gap-4 mb-8"> <!-- Daftar fitur vertikal -->
+                        <div class="flex items-center gap-3"> <!-- Fitur 1 -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-[18px] w-[18px] text-[#0055C9] shrink-0" viewBox="0 0 20 20" fill="currentColor"> <!-- Ikon centang bundar biru -->
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                            </svg>
+                            <span class="text-[14px] font-semibold text-[#131B2E] leading-tight">Prioritas booking harian</span> <!-- Teks fitur 1 -->
+                        </div>
+                        <div class="flex items-center gap-3"> <!-- Fitur 2 -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-[18px] w-[18px] text-[#0055C9] shrink-0" viewBox="0 0 20 20" fill="currentColor"> <!-- Ikon centang bundar biru -->
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                            </svg>
+                            <span class="text-[14px] font-semibold text-[#131B2E] leading-tight">Diskon 15% semua lokasi</span> <!-- Teks fitur 2 -->
+                        </div>
+                        <div class="flex items-center gap-3"> <!-- Fitur 3 -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-[18px] w-[18px] text-[#0055C9] shrink-0" viewBox="0 0 20 20" fill="currentColor"> <!-- Ikon centang bundar biru -->
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                            </svg>
+                            <span class="text-[14px] font-semibold text-[#131B2E] leading-tight">Akses Charging EV khusus</span> <!-- Teks fitur 3 -->
+                        </div>
+                    </div>
+
+                    <!-- Harga Paket Premium -->
+                    <div class="flex items-baseline gap-1 mb-6"> <!-- Baris harga dan siklus penagihan -->
+                        <span class="text-[36px] font-bold text-[#131B2E] leading-none">Rp 50rb</span> <!-- Harga utama (Rp 50.000) -->
+                        <span class="text-[14px] font-bold text-[#414755] ml-1">/bln</span> <!-- Siklus pembayaran (per bulan) -->
+                    </div>
+
+                    <!-- Tombol Aksi Beli Premium -->
+                    <button class="w-full py-[14px] rounded-[20px] bg-gradient-to-r from-[#0055C9] to-[#206DF1] text-white font-bold text-[16px] shadow-[0_10px_15px_-3px_rgba(0,85,201,0.25)] active:scale-95 transition-transform"> <!-- Tombol gradasi biru menyala -->
+                        Upgrade Sekarang <!-- Teks di dalam tombol -->
+                    </button>
+                </div>
+            </div>
+
+            <!-- Kartu Langganan: BASIC (GRATIS) -->
+            <div class="w-full bg-[#F2F3FF] rounded-[28px] p-[2px] mb-6"> <!-- Kotak garis pinggir paket Basic -->
+                <div class="bg-white rounded-[26px] p-8"> <!-- Area isi putih dalam kartu Basic -->
+                    
+                    <div class="flex justify-between items-start mb-6"> <!-- Kepala kartu -->
+                        <div class="flex flex-col"> <!-- Teks keterangan kartu -->
+                            <span class="text-[12px] font-bold text-[#57657A] uppercase tracking-[1.2px]">Entry Level</span> <!-- Label kategori Basic -->
+                            <h2 class="text-[24px] font-black text-[#131B2E] leading-tight mt-1">Basic</h2> <!-- Nama Paket: Basic -->
+                        </div>
+                        <div class="w-8 h-8 flex items-center justify-center shrink-0"> <!-- Ikon Basic -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-[22px] w-[22px] text-[#C1C6D7]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"> <!-- Ikon bangunan sederhana/tanda biasa -->
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M8 7h8M5 11h14l-1.5 5h-11L5 11zM7 11V7a2 2 0 012-2h6a2 2 0 012 2v4M6 16v2a1 1 0 001 1h2a1 1 0 001-1v-2m4 0v2a1 1 0 001 1h2a1 1 0 001-1v-2" />
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Daftar Keuntungan Paket Basic -->
+                    <div class="flex flex-col gap-4 mb-8"> <!-- Barisan keuntungan -->
+                        <div class="flex items-center gap-3"> <!-- Fitur 1 -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-[18px] w-[18px] text-[#0055C9]/60 shrink-0" viewBox="0 0 20 20" fill="currentColor"> <!-- Ikon centang abu kebiruan -->
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                            </svg>
+                            <span class="text-[14px] font-semibold text-[#414755] leading-tight">Reservasi standar</span> <!-- Teks fitur 1 -->
+                        </div>
+                        <div class="flex items-center gap-3"> <!-- Fitur 2 -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-[18px] w-[18px] text-[#0055C9]/60 shrink-0" viewBox="0 0 20 20" fill="currentColor"> <!-- Ikon centang abu kebiruan -->
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                            </svg>
+                            <span class="text-[14px] font-semibold text-[#414755] leading-tight">Sisa slot real-time</span> <!-- Teks fitur 2 -->
+                        </div>
+                    </div>
+
+                    <!-- Harga Paket Basic (Gratis) -->
+                    <div class="flex items-baseline gap-1 mb-4"> <!-- Blok harga -->
+                        <span class="text-[30px] font-bold text-[#131B2E] leading-none">Gratis</span> <!-- Teks 'Gratis' -->
+                    </div>
+
+                    <!-- Tombol Info Status Basic -->
+                    <button class="w-full py-[14px] rounded-[20px] bg-[#E2E7FF] text-[#57657A] font-bold text-[14px] active:scale-95 transition-transform"> <!-- Tombol mati/pasif (karena ini paket default user saat ini) -->
+                        Paket Saat Ini <!-- Status teks tombol -->
+                    </button>
+                </div>
+            </div>
+
+            <!-- Kartu Langganan: BUSINESS (Perusahaan) -->
+            <div class="w-full bg-[#F2F3FF] rounded-[28px] p-[2px] mb-8"> <!-- Kotak garis pinggir paket Bisnis -->
+                <div class="bg-white rounded-[26px] p-8"> <!-- Area putih dalam kartu Bisnis -->
+                    
+                    <div class="flex justify-between items-start mb-6"> <!-- Kepala kartu -->
+                        <div class="flex flex-col"> <!-- Teks keterangan kartu -->
+                            <span class="text-[12px] font-bold text-[#414755] uppercase tracking-[1.2px]">Enterprise</span> <!-- Label kategori Enterprise -->
+                            <h2 class="text-[24px] font-black text-[#131B2E] leading-tight mt-1">Business</h2> <!-- Nama Paket: Business -->
+                        </div>
+                        <div class="w-8 h-8 flex items-center justify-center shrink-0"> <!-- Ikon Business -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-[22px] w-[22px] text-[#414755]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"> <!-- Ikon koper / kantor/ perusahaan -->
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Daftar Keuntungan Paket Bisnis -->
+                    <div class="flex flex-col gap-4 mb-8"> <!-- Barisan keuntungan -->
+                        <div class="flex items-center gap-3"> <!-- Fitur 1 -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-[18px] w-[18px] text-[#00647C]/60 shrink-0" viewBox="0 0 20 20" fill="currentColor"> <!-- Ikon centang abu-abu -->
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                            </svg>
+                            <span class="text-[14px] font-semibold text-[#414755] leading-tight">Manajemen armada</span> <!-- Teks fitur 1 -->
+                        </div>
+                        <div class="flex items-center gap-3"> <!-- Fitur 2 -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-[18px] w-[18px] text-[#00647C]/60 shrink-0" viewBox="0 0 20 20" fill="currentColor"> <!-- Ikon centang abu-abu -->
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                            </svg>
+                            <span class="text-[14px] font-semibold text-[#414755] leading-tight">Laporan tagihan otomatis</span> <!-- Teks fitur 2 -->
+                        </div>
+                    </div>
+
+                    <!-- Harga Paket Bisnis (Berdasarkan Negosiasi / Kontak Sales) -->
+                    <div class="flex items-baseline gap-1 mb-4"> <!-- Blok harga (Teks Hubungi Kami) -->
+                        <span class="text-[24px] font-bold text-[#131B2E] leading-none">Hubungi Kami</span> <!-- Teks info harga -->
+                    </div>
+
+                    <!-- Tombol Aksi Kontak Tim Penjualan -->
+                    <button class="w-full py-[14px] rounded-[20px] bg-[#131B2E] text-[#FAF8FF] font-bold text-[14px] active:scale-95 transition-transform"> <!-- Tombol hitam gelap -->
+                        Hubungi Tim Sales <!-- Teks tombol -->
+                    </button>
+                </div>
+            </div>
+
+            <!-- Kartu Nilai Tambah (Keamanan & Akses) -->
+            <div class="grid grid-cols-2 gap-4"> <!-- Grid kolom untuk membagi ruang layar jadi dua sejajar -->
+                <!-- Blok Keamanan Extra -->
+                <div class="bg-white border border-[#DAE2FD] rounded-[28px] p-5 relative overflow-hidden flex flex-col justify-between min-h-[160px]"> <!-- Kotak putih kotak kecil 1 -->
+                    <div class="w-10 h-10 bg-[#0055C9]/5 rounded-full flex items-center justify-center"> <!-- Lingkaran pudar latar ikon -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#0055C9]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"> <!-- Ikon asuransi/perisai -->
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                        </svg>
+                    </div>
+                    <div> <!-- Kumpulan teks kotak 1 -->
+                        <h4 class="font-bold text-[14px] text-[#131B2E] mb-1">Keamanan Extra</h4> <!-- Judul mini fitur kelebihan -->
+                        <p class="font-medium text-[11px] text-[#414755] leading-[16px]">Asuransi parkir ganda di seluruh titik area.</p> <!-- Detail deskripsi pendek -->
+                    </div>
+                </div>
+
+                <!-- Blok Akses Cepat -->
+                <div class="bg-white border border-[#DAE2FD] rounded-[28px] p-5 relative overflow-hidden flex flex-col justify-between min-h-[160px]"> <!-- Kotak putih kotak kecil 2 -->
+                    <div class="w-10 h-10 bg-[#0055C9]/5 rounded-full flex items-center justify-center"> <!-- Lingkaran pudar latar ikon -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#0055C9]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"> <!-- Ikon pintu/akses -->
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        </svg>
+                    </div>
+                    <div> <!-- Kumpulan teks kotak 2 -->
+                        <h4 class="font-bold text-[14px] text-[#131B2E] mb-1">Akses Cepat</h4> <!-- Judul mini fitur kelebihan -->
+                        <p class="font-medium text-[11px] text-[#414755] leading-[16px]">Masuk dan keluar tanpa perlu buka kaca.</p> <!-- Detail deskripsi pendek -->
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>

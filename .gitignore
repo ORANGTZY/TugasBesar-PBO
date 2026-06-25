@@ -1,0 +1,34 @@
+# Maven build output
+target/
+*.class
+
+# Spring Boot
+*.jar
+*.war
+*.ear
+
+# IDE files
+.idea/
+*.iml
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Environment & secrets
+.env
+*.env
+application-secret.properties
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# DevTools
+.mvn/timing.properties

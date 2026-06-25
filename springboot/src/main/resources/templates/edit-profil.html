@@ -1,0 +1,512 @@
+<!DOCTYPE html> <!-- Deklarasi bahwa ini adalah dokumen HTML5 -->
+<html lang="id"> <!-- Elemen akar halaman, bahasa Indonesia -->
+<head> <!-- Bagian kepala halaman (metadata dan link) -->
+    <meta charset="UTF-8"> <!-- Encoding karakter UTF-8 agar teks Indonesia tampil benar -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"> <!-- Tampilan responsif di HP (mencegah zoom) -->
+    <meta name="theme-color" content="#F5F5F5"> <!-- Warna tema browser Android -->
+    <meta name="apple-mobile-web-app-capable" content="yes"> <!-- Mode aplikasi web iOS penuh layar -->
+    
+    <title>Parkirin - Edit Profil</title> <!-- Judul tab browser -->
+    <link rel="icon" href="/img/favicon.png" type="image/png"> <!-- Ikon tab browser -->
+
+    <script src="https://cdn.tailwindcss.com"></script> <!-- Script Tailwind CSS dari CDN -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet"> <!-- Font Montserrat dari Google Fonts -->
+    
+    <script src="https://accounts.google.com/gsi/client" async defer></script> <!-- Script Google Sign-In SDK untuk opsi tautan akun Google -->
+    
+    <style> 
+        body { font-family: 'Montserrat', sans-serif; background-color: #F1F1F1; margin: 0; overscroll-behavior-y: none; } /* Font, latar abu-abu, tanpa pantulan scroll di HP */
+        .hide-scrollbar::-webkit-scrollbar { display: none; } /* Menyembunyikan scrollbar di peramban berbasis WebKit (Chrome/Safari) */
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; } /* Menyembunyikan scrollbar di Firefox/IE */
+        
+        .slide-in { animation: slideInRight 0.3s ease-out forwards; } /* Animasi geser masuk dari kanan */
+        @keyframes slideInRight { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } } /* Efek pergeseran 20px ke 0 */
+
+        .material-input { /* Gaya input form kustom mirip desain Material dari Google */
+            width: 100%; /* Lebar penuh area yang tersedia */
+            height: 40px; /* Tinggi kotak input */
+            background-color: transparent; /* Latar transparan (menyesuaikan wadah) */
+            border: none; /* Hilangkan garis sisi kanan/kiri/atas */
+            border-bottom: 2px solid #515151; /* Tambahkan garis bawah tebal abu-abu gelap */
+            padding: 0 16px; /* Jarak tulisan dari pinggir inputan */
+            font-size: 14px; /* Ukuran tulisan ketikan */
+            font-weight: 600; /* Tulisan agak tebal */
+            color: #000000; /* Warna tulisan ketikan hitam */
+            transition: border-color 0.2s; /* Animasi mulus saat garis bawah berubah warna */
+        }
+        .material-input:focus { /* Gaya input form saat diklik (aktif) */
+            outline: none; /* Hilangkan garis fokus bawaan peramban */
+            border-bottom: 2px solid #0064F0; /* Ubah garis bawah menjadi warna biru aplikasi */
+        }
+        .material-input::placeholder { /* Gaya teks pancingan/placeholder (seperti: "contoh@email.com") */
+            color: #6B7280; /* Warna teks pancingan abu-abu */
+            opacity: 0.5; /* Transparansi teks pancingan setengah */
+            font-weight: 600; /* Ketebalan teks pancingan menengah */
+        }
+    </style>
+</head>
+<body class="flex justify-center h-screen text-gray-800 antialiased bg-gray-200"> <!-- Badan halaman di tengah layar penuh, latar abu gelap -->
+
+    <div id="fb-root"></div> <!-- Wadah wajib bagi Facebook SDK agar bisa berfungsi -->
+    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/id_ID/sdk.js"></script> <!-- Script SDK Login Facebook -->
+
+    <!-- WADAH UTAMA APLIKASI (BENTUK PONSEL) -->
+    <div class="w-full max-w-[402px] bg-[#F1F1F1] h-full relative flex flex-col shadow-2xl overflow-hidden slide-in"> <!-- Wadah area ponsel -->
+        
+        <!-- HEADER ATAS (JUDUL & TOMBOL KEMBALI) -->
+        <div class="w-full h-[120px] bg-[#F5F5F5] pt-12 px-4 flex items-center shadow-sm z-20 shrink-0"> <!-- Wadah latar putih agak abu -->
+            <a href="/profil" class="text-[#0064F0] hover:opacity-80 active:scale-95 transition-all cursor-pointer mr-3"> <!-- Tombol kembali (Ikon panah kiri) -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2.5"> <!-- Ikon SVG Panah Kiri -->
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" /> <!-- Garis bentuk panah -->
+                </svg>
+            </a>
+            <h1 class="text-[20px] font-bold text-[#0064F0]">Edit Profil</h1> <!-- Judul Halaman -->
+        </div>
+
+        <!-- AREA KONTEN (DAPAT DI-SCROLL KE BAWAH) -->
+        <div class="flex-grow overflow-y-auto hide-scrollbar z-10 flex flex-col pb-24 relative"> <!-- Wadah isi form yang bisa digulir -->
+            
+            <div class="absolute top-0 w-full h-[380px] bg-[#F5F5F5] z-0"></div> <!-- Hiasan kotak latar belakang warna terang untuk pembeda visual -->
+
+            <!-- BAGIAN FOTO PROFIL (UPLOAD AVATAR) -->
+            <div class="w-full flex justify-center mt-6 mb-4 z-10 relative"> <!-- Wadah di tengah untuk foto profil -->
+                <div class="relative w-[100px] h-[100px]"> <!-- Lingkaran utama profil ukuran 100x100px -->
+                    <div class="w-full h-full rounded-full overflow-hidden border-4 border-white shadow-md bg-gray-300"> <!-- Wadah potong bentuk bulat sempurna warna latar abu -->
+                        <img id="profile-pic-preview" src="https://i.pravatar.cc/150?img=11" alt="Profile" class="w-full h-full object-cover"> <!-- Gambar avatar default (Pravatar) -->
+                    </div>
+                    <!-- TOMBOL KECIL UPLOAD (IKON KAMERA) -->
+                    <label for="profile-upload" class="absolute bottom-0 right-0 w-8 h-8 bg-[#0064F0] rounded-full border-2 border-white flex items-center justify-center cursor-pointer hover:bg-blue-700 transition-colors shadow-sm"> <!-- Ikon kamera biru dengan pinggiran putih -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"> <!-- Ikon Kamera SVG -->
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" /> <!-- Badan Kamera -->
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" /> <!-- Lensa Kamera -->
+                        </svg>
+                    </label>
+                    <input type="file" id="profile-upload" class="hidden" accept="image/*" onchange="previewProfilePic(event)"> <!-- Input tipe file khusus gambar, disembunyikan agar diganti oleh label kamera -->
+                </div>
+            </div>
+
+            <!-- BAGIAN FORM DATA (NAMA, TELEPON, EMAIL) -->
+            <div class="w-full px-6 pt-2 flex flex-col gap-5 z-10"> <!-- Wadah deretan kolom input form -->
+                <!-- NAMA LENGKAP -->
+                <div class="relative flex flex-col bg-[#EDEDED] pt-2 rounded-t-md"> <!-- Latar belakang input form Nama -->
+                    <label class="text-[10px] font-bold text-[#A4A4A4] ml-4">Nama Lengkap</label> <!-- Teks panduan: Nama Lengkap -->
+                    <input type="text" id="edit-nama" class="material-input" placeholder="Masukkan nama Anda"> <!-- Kolom ketik Nama (bergaya material) -->
+                </div>
+
+                <!-- NOMOR TELEPON -->
+                <div class="relative flex flex-col bg-[#EDEDED] pt-2 rounded-t-md"> <!-- Latar belakang input form Telepon -->
+                    <label class="text-[10px] font-bold text-[#A4A4A4] ml-4">Nomor Telepon Aktif</label> <!-- Teks panduan: Nomor Telepon Aktif -->
+                    <input type="tel" id="edit-telepon" class="material-input" placeholder="Contoh: 08123456789"> <!-- Kolom ketik Telepon (bergaya material) -->
+                </div>
+
+                <!-- ALAMAT EMAIL -->
+                <div class="relative flex flex-col bg-[#EDEDED] pt-2 rounded-t-md"> <!-- Latar belakang input form Email -->
+                    <label class="text-[10px] font-bold text-[#A4A4A4] ml-4">Alamat Email</label> <!-- Teks panduan: Alamat Email -->
+                    <input type="email" id="edit-email" class="material-input" placeholder="contoh@email.com"> <!-- Kolom ketik Email (bergaya material) -->
+                </div>
+            </div>
+
+            <div class="w-full h-8 bg-[#F1F1F1] z-10 mt-6"></div> <!-- Pembatas kosong untuk jarak sebelum bagian Sosmed -->
+
+            <!-- BAGIAN TAUTAN AKUN (SOSIAL MEDIA & HAPUS AKUN) -->
+            <div class="w-full flex flex-col z-10 bg-[#F1F1F1]"> <!-- Wadah aksi manajemen akun lanjutan -->
+                
+                <!-- TAUTAN FACEBOOK -->
+                <div onclick="toggleSocialLink('facebook')" class="w-full h-[55px] bg-[#F5F5F5] border-b border-[#D9D9D9] flex items-center justify-between px-6 cursor-pointer hover:bg-gray-100 transition-colors"> <!-- Baris Tautan Facebook -->
+                    <div class="flex items-center gap-4"> <!-- Wadah ikon Facebook dan teks -->
+                        <div class="w-[29px] h-[29px] bg-[#1877F2] rounded-full flex items-center justify-center text-white"> <!-- Bulatan biru latar FB -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/></svg> <!-- Ikon huruf 'f' logo FB -->
+                        </div>
+                        <span id="facebook-text" class="font-medium text-[11px] text-black">Facebook</span> <!-- Teks Facebook / Nama Facebook (jika terkait) -->
+                    </div>
+                    <span id="facebook-status" class="font-bold text-[14px] text-[#0062E6]">LINK</span> <!-- Status apakah sudah di-LINK atau UNLINK -->
+                </div>
+
+                <!-- TAUTAN GOOGLE -->
+                <div onclick="toggleSocialLink('google')" class="w-full h-[55px] bg-[#F5F5F5] border-b border-[#D9D9D9] flex items-center justify-between px-6 cursor-pointer hover:bg-gray-100 transition-colors"> <!-- Baris Tautan Google -->
+                    <div class="flex items-center gap-4"> <!-- Wadah ikon Google dan teks -->
+                        <div class="w-[29px] h-[29px] bg-white rounded-full flex items-center justify-center shadow-sm"> <!-- Bulatan latar putih Google -->
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="18px" height="18px"><path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"/><path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"/><path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"/><path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"/></svg> <!-- Ikon warna-warni huruf 'G' logo Google -->
+                        </div>
+                        <span id="google-text" class="font-medium text-[11px] text-black">Google</span> <!-- Teks Google / Nama Google (jika terkait) -->
+                    </div>
+                    <span id="google-status" class="font-bold text-[14px] text-[#0062E6]">LINK</span> <!-- Status apakah sudah di-LINK atau UNLINK -->
+                </div>
+
+                <!-- TOMBOL HAPUS AKUN -->
+                <div onclick="konfirmasiHapusAkun()" class="w-full h-[55px] bg-[#F5F5F5] flex items-center justify-between px-6 cursor-pointer hover:bg-red-50 transition-colors mt-[26px]"> <!-- Baris Hapus Akun yang terpisah dengan margin atas -->
+                    <div class="flex items-center gap-4"> <!-- Wadah ikon Tempat Sampah dan teks -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#E53935]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"> <!-- Ikon SVG Tempat Sampah -->
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /> <!-- Bentuk bak sampah -->
+                        </svg>
+                        <span class="font-bold text-[11px] text-[#E53935]">Hapus Akun</span> <!-- Teks Hapus Akun berwarna merah -->
+                    </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#E53935]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg> <!-- Panah arah kanan -->
+                </div>
+            </div>
+
+        </div>
+
+        <!-- FOOTER: TOMBOL SIMPAN (SELALU DI BAWAH Layar) -->
+        <div class="absolute bottom-0 w-full h-[89px] bg-[#F5F5F5] flex flex-col justify-center px-8 z-20 shadow-[0_-5px_15px_rgba(0,0,0,0.05)]"> <!-- Wadah latar tombol simpan -->
+            <button onclick="simpanProfil()" class="w-full h-[47px] bg-[#89E7F9] hover:bg-cyan-400 rounded-[10px] flex items-center justify-center transition-all active:scale-95 shadow-sm"> <!-- Tombol Cyan "SIMPAN" -->
+                <span class="text-white font-semibold text-[12px] tracking-wide">SIMPAN</span> <!-- Tulisan tombol -->
+            </button>
+        </div>
+
+        <!-- MODAL KUSTOM: SUKSES SIMPAN PROFIL -->
+        <div id="saveModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black bg-opacity-40 backdrop-blur-sm transition-opacity opacity-0"> <!-- Latar belakang hitam transparan -->
+            <div id="saveModalContent" class="bg-white w-[280px] rounded-[20px] p-6 flex flex-col items-center shadow-2xl transform scale-90 transition-transform duration-300"> <!-- Kotak tengah putih -->
+                <div class="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mb-4"> <!-- Lingkaran latar hijau untuk ikon -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg> <!-- Ikon centang hijau sukses -->
+                </div>
+                <h3 class="text-[18px] font-bold text-black mb-2 text-center">Berhasil!</h3> <!-- Judul Sukses -->
+                <p class="text-[12px] font-medium text-gray-500 text-center mb-6 leading-relaxed">Perubahan profil Anda telah berhasil disimpan.</p> <!-- Penjelasan telah disimpan -->
+                <button onclick="window.location.href='/'" class="w-full bg-[#0064F0] hover:bg-blue-700 text-white font-bold py-2.5 rounded-[12px] text-[12px] transition-colors shadow-md active:scale-95"> <!-- Tombol tutup/kembali warna biru -->
+                    Kembali ke Profil <!-- Teks kembali -->
+                </button>
+            </div>
+        </div>
+
+        <!-- MODAL KUSTOM: PERINGATAN (ERROR / GAGAL) -->
+        <div id="warningModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black bg-opacity-40 backdrop-blur-sm transition-opacity opacity-0"> <!-- Latar belakang hitam transparan -->
+            <div id="warningModalContent" class="bg-white w-[280px] rounded-[20px] p-6 flex flex-col items-center shadow-2xl transform scale-90 transition-transform duration-300"> <!-- Kotak tengah putih -->
+                <div class="w-14 h-14 bg-yellow-100 rounded-full flex items-center justify-center mb-4"> <!-- Lingkaran latar kuning untuk ikon -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"> <!-- Ikon tanda seru (!) peringatan -->
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /> <!-- Bentuk segitiga peringatan -->
+                    </svg>
+                </div>
+                <h3 class="text-[18px] font-bold text-black mb-2 text-center">Peringatan!</h3> <!-- Judul Peringatan -->
+                <p id="warningMessage" class="text-[12px] font-medium text-gray-500 text-center mb-6 leading-relaxed">Semua kolom wajib diisi.</p> <!-- Pesan detail (dapat diganti via JS) -->
+                <button onclick="tutupModalPeringatan()" class="w-full bg-[#F59E0B] hover:bg-yellow-600 text-white font-bold py-2.5 rounded-[12px] text-[12px] transition-colors shadow-md active:scale-95"> <!-- Tombol tutup peringatan warna oren-kuning -->
+                    Mengerti <!-- Teks setuju untuk menutup -->
+                </button>
+            </div>
+        </div>
+
+        <!-- MODAL KUSTOM: KONFIRMASI HAPUS AKUN -->
+        <div id="deleteModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm transition-opacity opacity-0"> <!-- Latar belakang hitam transparan -->
+            <div id="deleteModalContent" class="bg-white w-[300px] rounded-[20px] p-6 flex flex-col items-center shadow-2xl transform scale-90 transition-transform duration-300"> <!-- Kotak tengah putih -->
+                <div class="w-14 h-14 bg-red-100 rounded-full flex items-center justify-center mb-4"> <!-- Lingkaran latar merah untuk ikon -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-[#E53935]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg> <!-- Ikon peringatan segitiga merah -->
+                </div>
+                <h3 class="text-[18px] font-bold text-black mb-2 text-center">Hapus Permanen?</h3> <!-- Judul Konfirmasi Hapus -->
+                <p class="text-[12px] font-medium text-gray-500 text-center mb-6 leading-relaxed">Semua data Anda akan dihapus secara permanen dari server.</p> <!-- Pesan dampak hapus akun -->
+                <div class="flex w-full gap-3"> <!-- Baris menaruh 2 tombol aksi: Batal atau Lanjut Hapus -->
+                    <button onclick="tutupModalHapus()" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-2.5 rounded-[12px] text-[12px] transition-colors active:scale-95">Batal</button> <!-- Tombol abu-abu batal -->
+                    <button onclick="eksekusiHapusAkun()" class="flex-1 bg-[#E53935] hover:bg-red-700 text-white font-bold py-2.5 rounded-[12px] text-[12px] transition-colors shadow-md active:scale-95">Ya, Hapus!</button> <!-- Tombol merah konfirmasi hapus -->
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- SCRIPT LOGIKA PROGRAM APLIKASI WEB (JS) -->
+    <script>
+        let googleClient; // Variabel penyimpan akses klien Google API
+
+        // Inisialisasi bawaan Facebook saat SDK selesai termuat
+        window.fbAsyncInit = function() { 
+            FB.init({
+                appId      : 'GANTI_DENGAN_FACEBOOK_APP_ID_ANDA', // Harus diisi dengan ID Aplikasi FB di dasbor dev FB
+                cookie     : true, // Izinkan Facebook menggunakan cookies agar status login bertahan
+                xfbml      : true, // Parse plugin sosial FB di halaman ini (jika ada)
+                version    : 'v19.0' // Gunakan versi API Graph FB 19.0
+            });
+        };
+
+        // Ketika halaman sepenuhnya terbuka dan siap digunakan
+        document.addEventListener("DOMContentLoaded", function() {
+            const userData = localStorage.getItem('user'); // Ambil data pengguna sementara yang sedang aktif di HP (localStorage)
+            
+            if(userData) { // Jika ada pengguna yang tersimpan/sedang aktif
+                const user = JSON.parse(userData); // Terjemahkan dari teks jadi objek JS agar mudah dibaca
+                
+                // Isi form otomatis dengan data pengguna tersebut (Jika ada, jika tidak, biarkan kosong)
+                if(user.nama) document.getElementById('edit-nama').value = user.nama; 
+                document.getElementById('edit-telepon').value = user.no_telepon || user.telepon || "";
+                if(user.email) document.getElementById('edit-email').value = user.email;
+
+                // Memeriksa dan memuat foto profil khusus si pengguna (disimpan terpisah)
+                const savedPic = localStorage.getItem('foto_profil_' + user.id); // Cari ID unik si user
+                    if(savedPic) { // Jika ternyata user ini punya foto yang disimpan
+                        document.getElementById('profile-pic-preview').src = savedPic; // Ganti gambar default dengan fotonya
+                    }
+                
+                // Periksa apakah user pernah menautkan sosial media dari memori lokal (status pura-pura / mockup frontend)
+                const fbLinked = user.isFbLinked || false; // Jika pernah LINK Facebook
+                const googleLinked = user.isGoogleLinked || false; // Jika pernah LINK Google
+                
+                // Ubah status dan tulisan kotak FB dan Google sesuai keadaan di atas
+                renderSocialStatus('facebook', fbLinked, user.nama);
+                renderSocialStatus('google', googleLinked, user.nama);
+            }
+
+            // Inisialisasi bawaan Google Account saat Google SDK terdeteksi (OAUTH2)
+            if(window.google) {
+                googleClient = google.accounts.oauth2.initTokenClient({
+                    client_id: 'GANTI_DENGAN_GOOGLE_CLIENT_ID_ANDA.apps.googleusercontent.com', // Harus diisi ID Klien Google 
+                    scope: 'email profile openid', // Izin meminta nama lengkap dan email pengguna Google
+                    callback: (response) => { // Jika login Google berhasil diklik dan diverifikasi
+                        if (response && response.access_token) { // Pastikan akses didapat
+                            linkAccount('google', 'Google User'); // Jalankan proses penautan akun Google di sistem aplikasi
+                        }
+                    },
+                });
+            }
+        });
+
+        // ===============================================
+        // FUNGSI FOTO PROFIL
+        // ===============================================
+        // Fungsi mengganti foto profil
+        function previewProfilePic(event) {
+            const input = event.target; // Ambil elemen file tempat upload gambar
+            if (input.files && input.files[0]) { // Pastikan pengguna benar-benar memilih file gambar (tidak batal)
+                const reader = new FileReader(); // Buat program pembaca file internal
+                reader.onload = function(e) { // Kejadian ketika foto selesai dibaca
+                    // Update/ganti tampilan foto pada antarmuka bulat di atas layar
+                    document.getElementById('profile-pic-preview').src = e.target.result;
+                    
+                    // Simpan foto secara permanen (tapi offline) di "Kamar Terpisah" berdasarkan ID User 
+                    let user = JSON.parse(localStorage.getItem('user')) || {};
+                    if (user.id) {
+                        localStorage.setItem('foto_profil_' + user.id, e.target.result); // Menyimpan format tulisan panjang gambar ke memori ponsel (Base64)
+                    }
+                };
+                reader.readAsDataURL(input.files[0]); // Mulai perintahkan membaca file menjadi kode teks panjang
+            }
+        }
+
+        // ===============================================
+        // FUNGSI LINK / UNLINK SOSIAL MEDIA
+        // ===============================================
+        // Fungsi merubah tampilan saat tombol sosmed diubah dari LINK <-> UNLINK
+        function renderSocialStatus(platform, isLinked, userName) {
+            const statusElement = document.getElementById(`${platform}-status`); // Teks (LINK/UNLINK)
+            const textElement = document.getElementById(`${platform}-text`); // Teks (Google / Nama FB / Nama Google)
+            
+            if (isLinked) { // Jika posisinya sedang TERTAUT
+                statusElement.textContent = "UNLINK"; // Ubah tombol kanan jadi UNLINK
+                statusElement.classList.replace("text-[#0062E6]", "text-red-500"); // Ubah warna LINK (biru) menjadi UNLINK (merah)
+                textElement.textContent = userName || "Pengguna";  // Ganti teks Google/FB menjadi nama si Pengguna tersebut
+            } else { // Jika posisinya TERPUTUS / belum terhubung
+                statusElement.textContent = "LINK"; // Ubah tombol kanan jadi LINK
+                statusElement.classList.replace("text-red-500", "text-[#0062E6]"); // Ubah warna kembali ke biru tua
+                textElement.textContent = platform.charAt(0).toUpperCase() + platform.slice(1); // Balikkan nama ke default (Cth: tulisan "Google")
+            }
+        }
+
+        // Fungsi yang dipanggil saat baris Facebook atau Google di layar diklik
+        function toggleSocialLink(platform) {
+            let user = JSON.parse(localStorage.getItem('user')) || {}; // Ambil data
+            // Cek kondisi sekarang (Sudah terkait atau belum?) dari memori ponsel
+            const isLinked = platform === 'facebook' ? user.isFbLinked : user.isGoogleLinked;
+
+            if (isLinked) { // Jika sudah terkait -> MAKA KITA INGIN MEMUTUSKANNYA (UNLINK)
+                if(platform === 'facebook') user.isFbLinked = false; // Tandai FB Putus
+                if(platform === 'google') user.isGoogleLinked = false; // Tandai Google Putus
+                localStorage.setItem('user', JSON.stringify(user)); // Simpan catatan putus tersebut ke ponsel
+                renderSocialStatus(platform, false, user.nama); // Jalankan perubahan visual layar ke mode belum terkait
+            } else { // Jika belum terkait -> MAKA KITA INGIN MENGHUBUNGKANNYA (LINK)
+                if (platform === 'facebook') { // Jika klik FB
+                    if(typeof FB === 'undefined') { // Cegah error jika FB SDK gagal termuat (misal karena diblok adblocker / internet lambat)
+                        tampilModalPeringatan("SDK Facebook sedang memuat. Coba lagi."); return;
+                    }
+                    // Minta FB membuka Pop up login miliknya sendiri
+                    FB.login(function(response) { 
+                        if (response.authResponse) { // Jika user sukses login akun FB dan menyetujui izin
+                            FB.api('/me', {fields: 'name'}, function(res) { // Minta data profil fbnya (nama)
+                                linkAccount('facebook', res.name); // Simpan nama di sistem kita
+                            });
+                        } else {
+                            console.log('Login Facebook dibatalkan pengguna.'); // Jika user tutup kotak FB di tengah jalan
+                        }
+                    }, {scope: 'public_profile,email'}); // Permintaan hak untuk akses email FB
+                    
+                } else if (platform === 'google') { // Jika klik Google
+                    if(googleClient) { // Pastikan inisialisasi awal Google SDK sukses
+                        googleClient.requestAccessToken(); // Panggil kotak pop up permintaan akun google resmi
+                    } else { // Jika SDK gagal termuat (Cth offline)
+                        tampilModalPeringatan("SDK Google gagal dimuat. Periksa koneksi internet."); 
+                    }
+                }
+            }
+        }
+
+        // Fungsi pembantu untuk menyimpan status sukses LINK ke sistem/memori ponsel
+        function linkAccount(platform, accountName) {
+            let user = JSON.parse(localStorage.getItem('user')) || {}; // Ambil data memori hp
+            if(platform === 'facebook') user.isFbLinked = true; // Tandai terkait
+            if(platform === 'google') user.isGoogleLinked = true; // Tandai terkait
+            localStorage.setItem('user', JSON.stringify(user)); // Simpan data
+            
+            renderSocialStatus(platform, true, accountName); // Merubah tampilan visual ke mode terhubung
+            // Tampilkan pop up kecil memberitahu berhasil terhubung
+            alert(`Berhasil menautkan akun ${platform} Anda!`);
+        }
+
+        // ===============================================
+        // FUNGSI MODAL PERINGATAN KUSTOM
+        // ===============================================
+        // Fungsi memunculkan pop up kuning (Peringatan/Error)
+        function tampilModalPeringatan(pesan) {
+            document.getElementById('warningMessage').textContent = pesan; // Masukkan teks error baru ke tengah pop up
+            const modal = document.getElementById('warningModal'); // Ambil background gelap
+            const modalContent = document.getElementById('warningModalContent'); // Ambil kotak pop up
+            
+            modal.classList.remove('hidden'); // Munculkan pop up agar merender di layar
+            modal.classList.add('flex'); // Set perataan konten agar tetap di tengah
+            
+            setTimeout(() => { // Animasi mulus masuk setelah elemen aktif (perlu jeda kecil Javascript)
+                modal.classList.remove('opacity-0'); 
+                modal.classList.add('opacity-100');
+                modalContent.classList.remove('scale-90');
+                modalContent.classList.add('scale-100');
+            }, 10);
+        }
+
+        // Fungsi menyembunyikan pop up kuning
+        function tutupModalPeringatan() {
+            const modal = document.getElementById('warningModal');
+            const modalContent = document.getElementById('warningModalContent');
+            
+            // Animasi mulus keluar
+            modal.classList.remove('opacity-100');
+            modal.classList.add('opacity-0');
+            modalContent.classList.remove('scale-100');
+            modalContent.classList.add('scale-90');
+            
+            setTimeout(() => { // Sembunyikan elemen secara total setelah animasi (300 ms) berakhir
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }, 300);
+        }
+
+        // ===============================================
+        // FUNGSI SIMPAN PROFIL DENGAN VALIDASI POP-UP
+        // ===============================================
+        // Fungsi untuk mengirim form profil yang diedit ke sistem Server Database (Backend SpringBoot)
+        async function simpanProfil() {
+            const newNama = document.getElementById('edit-nama').value.trim(); // Ambil isi input Nama lalu buang sisa spasi kosong di depan/belakang teks
+            const newTelepon = document.getElementById('edit-telepon').value.trim(); // Sama untuk Telp
+            const newEmail = document.getElementById('edit-email').value.trim(); // Sama untuk Email
+
+            // Pengecekan sebelum kirim: Cek jika ada input yang lupa diisi (Syarat validasi tidak boleh ada yang kosong!)
+            if (!newNama || !newTelepon || !newEmail) {
+                tampilModalPeringatan("Nama Lengkap, Nomor Telepon, dan Alamat Email tidak boleh kosong. Silakan lengkapi data Anda sebelum menyimpan."); // Munculkan error!
+                return; // Batalkan proses simpan! (Hentikan JS berjalan)
+            }
+
+            let user = JSON.parse(localStorage.getItem('user')) || {}; // Jika data sudah penuh, ambil ID pengenal user
+            
+            // Siapkan paket bingkisan (Payload) data terupdate yang ingin dititipkan ke Server
+            const updateData = {
+                id: user.id, // Pengenal User (sangat penting untuk DB tau siapa yang diubah)
+                nama: newNama,
+                no_telepon: newTelepon,
+                email: newEmail
+            };
+
+            try {
+                // Mengetuk pintu server Backend untuk minta Data di UPDATE (Methode HTTP: PUT)
+                const response = await fetch('/api/update-profile', { // Mengirim ke URL Controller REST API Spring
+                    method: 'PUT', // Aturan Rest, merubah keseluruhan pakai PUT
+                    headers: { 'Content-Type': 'application/json' }, // Format bingkisan adalah teks JSON
+                    body: JSON.stringify(updateData) // Ubah Paket menjadi teks tunggal
+                });
+
+                const result = await response.json(); // Menerima balasan pelayan (Server DB) apakah sukses / gagal dan kenapa
+
+                if (response.ok) { // Jika status HTTP kode 200/2xx (berhasil terubah)
+                    // Server sukses berubah. Selanjutnya ganti juga data yang masih teringat di memori lokal ponsel agar tidak kembali seperti semula!
+                    user.nama = newNama;
+                    user.no_telepon = newTelepon; 
+                    user.telepon = newTelepon;    
+                    user.email = newEmail;
+                    localStorage.setItem('user', JSON.stringify(user)); // Timpa paksa data lama ponsel
+
+                    // Munculkan Pop up Centang Hijau (Sukses)
+                    const modal = document.getElementById('saveModal');
+                    const modalContent = document.getElementById('saveModalContent');
+                    
+                    modal.classList.remove('hidden');
+                    modal.classList.add('flex');
+                    
+                    setTimeout(() => { // Animasi mulus pop up sukses
+                        modal.classList.remove('opacity-0');
+                        modal.classList.add('opacity-100');
+                        modalContent.classList.remove('scale-90');
+                        modalContent.classList.add('scale-100');
+                    }, 10);
+
+                } else { // Jika Server menolak memproses (Mungkin karena sistem DB eror atau format salah)
+                    tampilModalPeringatan("Gagal menyimpan profil: " + result.message); // Tampilkan alasan dari Server ke layar HP user
+                }
+
+            } catch (error) { // Terjadi Jika Pintu Server terkunci/tertutup (seperti koneksi internet user putus)
+                tampilModalPeringatan("Kesalahan Jaringan. Pastikan server backend berjalan."); // Tampilkan peringatan koneksi
+                console.error(error); // Catat kerusakan teknikal pada memori pengembang (console log browser)
+            }
+        }
+
+        // ===============================================
+        // FUNGSI HAPUS AKUN PERMANEN
+        // ===============================================
+        // Fungsi memunculkan pop up layar merah (Hapus Akun?) untuk bertanya yakin atau tidak
+        function konfirmasiHapusAkun() {
+            const modal = document.getElementById('deleteModal');
+            const modalContent = document.getElementById('deleteModalContent');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            setTimeout(() => { // Animasi muncul popup konfirmasi berbahaya
+                modal.classList.remove('opacity-0');
+                modal.classList.add('opacity-100');
+                modalContent.classList.remove('scale-90');
+                modalContent.classList.add('scale-100');
+            }, 10);
+        }
+
+        // Fungsi menyembunyikan/menghilangkan pop up layah merah tadi saat di klik Batal
+        function tutupModalHapus() {
+            const modal = document.getElementById('deleteModal');
+            const modalContent = document.getElementById('deleteModalContent');
+            modal.classList.remove('opacity-100');
+            modal.classList.add('opacity-0');
+            modalContent.classList.remove('scale-100');
+            modalContent.classList.add('scale-90');
+            setTimeout(() => { // Animasi keluar sebelum benar-benar disembunyikan JS (300 ms)
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }, 300);
+        }
+
+        // Fungsi fatal mendelete total akun ke server
+        async function eksekusiHapusAkun() {
+            let user = JSON.parse(localStorage.getItem('user')); // Identifikasi user (siapa yang mau dihapus?)
+            if (!user || !user.id) { // Jika tak ditemukan identitas di ponsel
+                tampilModalPeringatan("Gagal mengidentifikasi akun. Silakan login ulang."); return; // Mungkin sesi ilegal? Batalkan.
+            }
+            try {
+                // Mengetuk server API secara frontal dengan instruksi pembasmian data secara mutlak (Metode HTTP: DELETE) pada satu ID User itu
+                const response = await fetch(`/api/delete-account/${user.id}`, {
+                    method: 'DELETE', headers: { 'Content-Type': 'application/json' }
+                });
+                if (response.ok) { // Jika server setuju untuk membakar identitas akun tersebut
+                    localStorage.removeItem('user'); // Buang sisa-sisa ingatan ponsel ini dari akun yang terbakar
+                    // Menggunakan alert bawaan agar eksekusi pindah halaman mulus, memberi pesan terakhir sebelum reset aplikasi web
+                    alert("Akun Anda telah berhasil dihapus secara permanen.");
+                    window.location.href = "/login"; // Kembalikan ke gerbang pendaftaran/masuk awal (Force Logout)
+                } else { // Jika server enggan menghapus dengan suatu alasan fatal DB (Constraint Key, dll)
+                    const result = await response.json(); // Ambil respon tolak
+                    tampilModalPeringatan("Gagal menghapus akun: " + result.message); // Tampilkan alasan penolakan pada popup layar Hp 
+                    tutupModalHapus(); // Tutup mode Konfirmasi hapus dan kembali
+                }
+            } catch (error) { // Jika ponsel mati koneksi saat eksekusi fatal ini
+                tampilModalPeringatan("Kesalahan Jaringan. Tidak dapat terhubung ke server."); // Peringatkan gagal internet
+                tutupModalHapus(); // Tutup pop up
+            }
+        }
+    </script>
+</body>
+</html>

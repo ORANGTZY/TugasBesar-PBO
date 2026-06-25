@@ -1,0 +1,241 @@
+<!DOCTYPE html> <!-- Deklarasi bahwa ini adalah dokumen HTML5 -->
+<html lang="id"> <!-- Elemen akar halaman, bahasa Indonesia -->
+<head> <!-- Bagian kepala halaman -->
+    <meta charset="UTF-8"> <!-- Encoding UTF-8 agar teks Indonesia tampil benar -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"> <!-- Tampilan responsif di HP -->
+    <meta name="theme-color" content="#F1F1F1"> <!-- Warna tema browser di Android -->
+
+    <title>Parkirin - Tiket Anda</title> <!-- Judul tab browser -->
+    <link rel="icon" href="/img/favicon.png" type="image/png"> <!-- Ikon tab browser -->
+
+    <script src="https://cdn.tailwindcss.com"></script> <!-- Tailwind CSS dari internet -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet"> <!-- Font Montserrat -->
+
+    <style> 
+        body { font-family: 'Montserrat', sans-serif; background-color: #F1F1F1; margin: 0; overscroll-behavior-y: none; user-select: none; } /* Font, latar, tanpa seleksi teks */
+        .hide-scrollbar::-webkit-scrollbar { display: none; } /* Sembunyikan scrollbar Chrome/Safari */
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; } /* Sembunyikan scrollbar IE/Firefox */
+        .slide-in-right { animation: slideInRight 0.3s ease-out forwards; } /* Animasi geser masuk dari kanan */
+        @keyframes slideInRight { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } } /* Definisi animasi geser masuk */
+        /* Cekungan tengah navbar bawah */
+        .nav-curve { position: absolute; top: -1px; left: 50%; transform: translateX(-50%); width: 86px; height: 38px; background-color: #F1F1F1; border-bottom-left-radius: 43px; border-bottom-right-radius: 43px; border: 1px solid #D9D9D9; border-top: none; z-index: 10; }
+        .nav-curve::before, .nav-curve::after { content: ""; position: absolute; top: 0; width: 14px; height: 14px; background-color: transparent; } /* Dekoratif sudut cekungan */
+        .nav-curve::before { left: -14px; border-top-right-radius: 14px; border-right: 1px solid #D9D9D9; border-top: 1px solid #D9D9D9; box-shadow: 4px -4px 0 4px #F1F1F1; } /* Sudut kiri */
+        .nav-curve::after { right: -14px; border-top-left-radius: 14px; border-left: 1px solid #D9D9D9; border-top: 1px solid #D9D9D9; box-shadow: -4px -4px 0 4px #F1F1F1; } /* Sudut kanan */
+    </style>
+</head>
+<body class="flex justify-center h-screen text-gray-800 antialiased bg-gray-200 overflow-hidden"> <!-- Badan halaman: tengah, tinggi penuh -->
+    <!-- WADAH UTAMA HALAMAN TIKET -->
+    <div class="w-full max-w-[402px] bg-[#F1F1F1] h-full relative flex flex-col shadow-2xl overflow-hidden slide-in-right"> <!-- Wadah utama dengan animasi geser masuk -->
+        
+        <!-- HEADER: Tombol kembali dan judul -->
+        <div class="w-full h-[120px] bg-[#F5F5F5] pt-12 px-4 flex items-center shadow-sm z-20 shrink-0"> <!-- Bar atas halaman -->
+            <a href="/user-dashboard" class="flex items-center text-[#0064F0] hover:opacity-80 active:scale-95 transition-all cursor-pointer"> <!-- Tautan kembali ke dashboard -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" /></svg> <!-- Ikon panah kiri -->
+            </a>
+            <span class="ml-3 font-bold text-[20px] text-[#0064F0]">Daftar Tiket Aktif</span> <!-- Judul halaman -->
+        </div>
+
+        <!-- DAFTAR TIKET AKTIF -->
+        <div id="ticket-list-container" class="flex-grow overflow-y-auto hide-scrollbar z-10 flex flex-col pt-3 px-4 pb-32 relative bg-[#F1F1F1]"> <!-- Wadah konten tiket yang bisa digulir -->
+            <!-- TAMPILAN KOSONG (jika tidak ada tiket aktif) -->
+            <div id="empty-state" class="w-full flex flex-col items-center mt-20 hidden"> <!-- Tampilan kosong — tersembunyi secara default -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-gray-300 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" /></svg> <!-- Ikon tiket abu-abu besar -->
+                <p class="text-[12px] font-medium text-gray-400">Belum ada tiket yang aktif.</p> <!-- Pesan kosong -->
+            </div>
+            
+            <div id="cards-wrapper" class="w-full flex flex-col gap-3"></div> <!-- Wadah kartu tiket — diisi oleh JavaScript -->
+        </div>
+
+        <!-- NAVBAR BAWAH -->
+        <div class="absolute bottom-0 w-full max-w-[402px] h-[75px] bg-[#F5F5F5] border-t border-[#D9D9D9] rounded-t-[19px] z-20 shadow-[0_-5px_15px_rgba(0,0,0,0.05)]"> <!-- Bar navigasi bawah -->
+            <div class="relative w-full h-full px-8 flex items-center justify-center"> <!-- Wadah konten navbar -->
+                <div class="nav-curve"></div> <!-- Cekungan tengah navbar -->
+                <div class="flex w-full justify-between items-end pb-3 z-30"> <!-- Baris ikon navigasi -->
+                    <a href="/user-dashboard" class="flex flex-col items-center justify-end w-[60px] hover:opacity-80 transition-all"><svg xmlns="http://www.w3.org/2000/svg" class="h-[28px] w-[28px] text-[#D9D9D9] mb-[5px]" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3L2 12h3v8h6v-6h2v6h6v-8h3L12 3z"/></svg><span class="text-[#D9D9D9] font-semibold text-[12px] leading-none">Utama</span></a> <!-- Ikon Utama tidak aktif -->
+                    <div class="flex flex-col items-center justify-end w-[60px]"><div class="h-[28px] mb-[5px]"></div><span class="text-[#00D1FF] font-semibold text-[12px] leading-none">Tiket</span></div> <!-- Kolom tiket — aktif (cyan) -->
+                    <a href="/profil" class="flex flex-col items-center justify-end w-[60px] hover:opacity-80 transition-all"><svg xmlns="http://www.w3.org/2000/svg" class="h-[28px] w-[28px] text-[#D9D9D9] mb-[5px]" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg><span class="text-[#D9D9D9] font-semibold text-[12px] leading-none">Pengguna</span></a> <!-- Ikon Pengguna tidak aktif -->
+                </div>
+                <!-- TOMBOL TIKET BULAT (aktif di halaman ini) -->
+                <a href="/tiket" class="absolute top-[-26px] left-1/2 -translate-x-1/2 z-40 active:scale-95"><div class="bg-[#0141A3] w-[61px] h-[61px] rounded-full flex flex-col items-center justify-center shadow-lg"><div class="w-[32px] h-[29px] flex flex-col justify-between overflow-hidden rounded-[3px]"><div class="w-full h-[13px] bg-[#F5F5F5]"></div><div class="w-full h-[3px] bg-transparent"></div><div class="w-full h-[13px] bg-[#F5F5F5]"></div></div></div></a> <!-- Tombol tiket bulat biru -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let timerInterval = null; // Variabel untuk menyimpan ID interval penghitung mundur
+
+        async function sinkronisasiDataTiket() { // Fungsi untuk mengambil dan menampilkan data tiket aktif dari server
+            const userData = JSON.parse(localStorage.getItem('user')); // Ambil data pengguna dari penyimpanan lokal
+            if (!userData) { // Jika pengguna belum login
+                window.location.href = "/login"; // Arahkan ke halaman login
+                return;
+            }
+
+            const cardsWrapper = document.getElementById('cards-wrapper'); // Ambil wadah kartu tiket
+            const emptyElement = document.getElementById('empty-state'); // Ambil elemen tampilan kosong
+            
+            try {
+                // [PERBAIKAN] TEKNIK CACHE-BUSTING: Memaksa Browser meminta data terbaru (100% Realtime dari MySQL)
+                const cacheBuster = new Date().getTime(); // Buat parameter waktu unik untuk menghindari cache browser
+                const response = await fetch(`/api/parkir/reservasi/user/${userData.id}?t=${cacheBuster}`, { // Kirim permintaan dengan parameter cache-buster
+                    method: 'GET', // Metode GET untuk mengambil data
+                    headers: {
+                        'Cache-Control': 'no-cache, no-store, must-revalidate', // Instruksikan browser tidak menyimpan cache
+                        'Pragma': 'no-cache', // Kompatibilitas HTTP/1.0 untuk tidak cache
+                        'Expires': '0' // Anggap respons langsung kadaluwarsa
+                    }
+                });
+
+                const result = await response.json(); // Ubah respons dari JSON ke objek JavaScript
+
+                if (result.status === 'success') { // Jika berhasil mengambil data
+                    let localTickets = JSON.parse(localStorage.getItem('active_tickets')) || []; // Ambil tiket aktif dari penyimpanan lokal
+                    let newSyncedTickets = []; // Daftar baru tiket yang disinkronisasi dengan database
+
+                    const activeDbTickets = result.data.filter(t => t.status === 'Aktif' || t.status === 'Menunggu'); // Saring hanya tiket yang masih aktif/menunggu
+
+                    cardsWrapper.innerHTML = ''; // Kosongkan daftar kartu tiket sebelum diisi ulang
+
+                    if (activeDbTickets.length === 0) { // Jika tidak ada tiket aktif
+                        emptyElement.classList.remove('hidden'); // Tampilkan pesan "Belum ada tiket"
+                        localStorage.setItem('active_tickets', JSON.stringify([])); // Kosongkan tiket lokal
+                        if(timerInterval) clearInterval(timerInterval); // Hentikan timer
+                        return;
+                    } else { // Jika ada tiket aktif
+                        emptyElement.classList.add('hidden'); // Sembunyikan pesan kosong
+                    }
+
+                    activeDbTickets.forEach(dbTicket => { // Proses setiap tiket aktif dari database
+                        const localData = localTickets.find(t => t.id === dbTicket.kode_unik); // Cari data lokal yang cocok
+                        const platNomor = localData ? localData.vehicle.plate : 'Kendaraan Anda'; // Ambil nomor plat dari lokal (atau gunakan teks default)
+                        const jenis = dbTicket.blok === 'Mobil' ? 'mobil' : 'motor'; // Tentukan jenis kendaraan berdasarkan blok
+                        
+                        // CEK STATUS CHECK-IN DARI DB
+                        const isCheckedInDB = dbTicket.waktu_check_in !== null; // Cek apakah pengguna sudah check-in (masuk parkiran)
+                        const estimasi = new Date(dbTicket.estimasi_kedatangan).getTime(); // Ubah waktu estimasi kedatangan ke milidetik
+
+                        newSyncedTickets.push({ // Tambahkan data tiket ke daftar sinkronisasi baru
+                            id: dbTicket.kode_unik, // Kode unik tiket
+                            lantai: dbTicket.lantai, // Lantai parkir
+                            slot: dbTicket.blok === 'Mobil' ? dbTicket.no_slot : dbTicket.blok, // Nomor slot atau blok
+                            expiry: estimasi, // Waktu kedaluwarsa tiket (milidetik)
+                            isCheckedIn: isCheckedInDB, // Apakah sudah check-in
+                            checkInTime: dbTicket.waktu_check_in ? new Date(dbTicket.waktu_check_in).getTime() : null, // Waktu check-in
+                            vehicle: localData ? localData.vehicle : { plate: platNomor, jenis: jenis, name: 'Kendaraan' } // Data kendaraan
+                        });
+
+                        let targetUrl = isCheckedInDB ? `/tiket-pembayaran?id=${dbTicket.kode_unik}` : `/tiket-aktif?id=${dbTicket.kode_unik}`; // URL tujuan tombol: bayar jika sudah check-in, tiket aktif jika belum
+                        let slotText = jenis === 'mobil' ? `${dbTicket.lantai}, Slot ${dbTicket.no_slot}` : `${dbTicket.lantai}, ${dbTicket.blok}`; // Format teks lokasi slot
+
+                        cardsWrapper.innerHTML += ` <!-- Tambahkan kartu tiket ke dalam daftar -->
+                        <div id="ticket-card-${dbTicket.kode_unik}" class="w-full bg-[#F5F5F5] px-4 py-3 flex flex-col justify-between shadow-sm rounded-lg border border-gray-200">
+                            <div class="flex justify-between items-start w-full">
+                                <div class="flex flex-col">
+                                    <span class="font-bold text-[12px] text-black">Rita Supermall</span> <!-- Nama lokasi parkir -->
+                                    <span class="font-normal text-[10px] text-black mt-1">${slotText}</span> <!-- Teks lokasi slot -->
+                                </div>
+                                <div class="flex flex-col items-end gap-1">
+                                    <span class="font-bold text-[13px] text-[#000000]">${platNomor}</span> <!-- Nomor plat kendaraan -->
+                                    <a id="btn-buka-${dbTicket.kode_unik}" href="${targetUrl}" class="font-bold text-[11px] text-white bg-[#0141A3] px-3 py-1 rounded-md hover:bg-blue-800 active:scale-95 transition-all">Buka Tiket</a> <!-- Tombol buka tiket -->
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-1 mt-3 pt-2 border-t border-gray-200">
+                                <span id="label-timer-${dbTicket.kode_unik}" class="font-normal text-[10px] text-black"> <!-- Label timer atau status -->
+                                    ${isCheckedInDB ? 'Status :' : 'Tiket kedaluwarsa dalam :'}
+                                </span>
+                                <span id="timer-${dbTicket.kode_unik}" class="${isCheckedInDB ? 'font-bold text-[11px] text-[#000000]' : 'font-semibold text-[10px] text-black'}"> <!-- Tampilan timer atau status -->
+                                    ${isCheckedInDB ? 'Sedang Parkir' : '...'}
+                                </span>
+                            </div>
+                        </div>`;
+                    });
+
+                    // Tulis ulang memori lokal
+                    localStorage.setItem('active_tickets', JSON.stringify(newSyncedTickets)); // Simpan data tiket yang sudah disinkronisasi ke penyimpanan lokal
+
+                    if(timerInterval) clearInterval(timerInterval); // Hentikan interval penghitung mundur yang lama
+                    mulaiTimerKedaluwarsa(); // Mulai penghitung mundur baru
+                }
+            } catch (error) {
+                console.error("Gagal menarik data dari server:", error); // Catat error jika gagal mengambil data
+            }
+        }
+
+        // FUNGSI PENGHITUNG MUNDUR (LOOP)
+        function mulaiTimerKedaluwarsa() { // Fungsi untuk memulai penghitung mundur waktu kedaluwarsa tiket
+            timerInterval = setInterval(() => { // Jalankan setiap 1 detik
+                const sekarang = Date.now(); // Ambil waktu saat ini dalam milidetik
+                let isChanged = false; // Penanda apakah ada perubahan (tiket kadaluwarsa)
+                
+                let currentTickets = JSON.parse(localStorage.getItem('active_tickets')) || []; // Ambil data tiket dari penyimpanan lokal
+
+                currentTickets.forEach(ticket => { // Proses setiap tiket satu per satu
+                    const timerDisplay = document.getElementById(`timer-${ticket.id}`); // Ambil elemen tampilan timer
+                    const labelDisplay = document.getElementById(`label-timer-${ticket.id}`); // Ambil elemen label timer
+                    const btnBuka = document.getElementById(`btn-buka-${ticket.id}`); // Ambil tombol buka tiket
+                    
+                    if (!timerDisplay) return; // Lewati jika elemen tidak ditemukan
+
+                    // PEMBACAAN REAL-TIME DARI LOCALSTORAGE
+                    if (ticket.isCheckedIn) { // Jika pengguna sudah check-in di parkiran
+                        if (timerDisplay.textContent !== "Sedang Parkir") { // Jika belum menampilkan status parkir
+                            labelDisplay.textContent = "Status :"; // Ubah label ke "Status"
+                            timerDisplay.textContent = "Sedang Parkir"; // Tampilkan status sedang parkir
+                            timerDisplay.className = "font-bold text-[11px] text-[#000000]"; // Gaya teks status parkir
+                            
+                            if (btnBuka) btnBuka.href = `/tiket-pembayaran?id=${ticket.id}`; // Ubah tautan ke halaman pembayaran
+                        }
+                        return; // Tidak perlu hitung mundur lagi
+                    }
+
+                    const selisihWaktu = ticket.expiry - sekarang; // Hitung sisa waktu kedaluwarsa dalam milidetik
+                    
+                    if (selisihWaktu <= 0) { // Jika tiket sudah kadaluwarsa
+                        const card = document.getElementById(`ticket-card-${ticket.id}`); // Ambil elemen kartu tiket
+                        if(card) card.remove(); // Hapus kartu tiket dari tampilan
+                        ticket.isExpired = true; // Tandai tiket sebagai kadaluwarsa
+                        isChanged = true; // Tandai ada perubahan
+                    } else { // Jika tiket masih berlaku
+                        const jam = Math.floor((selisihWaktu % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)); // Hitung jam
+                        const menit = Math.floor((selisihWaktu % (1000 * 60 * 60)) / (1000 * 60)); // Hitung menit
+                        const detik = Math.floor((selisihWaktu % (1000 * 60)) / 1000); // Hitung detik
+                        timerDisplay.textContent = `${jam}:${menit.toString().padStart(2, '0')}:${detik.toString().padStart(2, '0')}`; // Tampilkan format jam:menit:detik
+                    }
+                });
+
+                if(isChanged) { // Jika ada tiket yang kadaluwarsa
+                    currentTickets = currentTickets.filter(t => !t.isExpired); // Hapus tiket kadaluwarsa dari daftar
+                    localStorage.setItem('active_tickets', JSON.stringify(currentTickets)); // Simpan daftar yang sudah diperbarui
+                    if(currentTickets.length === 0) { // Jika tidak ada tiket tersisa
+                        document.getElementById('empty-state').classList.remove('hidden'); // Tampilkan pesan kosong
+                    }
+                }
+            }, 1000); // Interval 1000ms = 1 detik
+        }
+
+        // =========================================================================
+        // SENSOR PINTAR PENCEGAH BUG
+        // =========================================================================
+        document.addEventListener("DOMContentLoaded", sinkronisasiDataTiket); // Sinkronisasi tiket saat halaman pertama kali dimuat
+
+        // Saat memencet tombol "BACK" / Kembali
+        window.addEventListener('pageshow', (e) => { // Dengarkan event pageshow (termasuk kembali dari halaman lain)
+            if (e.persisted || performance.getEntriesByType("navigation")[0].type === "back_forward") { // Jika halaman dipulihkan dari cache (tombol back)
+                sinkronisasiDataTiket(); // Sinkronisasi ulang data tiket
+            }
+        });
+
+        // Saat tab di-minimize lalu dibuka kembali
+        window.addEventListener('visibilitychange', () => { // Dengarkan perubahan visibilitas halaman
+            if (document.visibilityState === 'visible') sinkronisasiDataTiket(); // Jika tab kembali aktif, sinkronisasi ulang
+        });
+
+        // Jika localStorage berubah secara real-time di tab lain
+        window.addEventListener('storage', (e) => { // Dengarkan perubahan penyimpanan lokal dari tab lain
+            if (e.key === 'active_tickets') sinkronisasiDataTiket(); // Jika tiket aktif berubah, sinkronisasi ulang
+        });
+
+    </script>
+</body>
+</html>

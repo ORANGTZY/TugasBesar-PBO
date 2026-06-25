@@ -1,0 +1,307 @@
+<!DOCTYPE html> <!-- Deklarasi bahwa ini adalah dokumen HTML5 -->
+<html lang="id"> <!-- Elemen akar halaman, bahasa Indonesia -->
+<head> <!-- Bagian kepala halaman (metadata dan tautan) -->
+    <meta charset="UTF-8"> <!-- Menentukan encoding karakter UTF-8 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"> <!-- Memastikan tampilan responsif di HP (mencegah zoom) -->
+    <meta name="theme-color" content="#0271FE"> <!-- Warna tema peramban (biru Parkirin) -->
+    <meta name="apple-mobile-web-app-capable" content="yes"> <!-- Mendukung tampilan fullscreen di iOS -->
+    
+    <title>Parkirin - Pusat Bantuan (FAQ)</title> <!-- Judul halaman di tab browser -->
+    <link rel="icon" href="/img/favicon.png" type="image/png"> <!-- Ikon favicon -->
+
+    <script src="https://cdn.tailwindcss.com"></script> <!-- Mengimpor kerangka kerja Tailwind CSS -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet"> <!-- Memuat font Fredoka One & Montserrat dari Google Fonts -->
+    
+    <style> 
+        body { 
+            font-family: 'Montserrat', sans-serif; /* Font utama Montserrat */
+            background-color: #F1F1F1; /* Latar belakang abu-abu terang */
+            margin: 0; /* Menghilangkan margin bawaan */
+            overscroll-behavior-y: none; /* Mencegah efek pantulan berlebih saat scroll (bouncing) di HP */
+        }
+        .font-fredoka { font-family: 'Fredoka One', cursive; } /* Kelas khusus untuk font Fredoka One */
+        
+        .hide-scrollbar::-webkit-scrollbar { display: none; } /* Menyembunyikan scrollbar di Chrome, Safari, dll. */
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; } /* Menyembunyikan scrollbar di Firefox dan IE */
+        
+        /* Animasi masuk dari samping kanan */
+        .slide-in { animation: slideInRight 0.3s ease-out forwards; }
+        @keyframes slideInRight { 
+            from { opacity: 0; transform: translateX(20px); } /* Posisi awal sedikit ke kanan dan transparan */
+            to { opacity: 1; transform: translateX(0); } /* Posisi akhir di tengah dan solid */
+        }
+
+        /* Desain lengkungan navbar bagian bawah */
+        .nav-curve {
+            position: absolute;
+            top: -1px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 86px; 
+            height: 38px;
+            background-color: #FFFFFF; /* Warna putih navbar */
+            border-bottom-left-radius: 43px; /* Membuat sudut bawah lengkung */
+            border-bottom-right-radius: 43px;
+            border: 1px solid #D9D9D9; 
+            border-top: none;
+            z-index: 10;
+        }
+
+        /* Menambahkan detail sudut melengkung halus di kanan-kiri nav-curve */
+        .nav-curve::before, .nav-curve::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            width: 14px;
+            height: 14px;
+            background-color: transparent;
+        }
+
+        .nav-curve::before {
+            left: -14px; /* Sisi Kiri */
+            border-top-right-radius: 14px;
+            border-right: 1px solid #D9D9D9;
+            border-top: 1px solid #D9D9D9;
+            box-shadow: 4px -4px 0 4px #FFFFFF;
+        }
+
+        .nav-curve::after {
+            right: -14px; /* Sisi Kanan */
+            border-top-left-radius: 14px;
+            border-left: 1px solid #D9D9D9;
+            border-top: 1px solid #D9D9D9;
+            box-shadow: -4px -4px 0 4px #FFFFFF;
+        }
+
+        /* Efek bayangan untuk judul agar lebih jelas di atas latar warna */
+        .title-shadow {
+            text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        }
+    </style>
+</head>
+<body class="flex justify-center h-screen text-gray-800 antialiased bg-gray-200"> <!-- Body memusatkan aplikasi ke tengah layar -->
+
+    <!-- WADAH UTAMA APLIKASI BENTUK PONSEL -->
+    <div class="w-full max-w-[402px] h-full relative flex flex-col shadow-2xl overflow-hidden slide-in bg-gradient-to-b from-[#0271FE] to-[#014498]"> <!-- Wadah aplikasi dengan gradien biru elegan -->
+        
+        <!-- HIASAN LATAR BELAKANG GEOMETRIS DI ATAS DAN BAWAH -->
+        <div class="absolute inset-0 pointer-events-none overflow-hidden z-0"> <!-- Lapisan paling belakang, tak bisa diklik -->
+            <!-- Ornamen lengkungan biru muda/transparan -->
+            <div class="absolute -top-[29px] -left-[58px] w-[395px] h-[220px] bg-[#7EABFF] opacity-20 rounded-[100px] transform -rotate-[17deg]"></div>
+            <div class="absolute -top-[29px] -left-[10px] w-[395px] h-[310px] bg-[#ACC6FF] opacity-20 rounded-[100px] transform -rotate-[17deg]"></div>
+            <div class="absolute top-[442px] -left-[58px] w-[395px] h-[220px] bg-[#7EABFF] opacity-20 rounded-[100px] transform -rotate-[17deg]"></div>
+            <div class="absolute top-[442px] -left-[10px] w-[395px] h-[310px] bg-[#ACC6FF] opacity-20 rounded-[100px] transform -rotate-[17deg]"></div>
+        </div>
+
+        <!-- HEADER HALAMAN: LOGO DAN JUDUL PUSAT BANTUAN -->
+        <div class="w-full pt-10 pb-4 px-4 flex flex-col items-center z-10 shrink-0 relative"> <!-- Kotak transparan di atas (Header) -->
+            
+            <!-- TOMBOL KEMBALI KIRI ATAS -->
+            <a href="/profil" class="absolute left-4 top-10 text-white hover:opacity-80 active:scale-90 transition-transform cursor-pointer"> <!-- Tautan panah kembali -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2.5"> <!-- Ikon panah ke kiri -->
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" /> <!-- Bentuk garis panah -->
+                </svg>
+            </a>
+
+            <!-- LOGO APLIKASI DI TENGAH -->
+            <div class="flex items-center gap-2 mb-4"> <!-- Kotak Logo Tengah -->
+                <img src=".//img/LOGO.png" alt="Logo" class="h-6 object-contain" onerror="this.outerHTML='<span class=\'font-fredoka text-white text-[20px]\'>PARKIRIN</span>'"> <!-- Gambar logo Parkirin (fallback: Teks) -->
+            </div>
+            
+            <!-- JUDUL HALAMAN -->
+            <h1 class="text-[20px] font-bold text-white title-shadow tracking-wide">Pusat Bantuan</h1> <!-- Tulisan "Pusat Bantuan" pakai efek bayangan -->
+        </div>
+
+        <!-- KONTEN BISA DI-SCROLL (DAFTAR FAQ) -->
+        <div class="flex-grow overflow-y-auto hide-scrollbar z-10 px-4 pb-28"> <!-- Area sisa (putih) yang bisa digulir ke bawah -->
+            
+            <!-- KARTU FAQ UTAMA -->
+            <div class="w-full bg-[#D8F6FF] rounded-[10px] p-5 shadow-lg flex flex-col mt-2 relative"> <!-- Kotak cyan/biru muda yang memuat seluruh FAQ -->
+                
+                <!-- JUDUL FAQ DALAM KARTU -->
+                <div class="text-center mb-6 mt-2"> <!-- Area tengah judul -->
+                    <h2 class="text-[20px] font-bold text-black mb-2">FAQ (Pertanyaan Umum)</h2> <!-- Teks utama FAQ -->
+                    <p class="text-[14px] font-medium text-black leading-tight"> <!-- Deskripsi penjelasan FAQ -->
+                        Temukan jawaban cepat untuk beberapa pertanyaan umum.
+                    </p>
+                </div>
+
+                <!-- ITEM FAQ 1: TERLAMBAT DATANG -->
+                <div class="bg-white rounded-[10px] mb-3 overflow-hidden shadow-sm"> <!-- Kotak satu pertanyaan -->
+                    <!-- TOMBOL PERTANYAAN (KLIK BUKA) -->
+                    <button onclick="toggleFaq('faq1')" class="w-full flex justify-between items-center p-4 focus:outline-none active:bg-gray-50 transition-colors"> <!-- Baris tombol -->
+                        <span class="text-left font-semibold text-[14px] leading-tight text-black pr-4">Bagaimana jika saya terlambat datang?</span> <!-- Teks Pertanyaan -->
+                        <svg id="icon-faq1" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#0062E6] shrink-0 transform rotate-180 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"> <!-- Ikon tanda panah -->
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /> <!-- Bentuk Panah -->
+                        </svg>
+                    </button>
+                    <!-- KONTEN JAWABAN (DAPAT DIHILANGKAN/DIMUNCULKAN) -->
+                    <div id="content-faq1" class="overflow-hidden transition-all duration-300" style="max-height: 200px;"> <!-- Area isi jawaban (secara default diset maxHeight 200px alias terbuka sedikit) -->
+                        <div class="px-5 pb-4"> <!-- Jarak margin dan padding teks -->
+                            <ul class="list-disc pl-4 text-[14px] font-medium text-black leading-snug space-y-1"> <!-- List poin jawaban -->
+                                <li>Reservasi Anda akan tetap aktif hingga waktu berakhir</li> <!-- Jawaban 1 -->
+                                <li>Waktu parkir dihitung sejak masuk</li> <!-- Jawaban 2 -->
+                                <li>Anda mungkin akan dikenakan biaya tambahan jika melewati waktu berakhir</li> <!-- Jawaban 3 -->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ITEM FAQ 2: CARA RESERVASI -->
+                <div class="bg-white rounded-[10px] mb-3 overflow-hidden shadow-sm"> <!-- Kotak pertanyaan 2 -->
+                    <!-- TOMBOL PERTANYAAN -->
+                    <button onclick="toggleFaq('faq2')" class="w-full flex justify-between items-center p-4 focus:outline-none active:bg-gray-50 transition-colors"> <!-- Tombol klik -->
+                        <span class="text-left font-semibold text-[14px] leading-tight text-black pr-4">Bagaimana cara melakukan reservasi?</span> <!-- Pertanyaan -->
+                        <svg id="icon-faq2" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#0062E6] shrink-0 transform transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"> <!-- Panah -->
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+                    <!-- KONTEN JAWABAN -->
+                    <div id="content-faq2" class="overflow-hidden transition-all duration-300" style="max-height: 0px;"> <!-- Kotak jawaban (Default: maxHeight 0 atau Tertutup!) -->
+                        <div class="px-5 pb-4"> <!-- Padding jawaban -->
+                            <p class="text-[14px] font-medium text-black leading-snug"> <!-- Teks paragraf -->
+                                Pilih mall/tempat parkir yang diinginkan di halaman utama, tentukan waktu parkir, pilih kendaraan, lalu klik 'Pesan Sekarang'. <!-- Isi Jawaban -->
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ITEM FAQ 3: METODE PEMBAYARAN -->
+                <div class="bg-white rounded-[10px] mb-3 overflow-hidden shadow-sm"> <!-- Kotak pertanyaan 3 -->
+                    <button onclick="toggleFaq('faq3')" class="w-full flex justify-between items-center p-4 focus:outline-none active:bg-gray-50 transition-colors">
+                        <span class="text-left font-semibold text-[14px] leading-tight text-black pr-4">Metode Pembayaran apa yang tersedia?</span>
+                        <svg id="icon-faq3" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#0062E6] shrink-0 transform transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+                    <div id="content-faq3" class="overflow-hidden transition-all duration-300" style="max-height: 0px;"> <!-- Jawaban Tertutup default -->
+                        <div class="px-5 pb-4">
+                            <p class="text-[14px] font-medium text-black leading-snug">
+                                Kami menerima pembayaran melalui Saldo Parkirin, E-Wallet (DANA, OVO, GoPay, ShopeePay), dan QRIS. <!-- Teks penjelasan -->
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ITEM FAQ 4: BATALKAN RESERVASI -->
+                <div class="bg-white rounded-[10px] mb-3 overflow-hidden shadow-sm"> <!-- Kotak pertanyaan 4 -->
+                    <button onclick="toggleFaq('faq4')" class="w-full flex justify-between items-center p-4 focus:outline-none active:bg-gray-50 transition-colors">
+                        <span class="text-left font-semibold text-[14px] leading-tight text-black pr-4">Bagaimana cara membatalkan reservasi?</span>
+                        <svg id="icon-faq4" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#0062E6] shrink-0 transform transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+                    <div id="content-faq4" class="overflow-hidden transition-all duration-300" style="max-height: 0px;"> <!-- Jawaban Tertutup default -->
+                        <div class="px-5 pb-4">
+                            <p class="text-[14px] font-medium text-black leading-snug">
+                                Masuk ke menu Tiket, pilih reservasi yang aktif, lalu tekan tombol 'Batalkan Pesanan'. Harap perhatikan kebijakan pengembalian dana kami. <!-- Teks penjelasan -->
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ITEM FAQ 5: AKTIFKAN KEMBAR PAY -->
+                <div class="bg-white rounded-[10px] mb-6 overflow-hidden shadow-sm"> <!-- Kotak pertanyaan 5 -->
+                    <button onclick="toggleFaq('faq5')" class="w-full flex justify-between items-center p-4 focus:outline-none active:bg-gray-50 transition-colors">
+                        <span class="text-left font-semibold text-[14px] leading-tight text-black pr-4">Bagaimana cara mengaktifkan KEMBAR Pay?</span>
+                        <svg id="icon-faq5" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#0062E6] shrink-0 transform transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+                    <div id="content-faq5" class="overflow-hidden transition-all duration-300" style="max-height: 0px;"> <!-- Jawaban Tertutup default -->
+                        <div class="px-5 pb-4">
+                            <p class="text-[14px] font-medium text-black leading-snug">
+                                Buka menu Dompet Saya, tekan logo KEMBAR Pay, dan masukkan nomor HP yang terdaftar untuk menautkan akun. <!-- Teks penjelasan -->
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- GARIS PEMISAH TIPIS HITAM TRANSSPARAN -->
+                <div class="w-[90%] h-[1px] bg-black opacity-30 mx-auto mb-4"></div> <!-- Garis lurus pembatas antara FAQ dan Call Center -->
+
+                <!-- KOTAK HUBUNGI CUSTOMER SERVICE -->
+                <a href="/layanan-pelanggan" class="flex items-center gap-3 px-2 mb-2 cursor-pointer hover:opacity-80 transition-opacity block"> <!-- Baris link menuju Chat CS -->
+                    <img src="/img/elemencs.png" alt="Customer Service" class="h-8 w-8 object-contain opacity-70"> <!-- Ikon headset/customer service -->
+                    <div class="flex flex-col"> <!-- Grup tulisan -->
+                        <span class="text-[12px] font-medium text-[#3F465C]">Butuh bantuan terkait hal lain?</span> <!-- Pertanyaan CS -->
+                        <span class="text-[12px] font-semibold text-[#42BEE2]">Hubungi Layanan Pelanggan</span> <!-- Tulisan aksi warna biru muda -->
+                    </div>
+                </a>
+
+            </div>
+
+        </div>
+
+        <!-- NAVBAR MENU BAWAH (PUTIH) -->
+        <div class="absolute bottom-0 w-full max-w-[402px] h-[75px] bg-[#FFFFFF] border-t border-[#D9D9D9] rounded-t-[19px] z-20 shadow-[0_-5px_15px_rgba(0,0,0,0.05)]"> <!-- Wadah Menu utama Aplikasi -->
+            
+            <div class="relative w-full h-full px-8 flex items-center justify-center"> <!-- Pembatas tengah flexbox navbar -->
+                
+                <div class="nav-curve"></div> <!-- Hiasan melengkung pada tengah navbar -->
+
+                <!-- BARISAN TOMBOL MENU -->
+                <div class="flex w-full justify-between items-end pb-3 z-30"> <!-- Container ikon menu kiri & kanan -->
+                    
+                    <!-- MENU HOME/BERANDA (Tidak Aktif) -->
+                    <a href="/user-dashboard" class="flex flex-col items-center justify-end cursor-pointer relative z-30 w-[60px] hover:opacity-80 transition-all"> <!-- Tombol Home -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-[28px] w-[28px] text-[#D9D9D9] mb-[5px]" viewBox="0 0 24 24" fill="currentColor"> <!-- Ikon Rumah Abu-abu -->
+                            <path d="M12 3L2 12h3v8h6v-6h2v6h6v-8h3L12 3z"/>
+                        </svg>
+                        <span class="text-[#D9D9D9] font-semibold text-[12px] leading-none">Home</span> <!-- Teks Home -->
+                    </a>
+
+                    <!-- MENU TIKET / SPOT TENGAH KOSONG -->
+                    <div class="flex flex-col items-center justify-end cursor-pointer relative z-30 w-[60px]"> <!-- Ruang kosong di tengah, karena nanti ditempati tombol Bulat -->
+                        <div class="h-[28px] mb-[5px]"></div> <!-- Spacer kosong tinggi ikon -->
+                        <span class="text-[#D9D9D9] font-semibold text-[12px] leading-none">Tiket</span> <!-- Teks Tiket -->
+                    </div>
+
+                    <!-- MENU PENGGUNA/PROFIL (AKTIF - WARNA BIRU MUDA CYANN) -->
+                    <a href="/profil" class="flex flex-col items-center justify-end cursor-pointer relative z-30 w-[60px] hover:opacity-80 transition-all"> <!-- Tombol Profil -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-[28px] w-[28px] text-[#00D1FF] mb-[5px]" viewBox="0 0 24 24" fill="currentColor"> <!-- Ikon User Biru Cyan -->
+                            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                        </svg>
+                        <span class="text-[#00D1FF] font-semibold text-[12px] leading-none">Pengguna</span> <!-- Teks Pengguna -->
+                    </a>
+                </div>
+
+                <!-- TOMBOL MENU TENGAH BULAT (TIKET BESAR) -->
+                <div class="flex flex-col items-center cursor-pointer absolute top-[-26px] left-1/2 -translate-x-1/2 z-40 transition-transform active:scale-95"> <!-- Posisi menonjol dari navbar -->
+                    <div class="bg-[#0141A3] w-[61px] h-[61px] rounded-full flex flex-col items-center justify-center shadow-[0_5px_10px_rgba(1,65,163,0.3)]"> <!-- Lingkaran Biru Tua -->
+                        <!-- Desain Garis-garis Kartu Tiket didalam lingkaran -->
+                        <div class="w-[32px] h-[29px] flex flex-col justify-between overflow-hidden rounded-[3px]"> 
+                            <div class="w-full h-[13px] bg-[#FFFFFF]"></div> <!-- Bagian atas tiket -->
+                            <div class="w-full h-[3px] bg-transparent"></div> <!-- Garis putus/bolong tengah tiket -->
+                            <div class="w-full h-[13px] bg-[#FFFFFF]"></div> <!-- Bagian bawah tiket -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+
+    </div>
+
+    <!-- SCRIPT JAVASCRIPT UNTUK ACCORDION FAQ -->
+    <script>
+        // Fungsi untuk membuka/menutup jawaban FAQ saat Pertanyaan (Judul) diklik
+        function toggleFaq(id) { 
+            const content = document.getElementById(`content-${id}`); // Ambil elemen wadah jawaban berdasarkan ID
+            const icon = document.getElementById(`icon-${id}`); // Ambil elemen ikon panah berdasarkan ID
+
+            // Cek apakah konten (jawaban) sedang terbuka (Jika tinggi maks tidak kosong dan bukan 0px)
+            if (content.style.maxHeight && content.style.maxHeight !== '0px') {
+                // Berarti sedang terbuka, ayo kita TUTUP
+                content.style.maxHeight = '0px'; // Paksa tinggi maks menjadi nol (CSS Transition akan memendekkan kotak pelan-pelan)
+                icon.classList.remove('rotate-180'); // Putar panah kembali menghadap ke bawah
+            } else {
+                // Berarti sedang tertutup, ayo kita BUKA
+                // Ambil ukuran tinggi asli kotak (scrollHeight) lalu jadikan max-height agar pas memuat teks
+                content.style.maxHeight = content.scrollHeight + 'px'; 
+                icon.classList.add('rotate-180'); // Putar panah 180 derajat ke arah ATAS (berputar mulus berkat class tailwind)
+            }
+        }
+    </script>
+</body>
+</html>

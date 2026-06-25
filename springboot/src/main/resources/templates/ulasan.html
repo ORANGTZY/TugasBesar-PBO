@@ -1,0 +1,321 @@
+<!DOCTYPE html> <!-- Ini adalah fondasi dasar, menginfokan ke browser bahwa lembaran ini dibangun mengikuti aturan main HTML versi 5 -->
+<html lang="id"> <!-- Akar kehidupan dokumen web, diformat menggunakan spesifikasi bahasa Indonesia -->
+<head> <!-- Bagian hulu yang terpendam, isinya adalah rahasia konfigurasi untuk mesin peramban (browser) -->
+    <meta charset="UTF-8"> <!-- Standar sihir pengkodean (UTF-8), membuat komputer tak bingung ngebaca huruf aneh dan emoji sejagat raya -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"> <!-- Mantram pelindung agar layar pas dengan bodi HP dan menolak niat iseng pengguna untuk memperbesar/mencubit ukuran layar secara paksa -->
+    <meta name="theme-color" content="#F6F6F6"> <!-- Titah pewarnaan area ujung paling atas HP Android (Notifikasi sinyal) menjadi rupa putih sedikit keabuan -->
+    
+    <title>Parkirin - Ulasan & Penilaian</title> <!-- Teks tebal yang terpasang membentang di ujung bilah judul Tab Internet kita -->
+    <link rel="icon" href="/img/favicon.png" type="image/png"> <!-- Memanggil foto logo mini emblem Parkirin ke sudut kiri Tab Browser tsb -->
+    
+    <script src="https://cdn.tailwindcss.com"></script> <!-- Memanggil bala bantuan online penyulap dekorasi desain seketika, bernama Tailwind CSS -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet"> <!-- Mengimpor kerangka huruf estetis modern (Montserrat) karya agung perpustakaan Google Fonts -->
+    
+    <style> 
+        body { font-family: 'Montserrat', sans-serif; background-color: #F1F1F1; margin: 0; overscroll-behavior-y: none; } /* Seluruh teks pakai baju Montserrat, warna cat alas bumi kelabu keputihan, mepet batas layar, serta matikan efek memantul narik-narik di layar HP mentok bawah */
+        
+        /* DUA JURUS CSS UNTUK MENGHILANGKAN SCROLLBAR DARI PANDANGAN MATA (Estetika Murni) */
+        .hide-scrollbar::-webkit-scrollbar { display: none; } /* Meniadakan penampakan bayangan batang besi scrollbar pada Browser turunan Mbah Google Chrome dan Safari */
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; } /* Meniadakan hal sama, namun khusus dikembangkan bagi kaum Browser lama Firefox dan Mbah Edge jadul */
+
+        .slide-in-right { animation: slideInRight 0.3s ease-out forwards; } /* Perintah menjalankan cuplikan film animasi yang diberi judul: Geser Masuk Kanan (slideInRight) */
+        @keyframes slideInRight { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } } /* Naskah arahannya: Mula-mula samar hantu geser dari sumbu kordinat X sisi Kanan, berlanjut menjadi padat fisik tepat memusat pada asalnya. */
+        
+        /* Aturan Dandan Bentuk Fisik Bintang Bintang Emas 5 Ratingnya! */
+        .star-active { /* Jika Bintang itu DITEKAN JARI (Bintang Nyala Emas) */
+            color: #3B82F6; /* Berubah kelir wujud menjadi Biru Nyala (Bukan Emas wkwk, Biar tema aplikasinya nyambung Biru) */
+            filter: drop-shadow(0px 0px 8px rgba(59, 130, 246, 0.8)) drop-shadow(0px 0px 20px rgba(59, 130, 246, 0.4)); /* Diberi sihir bayangan ganda (Aura) memancar di belakang siluet bintangnya bagai dewa bersinar! */
+            transform: scale(1.1); /* Agak di besarkan (Ngemah/Nge-Zoom dikit) 10 persen dari aslinya */
+            transition: all 0.2s ease-in-out; /* Diberi pelicin animasi saat proses nyala ke matinya / 0.2 Detik kelar */
+        }
+        .star-inactive { /* Jika Bintang itu TIDAK KEPILIH (Bintang Padam/Kosong) */
+            color: #D9D9D9; /* Dilumuri warna Kelabu kusam suram pucat basi */
+            transform: scale(1); /* Bodinya dikecilkan kembali kembali ke setelan wajar sejati (Skala 1) */
+            transition: all 0.2s ease-in-out; /* Sama, kasih pelicin durasi animasi pemindahan auranya */
+        }
+    </style>
+</head>
+<body class="flex justify-center h-screen text-gray-800 antialiased bg-gray-200 overflow-hidden"> <!-- Layar utama membatasi wilayah abu abu gelap memusatkan bingkai ukuran aplikasi HP berada pas di tengah meja laptop -->
+
+    <!-- KERANGKA UTAMA BINGKAI HP VIRTUAL (Pembungkus Sekujur Dunia) -->
+    <div class="w-full max-w-[402px] bg-[#F6F6F6] h-full relative flex flex-col shadow-2xl overflow-hidden slide-in-right"> <!-- Kotak besi 402 pixel yg punya batasan batas pemotongan ujung tepian HP dan diberi pelindung bayangan hitam kuat (2xl) belakang punggungnya -->
+        
+        <!-- BAGIAN 1: PENGGANJAL LANGIT ATAS BUMI (Bar Header) -->
+        <div class="w-full h-[120px] pt-12 px-10 flex items-center shrink-0 bg-[#F6F6F6]"> <!-- Balok tebal tak termakan ruang yang berdiri tegak tebal 120 piksel -->
+            <!-- TANDA PANAH MUNDUR KE HALAMAN UTAMA DASHBOARD -->
+            <a href="/user-dashboard" class="flex items-center text-[#0064F0] hover:opacity-80 active:scale-95 transition-all cursor-pointer"> <!-- Link penjelajah lorong waktu melompat ke Beranda yg menyusut kalo di injek kursor -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2.5"> <!-- Gambaran Vektor tanda belok kurung lancip kiri -->
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+                </svg>
+            </a>
+            <span class="ml-4 font-bold text-[20px] leading-[24px] text-[#0064F0]">Ulasan & Penilaian</span> <!-- Stempel Judul Menu besar warna biru mentereng di sebelah panah -->
+        </div>
+
+        <!-- BAGIAN 2: RUANGAN ISI INTI FORMULIR YG BISA DIGULIR MUNDUR MAJU MENGULUR WAKTU (Scrollable Content) -->
+        <div class="flex-grow overflow-y-auto hide-scrollbar flex flex-col pb-28"> <!-- Papan panjang lentur melar ke bawah. Tampilan kawat Scrollbar nya dighaibkan pakai jurus diatas tadi -->
+            
+            <!-- BLOK KATA SAPAAN SELAMAT DATANG (Pembuka Obrolan) -->
+            <div class="px-10 mt-6"> <!-- Diberi pembatas pagar jarak luas di sisi kirinya biar teks ga nabrak bodi hp -->
+                <h1 class="font-semibold text-[20px] leading-[24px] text-black mb-2">Bagaimana pengalaman parkir Anda?</h1> <!-- Kata Basa basi Menghibur Nanya -->
+                <p class="font-normal text-[14px] leading-[17px] text-black">Masukan Anda membantu kami meningkatkan layanan Parkirin.</p> <!-- Kata Basa basi Harapan Developer -->
+            </div>
+
+            <!-- BLOK KARTU PRESTASI HASIL RIWAYAT PARKIR DIA BARUSAN (Summary Struk Terakhir Banget) -->
+            <div class="bg-white rounded-[10px] mx-10 mt-8 p-5 relative shadow-sm"> <!-- Bingkai kertas Putih kecil melayang dikasih bayangan -->
+                
+                <div class="flex justify-between items-center mb-5"> <!-- Belah wilayah kiri kanan -->
+                    <span class="text-[#0055C9] font-medium text-[14px] leading-[18px]">SESI TERAKHIR</span> <!-- Penjelas Bahwa Ini tuh yg kemaren lho -->
+                    <span class="bg-[#009DC1] text-white font-semibold text-[10px] px-3 py-1 rounded-[20px]">Selesai</span> <!-- Tanda Lulus stempel pil warna pirus laut 'Selesai' -->
+                </div>
+                
+                <h2 class="text-black font-semibold text-[25px] leading-[18px] mb-8">Rita Supermall</h2> <!-- Nama Lokasi Gedung tempat dia main tadi -->
+                
+                <div class="flex justify-between items-center text-[#8990A8] font-normal text-[12px]"> <!-- Barisan Kiri Kanan warna tulisan Kelabu Tua -->
+                    <!-- Sisi Info Lama Durasi Parkir nya -->
+                    <div class="flex items-center gap-2"> 
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg> <!-- Ikon Jarum Jam Mutar -->
+                        <span id="display-durasi">Memuat...</span> <!-- Ruang buat naruh Kalimat Cth "2 Jam 40 Menit" (Bakal dicolong JS dari server database di skrip bawah) -->
+                    </div>
+                    <!-- Sisi Uang Total Yg Dirampok dari Dompetnya tadi! -->
+                    <div class="flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" /></svg> <!-- Ikon Buku Tabungan Kartu ATM -->
+                        <span id="display-harga">Memuat...</span> <!-- Lahan nyetak uang Rupiah Cth "Rp 21.000" yg juga disedot dari database pake JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- BLOK KOTAK 5 BINTANG PENILAIAN!!! (Ini adalah nyawa fitur aplikasi ini) -->
+            <div class="flex justify-center items-center gap-4 mt-12 px-10" id="star-container"> <!-- Lahan lapang buat menjemur ke lima bintang berjejer memanjang dengan jarak renggang (gap) -->
+                <!-- KE LIMA GAMBAR BINTANG BINTANG TERSEBUT DISAJIKAN LANGSUNG MENGGUNAKAN LUKISAN GARIS KOORDINAT 'SVG' -->
+                <!-- Sengaja pada awal dilahirkan, 4 Bintang pertama di paksa dikasih gelar/baju 'star-active' (Menyala Biru Cerah) oleh programmer HTML -->
+                <!-- Kalau disentuh/di-klik jari, masing-masing bintang akan memanggil Instruktur mesin JS SetRating() dan ngelapor sambil bawa Pangkat Rating Angka nya masing-masing sesuai urutannya (1-5) -->
+                <svg onclick="setRating(1)" class="w-12 h-12 cursor-pointer star-active" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg> <!-- Bintang ke 1 (Terburuk) -->
+                <svg onclick="setRating(2)" class="w-12 h-12 cursor-pointer star-active" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927... (sama)"/></svg> <!-- Bintang 2 (Buruk) -->
+                <svg onclick="setRating(3)" class="w-12 h-12 cursor-pointer star-active" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927... (sama)"/></svg> <!-- Bintang 3 (Lumayan) -->
+                <svg onclick="setRating(4)" class="w-12 h-12 cursor-pointer star-active" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927... (sama)"/></svg> <!-- Bintang 4 (Suka Sekali) -->
+                
+                <!-- Terkhusus Bintang 5 Ujung Kanan, sejak lahir dia dikutuk pakai gelar 'star-inactive' (Mati Suram Kelabu) sebagai Patokan Standar Default bawaan HP kalau orangnya ga iseng mencet milih nilai apa apa! Default Nilainya jadi Angka Bintang 4 -->
+                <svg onclick="setRating(5)" class="w-12 h-12 cursor-pointer star-inactive" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927... (sama)"/></svg> <!-- Bintang Ke 5 (Tuhan Maha Sempurna Sangat Bagus) -->
+            </div>
+
+            <!-- TULISAN CANGGIH DI BAWAH BINTANG YANG BISA BERUBAH MENURUT BINTANG APA YANG DIPILIH -->
+            <p id="rating-text" class="text-center text-[#0055C9] font-medium text-[14px] mt-6">Bagus</p> <!-- Ini teks bunglon, Kalau orang milih Bintang 1 (JS bakal nyulap ini jadi tulisan 'Sangat Buruk', dst!) Awal lahir dia bernilai 'Bagus' ngikutin standar 4 Bintang tadi. -->
+
+            <!-- KOTAK FORMULIR KOLOM KELUH KESAH (Komentar Review) -->
+            <div class="px-10 mt-8"> 
+                <label class="block font-semibold text-[14px] text-black mb-3">ULASAN DETAIL</label> <!-- Teks Penunjuk subjek Kolom isian -->
+                <!-- Kolom kotak Ketik Raksasa abu-abu besar yang dipasang jimat penghalang 'resize-none' agar orang iseng nggak bisa nyeret melebarkan bodi kotak aslinya melampaui batas layar HP  -->
+                <textarea id="komentar-input" class="w-full h-[159px] bg-[#D9D9D9] rounded-[10px] p-4 text-[16px] text-black placeholder-black focus:outline-none resize-none" style="--tw-placeholder-opacity: 0.25;" placeholder="Tulis ulasan Anda di sini..."></textarea>
+            </div>
+
+        </div>
+
+        <!-- BAGIAN 3: ALAT KENDALI AKHIR MENU PANGKAL BAWAH (Tombol Submit Simpan ke Server Paling Ujung Kaki) -->
+        <div class="absolute bottom-10 w-full px-10"> <!-- Ditambatkan melayang nempel mepet ke alas bumi -->
+            <!-- Tombol Aksi Pamungkas: Jika Ditekan... Maka Akan teriak menyuruh otak JS menjalankan Mandat Eksekusi 'kirimUlasan()' yang fungsinya mengirimkan rating dan curhatan orangnya ke Tuhan Server Database SQL Backend kita! -->
+            <button onclick="kirimUlasan()" class="w-full h-[60px] bg-[#0141A3] hover:bg-blue-800 text-white font-bold text-[14px] rounded-[10px] shadow-md transition-all active:scale-95"> <!-- Tombol bongsor nan kokoh warna Biru Elektrik Biru Nyala Laut Biru Telor Asin -->
+                Kirim Ulasan <!-- Instruksi provokasi Teks di dalam dada tombolnya -->
+            </button>
+        </div>
+
+        <!-- PERKAKAS BANTUAN DARURAT: KOTAK POP-UP PERINGATAN / TEGURAN LINTAS KASUS -->
+        <!-- *Kotak terbungkus Kain Hitam Tembus ini pada asalnya tidur pulas (Hidden/Gaib), Hanya jika JS membangunkannya ia akan membongkar raga nya menutupi sekeliling area padang rumput aplikasi HTML* -->
+        <div id="customModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black bg-opacity-40 backdrop-blur-sm transition-opacity opacity-0"> 
+            <div id="customModalContent" class="bg-white w-[280px] rounded-[20px] p-6 flex flex-col items-center shadow-2xl transform scale-90 transition-transform duration-300"> <!-- Lembaran Latar pesan putih tulang di perutnya -->
+                
+                <!-- Cincin Bulatan Tanda Bahagia (Sukses Kirim Ulasan) -->
+                <div id="modalIconSuccess" class="w-14 h-14 bg-green-100 rounded-full hidden items-center justify-center mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /> <!-- Menggambar garis menari membentuk siluet checklist (Centang) -->
+                    </svg>
+                </div>
+
+                <!-- Cincin Bulatan Tanda Malapetaka (Gagal Server / Eror Kirim Ulasan) -->
+                <div id="modalIconError" class="w-14 h-14 bg-red-100 rounded-full hidden items-center justify-center mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /> <!-- Menggambar silang palang X tebal merona -->
+                    </svg>
+                </div>
+
+                <h3 id="modalTitle" class="text-[18px] font-bold text-black mb-2 text-center">Judul</h3> <!-- Lahan hampa bagi JS menuliskan intisari error -->
+                <p id="modalMessage" class="text-[12px] font-medium text-gray-500 text-center mb-6 leading-relaxed">Pesan modal disini</p> <!-- Lahan hampa JS merapal detil lengkap letak sumur salah / tegurannya -->
+                
+                <button id="modalBtn" class="w-full bg-[#0141A3] hover:bg-blue-800 text-white font-bold py-2.5 rounded-[12px] text-[12px] transition-colors shadow-md active:scale-95"> <!-- Tombol biru penutup pembicaraan kasus -->
+                    Mengerti <!-- Teks setuju mengakui kesalahan -->
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- PUSAT KERJA KONSOL OTOMATIS DAN LOGIKA MESIN PENGIRIM DATA PUSAT (JAVASCRIPT) -->
+    <script>
+        // KODE SAPU JAGAD MEMPERBAIKI KECOCATAN MASA LALU (Bugfix Bintang Copas!)
+        // Penjelasan: Di baris HTML kode desain bentuk SVG Bintang no 2 sampe 5 itu cuma ditulis titik-titik sama programmer males (Path ... (Sama)). Kalau dibiarin, bakalan ga nyala gambar bintang HTML nya!
+        // Oleh karena itu, Skrip Sakti perbaikan ini akan meraba raba baris kode SVG tersebut, dan memaksa merubah titik-titik cacat itu menjadi serangkaian kode kordinat asli panjang lebar milik Bintang ke 1 yang normal! HAHA!
+        const svgPath = "M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z";
+        document.querySelectorAll('svg path').forEach(path => {
+            if (path.getAttribute('d').includes('M9.049')) path.setAttribute('d', svgPath);
+        });
+
+        // MENYIAPKAN KERANJANG INGATAN (Variabel Memori Global Layar)
+        let currentRating = 4; // Keranjang bawaan HP. Nyatet bahwa skor bawaan lahir default pengguna itu kita paksa ngasih nilai angka 4! (Lumayan gede dlu biar rating mall ga hancur2 amat walau dia malas mencet)
+        const ratingLabels = ["Sangat Buruk", "Buruk", "Cukup", "Bagus", "Sangat Bagus"]; // Daftar Susunan Kosakata Pujian-Hinaan dari Tingkat 1 sampe Mentok Level Bintang 5.
+        
+        const urlParams = new URLSearchParams(window.location.search); // Mengais Ngais debu di Jejak Link Web Atas URL bar.
+        const ticketId = urlParams.get('id'); // Mengoleksi Coretan kode ID di link URL tsb untuk dikenali siapa sebenarnya dalang manusia yang membuka situs halaman ini? (Cth Hasil Tangkapan: "PRK_AJH2-1")
+
+        // ============================================
+        // MESIN FABRIKASI BIKIN KOTAK ALERT PERINGATAN (Modal)
+        // ============================================
+        let modalRedirectUrl = null; // Menyimpan link pelontar evakuasi jika dibutuhkan.
+        function showCustomAlert(type, title, message, redirectUrl = null) {
+            modalRedirectUrl = redirectUrl; // Nitip link buat tombol ngerti nanti
+            const modal = document.getElementById('customModal');
+            const modalContent = document.getElementById('customModalContent');
+            
+            document.getElementById('modalTitle').textContent = title; // Tempel Judulnya ke kertas putih
+            document.getElementById('modalMessage').textContent = message; // Tempel Isi ocehan panjang
+
+            if (type === 'success') { // Jika Disuruh Tampilin Peringatan Girang Kegembiraan 'success'
+                document.getElementById('modalIconSuccess').style.display = 'flex'; // Ikon Ijo Centang Nyala Terang
+                document.getElementById('modalIconError').style.display = 'none'; // Ikon X Mati Meredam
+            } else { // Jika Dikasih Perintah Lainnya (Artinya Error Gagal/Bencana)
+                document.getElementById('modalIconSuccess').style.display = 'none'; // Ceklisnya Ghaib
+                document.getElementById('modalIconError').style.display = 'flex'; // Ikon Darah Silang Nyala Menyolok
+            }
+
+            // ATRAKSI ANIMASI TERTATA MUNCUL DARI GAIB KE REALITA MENEMBUS LAPISAN LAYAR HP!
+            modal.classList.remove('hidden'); // Cabut nyawa kasat mata (Hidden)
+            modal.classList.add('flex'); // Paksa letaknya memusat di ulu hati layar
+            setTimeout(() => { // Tahan kedipan mikrosekon dikit biar mesin peramban kuat ngolah beratnya efek Animasi tailwind Transisi CSS
+                modal.classList.remove('opacity-0'); // Bongkar Baju jubah tembus pandang memudar nyaris hilang...
+                modal.classList.add('opacity-100'); // Padatkan bodinya ke alam semesta wujud mutlak sejati nyata 100%!
+                modalContent.classList.remove('scale-90'); // Hilangin efek kutukan liliput penciut ukuran (Scale 90)
+                modalContent.classList.add('scale-100'); // Gembungkan letup bodi dan membesar ke bentuk wajar seperti Pop Corn Merekah! (Pop Zoom Anim)
+            }, 10);
+        }
+
+        // AKSI BALASAN (TRIGGER) SAAT PENGGUNA TERPAKSA KLIK TOMBOL "MENGERTI" SEUSAI DITAMPAR KOTAK PERINGATAN DIATAS!
+        document.getElementById('modalBtn').addEventListener('click', () => {
+            if (modalRedirectUrl) { // JIKA TADI SI MESIN JS NYELIPIN LINK EVAKUASI / TENDANGAN LEMPAR JAUH 
+                window.location.href = modalRedirectUrl; // GAK USAH TUTUP KOTAK DLU, LANGSUNG AJA LOMPAT PINDAH DIMENSI TINGGALIN HALAMAN WEBSITE INI! WUSH!
+            } else { // JIKA GAK ADA LINK EVAKUASI (Halaman ini masih dibutuhkan orang, dia cuma neken Tombol tutup pengumuman doang)
+                // Mainkan ilmu sihir pembalikan. Putar ulang kaset video memudar pelan dari layar....
+                const modal = document.getElementById('customModal');
+                const modalContent = document.getElementById('customModalContent');
+                modal.classList.remove('opacity-100');
+                modal.classList.add('opacity-0'); // Pakaikan kembali baju Jubah Transparan hantu pelan pelan 3 detik..
+                modalContent.classList.remove('scale-100');
+                modalContent.classList.add('scale-90'); // Sedot udara badannya mengempis keriput ciut...
+                setTimeout(() => { // Tahan nafas sepersekian jenak sebelum layar hilang sepenuhnya...
+                    modal.classList.add('hidden'); // Kuburkan nyawanya kembali ke tanah ghaib
+                    modal.classList.remove('flex'); // Hancurkan kerangka susunan tengah badannya.
+                }, 300);
+            }
+        });
+
+        // ============================================
+        // MESIN INISIASI (BEKERJA OTOMATIS BILA KERTAS HTML SELESAI DIGAMBAR HP OLEH BROWSER / EVENT ONLOAD)
+        // ============================================
+        document.addEventListener("DOMContentLoaded", async () => {
+            // PAKSA LAMPU EMAS BINTANG NYALA 4 BIJI BIAR GA KELIATAN KOSONG MELOMPONG SISA KELABU
+            setRating(4); 
+            
+            // LAKUKAN PENGECEKAN AMAN RAZIA IDENTITAS ORANG YANG LAGI NONGKRONG!
+            if (!ticketId) return; // Kalau di link atas url nya kaga ada bawa bawa Nomer Bukti Karcis/ID, ngapain dia bisa tembus ke ruang Penilaian Rating ini?? BERHENTIKAN MESIN SEKARANG JUGA DI BARIS INI! (RETURN!)
+
+            // JIKA LULUS CEK, MULAI PROSES SULAP MEMBONGKAR RAHASIA CATATAN DUIT NYA DARI GUDANG SERVER!
+            try {
+                // Perintahkan Kurir (Fetch) Terbang membelah jaringan internet menuju Istana Server API di Endpoint "/api/parkir/checkout-info/" dengan dibekali Identitas Kode ID si Pengunjung Parkiran ini!
+                const response = await fetch(`/api/parkir/checkout-info/${ticketId}`);
+                const result = await response.json(); // Bedah parsel surat balesan berisi profil bon bonan orang ini pas dia parkir tadi..
+
+                if (result.status === 'success') { // Jika Sang Raja Server senyum membukakan akses buku rekeningnya..
+                    // Tempel Jumlah Kerugian Duit Yang dia bayarin pas keluar gerbang (Ubah paksa angka kaku 10000 jd cantik bernoda titik Rupiah "Rp 10.000")
+                    document.getElementById('display-harga').textContent = `Rp ${result.total_harga.toLocaleString('id-ID')}`;
+                    
+                    // Merangkai Puisi Untaian Lamanya Waktu Berapa lama Dia Terdiam Terjebak di Basement Gedung tersebut!
+                    let durasiTeks = ''; // Keranjang untaian
+                    if (result.durasi_jam > 0) durasiTeks += `${result.durasi_jam} Jam `; // Kalau ga nyampe sejam, gausah munculin kata Jam.
+                    durasiTeks += `${result.durasi_menit} Menit`; // Sisanya sumpelin semua kotoran menit menit dibelakangnya panjang 
+                    // Tempel Untaian Kalimat (Cth "1 Jam 25 Menit") itu ke Layar HP Nya.
+                    document.getElementById('display-durasi').textContent = durasiTeks;
+                }
+            } catch (error) { // Jika Terjadi Kiamat Gempa Bumi Internet terputus (Mati Lampu Jaringan / Server Error / Maintenance)
+                console.error("Gagal menarik riwayat tiket:", error); // Biarkan error ditelen sunyi masuk buku cacatan dosa harian programmer di layar konsol hitam tanpa bikin takut Pengunjung (Fail Silent).
+            }
+        });
+
+        // ============================================
+        // MESIN PERUBAH LAMPU BINTANG NYALA MATI BERDASARKAN SENTUHAN JARI
+        // ============================================
+        // Bila sebuah SVG Bintang di HTML atas dipencet jari, fungsi sakti ini yang muter ngolah lampunya!
+        function setRating(rating) {
+            currentRating = rating; // Ambil nilai pangkat si bintang itu (Misal Bintang Babi nomor 1? atau Bintang Raja nomor 5?)
+            
+            const stars = document.getElementById('star-container').children; // Sedot merangkul Kelima Batang Bintang itu hidup hidup ke genggaman.
+            
+            // SIKSA SATU-PERSATU SETIAP BINTANG DENGAN MELAKUKAN PEMERIKSAAN Kasta Urutan (Loop) 
+            for (let i = 0; i < stars.length; i++) { 
+                // Misal Jari nekan Bintang Nomor 3:
+                // Maka Bintang no 1, 2, dan 3 (Yang nilai urutannya lebih kecil atau seangkatan) AKAN DIGUYUR CAHAYA (Pakaiannya direnggut ganti ke 'star-active' jadi nyala Emas/Biru Terang Benderang!)
+                if (i < rating) stars[i].classList.replace('star-inactive', 'star-active');
+                
+                // Namun nasib nahas bagi Bintang no 4 dan 5 (Yang berada di sisa pinggiran kanan yg tak tersentuh). MEREKA DIPADAMKAN CAHAYANYA! (Pakaian emas ditarik, dibuang diganti 'star-inactive' baju gembel warna Kelabu mati basi)
+                else stars[i].classList.replace('star-active', 'star-inactive');
+            }
+            
+            // Selesai memutar mutar cahaya bintang, Jangan Lupa! Ubah Teks Bunglon Pujian dibawahnya menyelaraskan pangkat. 
+            // Cth Pangkat 1 (1 - 1 = Index 0 = 'Sangat Buruk').
+            document.getElementById('rating-text').textContent = ratingLabels[rating - 1]; 
+        }
+
+        // ============================================
+        // MANTRAM PENGIRIMAN DATA UMPAN BALIK KE BACKEND SERVER (Fungsi Aksi Eksekusi Utama!)
+        // ============================================
+        // Dipicu saat Pengguna merasa yakin puas atas luapan bacot emosinya lalu memencet Jari nindih Tombol Biru Lebar di dasar kaki halaman!
+        async function kirimUlasan() {
+            const user = JSON.parse(localStorage.getItem('user')); // Gali kuburan memori Laci HP, cari cari Dompet KTP orang ini buat tau siapa namanya yang berani ngehina mall ku?
+            const komentar = document.getElementById('komentar-input').value; // Sikat habis curi seluruh hasil karangan bebas tulisan uneg-uneg dia dari Kolom Ketikan Besar tsb.
+            const btn = document.querySelector('button'); // Cekal kerah tombol birunya di tangan agar bisa kita obrak abrik teksnya buat nipu mata
+
+            // JAGA JAGA! JIKA TERNYATA DOMPET KTP NYA HILANG ATAU DIA GAPERNAH LOGIN TAPI NYELUNDUP MASUK KE HALAMAN INI!!
+            if (!user || !user.id) {
+                // TAMPAR pakai peringatan error dan TENDANG MENTAL MELAYANG dia terbang jatuh ke Halaman Gerbang Login Pendaftaran ulang! Jangan biarkan orang anonim nge rating mall sembarangan.
+                showCustomAlert('error', 'Sesi Habis', 'Silakan login kembali untuk melanjutkan.', '/login');
+                return; // STOP! Mesin dilarang mengeksekusi sisa barisan kode suci dibawah gara gara ulah maling ga punya KTP!
+            }
+
+            // GANTI TULISAN TOMBOL BIRU YG TADI DIAM JADI KATA SIBUK: Biar orangnya sabar nungguin loading pesawat kurir yg mau berangkat, ga nekan tombol kaya org kesetanan dobel dobel ntar malah dapet error!
+            btn.innerHTML = `Mengirim...`;
+
+            // PERJALANAN PAKET KE KANTOR PUSAT MENGGUNAKAN KURIR CEPAT (Fetch Internet)
+            try {
+                // Lontarkan Pesawat Menuju Jalur Istana Pusat Endpoint API ("/api/parkir/ulasan")
+                const response = await fetch('/api/parkir/ulasan', {
+                    method: 'POST', // Kirim Kode Sandi POST (Niat Buat Naruh Arsip Baru/ Nulis Database!)
+                    headers: { 'Content-Type': 'application/json' }, // Pesan format JSON
+                    body: JSON.stringify({ // Terjemahkan bungkusan kotak rahasia yg mau dibawa:
+                        kode_unik: ticketId || "TKT_DEMO", // Nomor Resi Tiket (Buat Tahu di parkiran mananya)
+                        user_id: user.id, // ID KTP Org Nya
+                        rating: currentRating, // Pangkat Jumlah Bintang (1-5) yg dia berikan
+                        komentar: komentar // Lampirkan isi ocehan teks uneg uneg dia tadi
+                    })
+                });
+
+                if (response.ok) { // Jika Raja Server berucap syukur alhamdulilah "Laporan Masuk Bro!"
+                    // Tampar kasih Notif Hijau Centang ucapan Terimakasih! Lalu secara kilat banting setir tendang dia mental melayang ke Alam Kebebasan (Halaman Dashboard Rumah Utama Pengguna). Selamat jalan pahlawan.
+                    showCustomAlert('success', 'Berhasil', 'Terima kasih atas ulasan Anda! Masukan Anda sangat berharga bagi kami.', '/user-dashboard');
+                } else { // Jika Sang Raja marah dan melempar balik error 500! (Bisa jadi Koneksi db down)
+                    showCustomAlert('error', 'Gagal', 'Terjadi kesalahan saat menyimpan ulasan Anda. Silakan coba lagi.'); // Lapor Ke dia.
+                    btn.innerHTML = `Kirim Ulasan`; // Muka tebal balikin tombol sperti semula pura pura ga ada loading tadi biar orang mau mencet ngulang lg kwkw
+                }
+            } catch (e) { // Kalau bencana internet mati lampu gempa putus pas jalan
+                showCustomAlert('error', 'Koneksi Terputus', 'Tidak dapat terhubung ke server. Pastikan internet Anda stabil.');
+                btn.innerHTML = `Kirim Ulasan`; // Balikin teks awal.
+            }
+        }
+    </script>
+</body>
+</html>

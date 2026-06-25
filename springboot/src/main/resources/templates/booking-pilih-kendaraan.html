@@ -1,0 +1,281 @@
+<!DOCTYPE html> <!-- Deklarasi bahwa ini adalah dokumen HTML5 -->
+<html lang="id"> <!-- Elemen akar halaman, bahasa Indonesia -->
+<head> <!-- Bagian kepala halaman -->
+    <meta charset="UTF-8"> <!-- Encoding karakter UTF-8 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"> <!-- Tampilan responsif di HP -->
+    <meta name="theme-color" content="#F5F5F5"> <!-- Warna tema browser Android -->
+    
+    <title>Parkirin - Pilih Kendaraan</title> <!-- Judul tab browser -->
+    <link rel="icon" href="/img/favicon.png" type="image/png"> <!-- Ikon tab browser -->
+
+    <script src="https://cdn.tailwindcss.com"></script> <!-- Menggunakan Tailwind CSS -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet"> <!-- Menggunakan Font Montserrat -->
+    
+    <style> 
+        body { 
+            font-family: 'Montserrat', sans-serif; /* Font default */
+            background-color: #F1F1F1; /* Latar belakang abu-abu muda */
+            margin: 0; /* Tanpa margin luar */
+            overscroll-behavior-y: none; /* Cegah efek memantul saat scroll di HP */
+        }
+        
+        .hide-scrollbar::-webkit-scrollbar { display: none; } /* Sembunyikan scrollbar di Chrome/Safari */
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; } /* Sembunyikan scrollbar di Firefox/IE */
+        
+        .slide-in-right { animation: slideInRight 0.3s ease-out forwards; } /* Animasi geser masuk dari kanan */
+        @keyframes slideInRight { 
+            from { opacity: 0; transform: translateX(20px); } /* Awal animasi */
+            to { opacity: 1; transform: translateX(0); } /* Akhir animasi */
+        }
+
+        .vehicle-card {
+            transition: all 0.2s ease-in-out; /* Transisi halus saat ada perubahan gaya */
+            border: 2px solid transparent; /* Border transparan default */
+        }
+        .vehicle-card.selected { /* Gaya saat kartu kendaraan dipilih */
+            background-color: #D8F6FF !important; /* Latar biru muda terang */
+            border-color: #0064F0 !important; /* Garis tepi biru tua */
+            transform: scale(0.98); /* Sedikit mengecil */
+        }
+    </style>
+</head>
+<body class="flex justify-center h-screen text-gray-800 antialiased bg-gray-200 overflow-hidden"> <!-- Badan halaman: di tengah, tinggi penuh -->
+
+    <!-- WADAH UTAMA -->
+    <div class="w-full max-w-[402px] bg-[#F1F1F1] h-full relative flex flex-col shadow-2xl overflow-hidden slide-in-right"> <!-- Wadah aplikasi mobile -->
+        
+        <!-- HEADER -->
+        <div class="w-full h-[120px] bg-[#F5F5F5] pt-12 px-4 flex items-center shadow-sm z-20 shrink-0"> <!-- Barisan atas -->
+            <a href="javascript:history.back()" class="flex items-center text-[#0064F0] hover:opacity-80 active:scale-95 transition-all cursor-pointer"> <!-- Tombol kembali -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2.5"> <!-- Ikon panah kiri -->
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" /> <!-- Bentuk panah -->
+                </svg>
+            </a>
+            <span class="ml-2 font-bold text-[20px] text-[#0064F0]">Pilih Kendaraan</span> <!-- Judul halaman -->
+        </div>
+
+        <!-- AREA KONTEN (DAFTAR KENDARAAN) -->
+        <div class="flex-grow overflow-y-auto hide-scrollbar z-10 flex flex-col pt-4 pb-28 relative"> <!-- Konten yang bisa di-scroll -->
+            
+            <!-- WADAH DAFTAR KENDARAAN -->
+            <div id="vehicle-list" class="w-full flex flex-col px-4 gap-3"> <!-- Tempat kartu kendaraan akan muncul -->
+                <p class="text-center text-[12px] font-medium text-gray-500 mt-10">Memuat kendaraan Anda...</p> <!-- Teks sementara saat loading -->
+            </div>
+
+            <!-- TOMBOL TAMBAH KENDARAAN BARU -->
+            <div class="w-full px-4 mt-4"> <!-- Wadah tombol tambah -->
+                <a href="/kendaraan" class="flex items-center justify-center gap-2 w-full py-3 border-2 border-dashed border-[#A3ABC4] rounded-[10px] text-[#A3ABC4] hover:bg-blue-50 hover:border-[#0064F0] hover:text-[#0064F0] transition-colors cursor-pointer"> <!-- Tautan gaya garis putus-putus -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"> <!-- Ikon plus -->
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" /> <!-- Bentuk plus -->
+                    </svg>
+                    <span class="font-bold text-[12px]">Tambah Kendaraan Baru</span> <!-- Teks tombol -->
+                </a>
+            </div>
+
+        </div>
+
+        <!-- FOOTER BAWAH (TOMBOL LANJUTKAN) -->
+        <div class="absolute bottom-0 w-full h-[89px] bg-[#F5F5F5] flex flex-col justify-center px-8 z-20 shadow-[0_-5px_15px_rgba(0,0,0,0.05)] border-t border-gray-200"> <!-- Area footer tetap di bawah -->
+            <button id="btn-lanjutkan" onclick="lanjutkanBooking()" disabled class="w-full h-[47px] bg-[#D9D9D9] rounded-[10px] flex items-center justify-center transition-all duration-300 shadow-sm"> <!-- Tombol lanjutkan, defaultnya nonaktif (abu-abu) -->
+                <span class="text-white font-semibold text-[13px] tracking-wide">Lanjutkan</span> <!-- Teks tombol -->
+            </button>
+        </div>
+
+        <!-- MODAL / POP UP PERINGATAN (Kustom) -->
+        <div id="customModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black bg-opacity-40 backdrop-blur-sm transition-opacity opacity-0"> <!-- Latar belakang pop up gelap -->
+            <div id="customModalContent" class="bg-white w-[280px] rounded-[20px] p-6 flex flex-col items-center shadow-2xl transform scale-90 transition-transform duration-300"> <!-- Kotak pop up -->
+                <div class="w-14 h-14 bg-orange-100 rounded-full flex items-center justify-center mb-4"> <!-- Ikon peringatan bulat oranye -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"> <!-- Ikon seru (!) -->
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /> <!-- Bentuk ikon seru segitiga -->
+                    </svg>
+                </div>
+                <h3 id="modalTitle" class="text-[18px] font-bold text-black mb-2 text-center">Perhatian</h3> <!-- Judul pesan -->
+                <p id="modalMessage" class="text-[12px] font-medium text-gray-500 text-center mb-6 leading-relaxed">Pesan modal disini</p> <!-- Isi pesan (diisi JavaScript) -->
+                <button onclick="closeCustomAlert()" class="w-full bg-[#0141A3] hover:bg-blue-800 text-white font-bold py-2.5 rounded-[12px] text-[12px] transition-colors shadow-md active:scale-95"> <!-- Tombol tutup -->
+                    Mengerti
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        let selectedVehicleData = null; // Menyimpan data kendaraan yang dipilih sementara
+        let userData = JSON.parse(localStorage.getItem('user')); // Mengambil data user yang sedang login
+
+        document.addEventListener("DOMContentLoaded", () => { // Saat halaman selesai dimuat
+            if (!userData) { // Jika belum login
+                alert("Anda belum login."); // Tampilkan pesan alert bawaan
+                window.location.href = "/login"; // Arahkan ke halaman login
+                return; // Hentikan fungsi
+            }
+            fetchDataDanSinkronisasi(); // Jika sudah login, ambil data kendaraan
+        });
+
+        // ==========================================
+        // FUNGSI UNTUK MENAMPILKAN POP UP CUSTOM
+        // ==========================================
+        function showCustomAlert(title, message) { // Fungsi memunculkan pop up peringatan
+            const modal = document.getElementById('customModal'); // Ambil elemen latar modal
+            const modalContent = document.getElementById('customModalContent'); // Ambil elemen isi modal
+            
+            document.getElementById('modalTitle').textContent = title; // Ganti judul modal
+            document.getElementById('modalMessage').textContent = message; // Ganti isi pesan modal
+
+            modal.classList.remove('hidden'); // Munculkan modal (hapus status sembunyi)
+            modal.classList.add('flex'); // Atur menjadi flex agar di tengah
+            setTimeout(() => { // Tunggu sebentar lalu jalankan animasi masuk
+                modal.classList.remove('opacity-0'); // Hilangkan transparansi
+                modal.classList.add('opacity-100'); // Buat solid
+                modalContent.classList.remove('scale-90'); // Hilangkan efek kecil
+                modalContent.classList.add('scale-100'); // Buat ukuran normal
+            }, 10);
+        }
+
+        function closeCustomAlert() { // Fungsi menutup pop up peringatan
+            const modal = document.getElementById('customModal'); // Ambil elemen latar modal
+            const modalContent = document.getElementById('customModalContent'); // Ambil elemen isi modal
+            
+            modal.classList.remove('opacity-100'); // Mulai buat transparan
+            modal.classList.add('opacity-0'); // Transparan
+            modalContent.classList.remove('scale-100'); // Mulai perkecil
+            modalContent.classList.add('scale-90'); // Perkecil
+            setTimeout(() => { // Tunggu animasi selesai
+                modal.classList.add('hidden'); // Sembunyikan modal sepenuhnya
+                modal.classList.remove('flex'); // Hapus flex
+            }, 300); // 300 milidetik
+        }
+
+        // ==========================================
+        // LOGIKA SINKRONISASI DATABASE & LOCALSTORAGE
+        // ==========================================
+        async function fetchDataDanSinkronisasi() { // Mengambil data kendaraan dan mencocokkan dengan parkir aktif
+            try {
+                // 1. Ambil data kendaraan user dari server
+                const resKendaraan = await fetch(`/api/kendaraan/${userData.id}`); // Kirim permintaan ambil kendaraan
+                const resultKendaraan = await resKendaraan.json(); // Ubah ke JSON
+
+                // 2. Ambil data reservasi (tiket parkir) dari database untuk Sinkronisasi
+                const resReservasi = await fetch(`/api/parkir/reservasi/user/${userData.id}`); // Permintaan tiket parkir
+                const resultReservasi = await resReservasi.json(); // Ubah ke JSON
+
+                // 3. Sinkronkan tiket di memori (HP) dengan Database
+                let activeTicketsLocal = JSON.parse(localStorage.getItem('active_tickets')) || []; // Ambil tiket dari HP
+                
+                if (resultReservasi.status === 'success') { // Jika berhasil ambil dari database
+                    // Filter: Hanya simpan tiket di memori HP jika di database statusnya masih 'Aktif' atau 'Menunggu'
+                    activeTicketsLocal = activeTicketsLocal.filter(localTicket => {
+                        const dbMatch = resultReservasi.data.find(dbItem => dbItem.kode_unik === localTicket.id); // Cari kecocokan
+                        return dbMatch && (dbMatch.status === 'Aktif' || dbMatch.status === 'Menunggu'); // Sisakan yg aktif/menunggu
+                    });
+                    // Perbarui memori HP agar tiket yg sudah expired/selesai otomatis terhapus status sibuknya
+                    localStorage.setItem('active_tickets', JSON.stringify(activeTicketsLocal)); 
+                }
+
+                // Render (Tampilkan) kendaraan ke layar
+                renderKendaraan(resultKendaraan.data || [], activeTicketsLocal);
+            } catch (err) { // Jika terjadi error jaringan
+                console.error("Gagal load data", err); // Catat di konsol
+                document.getElementById('vehicle-list').innerHTML = `<p class="text-center text-[12px] font-medium text-red-500 mt-10">Gagal mengambil data. Pastikan server aktif.</p>`; // Tampilkan pesan error
+            }
+        }
+
+        function renderKendaraan(daftarKendaraan, activeTicketsLocal) { // Fungsi membuat HTML kartu kendaraan
+            const container = document.getElementById('vehicle-list'); // Ambil wadah kendaraan
+            container.innerHTML = ''; // Kosongkan wadah
+
+            if (daftarKendaraan.length === 0) { // Jika tidak punya kendaraan
+                container.innerHTML = `<p class="text-center text-[12px] font-medium text-gray-500 mt-10">Anda belum mendaftarkan kendaraan.</p>`; // Tampilkan pesan kosong
+                return; // Selesai
+            }
+
+            // Kumpulkan plat nomor yang sedang dalam pesanan parkir
+            const activePlates = activeTicketsLocal.map(t => t.vehicle.plate); 
+
+            daftarKendaraan.forEach((kendaraan) => { // Ulangi untuk setiap kendaraan
+                const isUtamaHidden = kendaraan.is_utama ? '' : 'hidden'; // Sembunyikan tulisan "Utama" jika bukan kendaraan utama
+                const vehicleName = `${kendaraan.merek} ${kendaraan.model}`; // Gabung merek dan model (contoh: Honda Brio)
+                
+                let jenis = kendaraan.jenis ? kendaraan.jenis.toLowerCase() : ''; // Ambil jenis jika ada
+                if(!jenis) { // Jika jenis kosong (dari data lama), coba tebak dari namanya
+                    jenis = (vehicleName.toLowerCase().includes('yamaha') || vehicleName.toLowerCase().includes('honda') || vehicleName.toLowerCase().includes('suzuki')) ? 'motor' : 'mobil';
+                }
+                
+                // LOGIKA PENGECEKAN DOUBLE BOOKING
+                const isParked = activePlates.includes(kendaraan.plat); // Cek apakah kendaraan ini sedang dipakai parkir
+                
+                // Panggil Popup Kustom jika sedang dipesan (diklik muncul error), jika tidak maka izinkan memilih
+                const clickHandler = isParked 
+                    ? `onclick="showCustomAlert('Gagal Memilih', 'Kendaraan dengan plat ${kendaraan.plat} sedang dalam pesanan aktif. Gunakan kendaraan lain.')"` 
+                    : `onclick="selectVehicle('vehicle-${kendaraan.id}', '${vehicleName}', '${kendaraan.plat}', '${jenis}')"`;
+                
+                // Ubah tampilan kartu jika sedang dipesan (menjadi agak buram/transparan dan abu-abu)
+                const cardStyle = isParked 
+                    ? `opacity-60 bg-gray-200 cursor-not-allowed` 
+                    : `bg-[#F5F5F5] hover:bg-gray-100 cursor-pointer`;
+
+                // Tampilkan label "Dalam Pesanan" berwarna merah jika sedang dipesan
+                const badgeParkirHTML = isParked 
+                    ? `<span class="bg-red-100 text-red-600 text-[9px] font-bold px-2 py-0.5 rounded-md ml-1 border border-red-200">Dalam Pesanan</span>` 
+                    : ``;
+
+                // Buat struktur HTML (elemen) untuk satu kendaraan
+                const cardHTML = `
+                <div id="vehicle-${kendaraan.id}" ${clickHandler} class="vehicle-card w-full h-[82px] ${cardStyle} flex items-center px-4 rounded-[10px]"> <!-- Kartu luar -->
+                    <div class="w-[91px] h-[53px] bg-[#0F172A] border-[3px] border-[#D9D9D9] rounded-[5px] flex items-center justify-center shrink-0 shadow-sm relative overflow-hidden"> <!-- Kotak plat nomor -->
+                        <div class="absolute inset-0 border-2 border-[#0F172A] rounded-[3px]"></div> <!-- Garis dalam plat nomor -->
+                        <span class="font-semibold text-[12px] text-white tracking-wide">${kendaraan.plat}</span> <!-- Teks plat nomor -->
+                    </div>
+                    
+                    <div class="ml-4 flex-grow"> <!-- Info samping plat -->
+                        <div class="flex items-center gap-1 flex-wrap"> <!-- Baris atas info -->
+                            <span class="font-semibold text-[12px] text-black leading-tight truncate max-w-[120px]">${vehicleName}</span> <!-- Nama kendaraan -->
+                            ${badgeParkirHTML} <!-- Tampilkan label dipesan (jika ada) -->
+                            <div class="flex items-center gap-1 ${isUtamaHidden}"> <!-- Indikator Utama -->
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-[#0062E6]" viewBox="0 0 20 20" fill="currentColor"> <!-- Ikon bintang utama -->
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /> <!-- Bentuk bintang -->
+                                </svg>
+                                <span class="font-medium text-[10px] text-black">Utama</span> <!-- Teks utama -->
+                            </div>
+                        </div>
+                        <span class="font-medium text-[10px] text-gray-500 block mt-0.5">${kendaraan.warna}</span> <!-- Warna kendaraan -->
+                    </div>
+                </div>`;
+                
+                container.innerHTML += cardHTML; // Tambahkan kartu ke dalam wadah layar
+            });
+        }
+
+        function selectVehicle(elementId, vehicleName, plateNumber, jenisKendaraan) { // Fungsi saat sebuah kendaraan (yang bisa dipilih) diklik
+            const allCards = document.querySelectorAll('.vehicle-card'); // Ambil semua elemen kendaraan
+            allCards.forEach(card => card.classList.remove('selected')); // Hapus status terpilih dari semuanya (reset)
+
+            const selectedCard = document.getElementById(elementId); // Ambil kendaraan yang baru saja diklik
+            selectedCard.classList.add('selected'); // Tandai kendaraan ini sebagai terpilih (jadi biru)
+
+            selectedVehicleData = { // Simpan data kendaraan ini ke variabel sementara
+                name: vehicleName, // Simpan nama
+                plate: plateNumber, // Simpan plat
+                jenis: jenisKendaraan // Simpan jenis
+            };
+
+            const btn = document.getElementById('btn-lanjutkan'); // Ambil tombol Lanjutkan di bawah
+            btn.disabled = false; // Aktifkan tombol (bisa diklik)
+            btn.classList.remove('bg-[#D9D9D9]'); // Hapus warna abu-abu
+            btn.classList.add('bg-[#0141A3]/80', 'hover:bg-[#0141A3]', 'active:scale-95'); // Ganti jadi warna biru aktif
+        }
+
+        function lanjutkanBooking() { // Fungsi yang berjalan saat tombol Lanjutkan diklik
+            if (selectedVehicleData) { // Jika memang ada kendaraan yang dipilih
+                localStorage.setItem('booking_vehicle', JSON.stringify(selectedVehicleData)); // Simpan data kendaraan ke memori HP untuk halaman selanjutnya
+                
+                if (selectedVehicleData.jenis === 'mobil') { // Jika jenisnya mobil
+                    window.location.href = "/pilih-slot-mobil"; // Pindah ke halaman pilih slot mobil
+                } else { // Jika selain mobil (motor)
+                    window.location.href = "/pilih-slot-motor"; // Pindah ke halaman pilih slot motor
+                }
+            }
+        }
+    </script>
+</body>
+</html>

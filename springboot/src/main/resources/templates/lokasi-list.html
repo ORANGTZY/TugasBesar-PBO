@@ -1,0 +1,206 @@
+<!DOCTYPE html> <!-- Menandakan bahwa dokumen ini ditulis dalam bahasa HTML5 -->
+<html lang="id"> <!-- Elemen akar aplikasi dengan aturan tata bahasa Indonesia -->
+<head> <!-- Area tak kasat mata yang menyimpan data kepala (metadata) situs -->
+    <meta charset="UTF-8"> <!-- Mengatur karakter huruf agar sesuai ejaan universal (UTF-8) -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"> <!-- Perintah agar desain proporsional dan tidak bisa di zoom (cubit) oleh user -->
+    <meta name="theme-color" content="#F5F5F5"> <!-- Warna pita atas browser bawaan diset ke warna putih keabu-abuan -->
+    <meta name="apple-mobile-web-app-capable" content="yes"> <!-- Mendukung tampilan layar penuh jika ditambahkan ke Homescreen iPhone -->
+    <meta name="mobile-web-app-capable" content="yes"> <!-- Mendukung tampilan layar penuh untuk Android -->
+    
+    <title>Parkirin - Lokasi List</title> <!-- Judul yang muncul di atas Tab Browser -->
+    <link rel="icon" href="/img/favicon.png" type="image/png"> <!-- Gambar lambang ikon kecil di Tab -->
+    
+    <script src="https://cdn.tailwindcss.com"></script> <!-- Mengambil mesin desain Tailwind CSS secara instan dari internet -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet"> <!-- Mendownload file font Montserrat dari server Google -->
+    
+    <!-- LEAFLET JS UNTUK KALKULASI JARAK/GEOLOCATION (Tidak menampilkan petanya, hanya butuh rumus matematika titik koordinat logikanya) -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script> <!-- Sistem Pihak Ketiga (Library Map) Leaflet.js -->
+
+    <style> 
+        body {
+            background-color: #F1F1F1; /* Melapisi seluruh latar kanvas dengan warna abu gelap */
+            font-family: 'Montserrat', sans-serif; /* Semua teks diseragamkan dengan font Montserrat */
+            overscroll-behavior-y: none; /* Larangan peramban memantulkan layar ketika layar discroll terlalu kuat ke sudut atas/bawah */
+            margin: 0; /* Menghilangkan jarak jeda bawaan pinggiran browser */
+        }
+
+        /* Animasi menggeser lembut elemen dari Kanan menuju posisinya */
+        .slide-in-right {
+            animation: slideIn 0.3s ease-out forwards;
+        }
+        @keyframes slideIn { /* Instruksi rute perjalanan efek menggeser animasi slideInRight */
+            from { opacity: 0; transform: translateX(20px); } /* Mulai tak terlihat dengan margin meleset 20px dari kanan */
+            to { opacity: 1; transform: translateX(0); } /* Berhenti solid pekat di titik nol posisi asalnya */
+        }
+
+        /* Trik jitu menghilangkan tampilan garis bantu scrollbar tapi fiturnya tetap dapat di usap oleh pengguna */
+        .hide-scrollbar::-webkit-scrollbar { display: none; } /* Teruntuk peramban dengan inti mesin WebKit (Chrome, Safari, Opera) */
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; } /* Teruntuk peramban jenis Firefox dan juga Internet Explorer / Edge Lama */
+    </style>
+</head>
+<body class="flex justify-center h-screen text-gray-800 antialiased bg-gray-200"> <!-- Body membungkus antarmuka persis pas menengahkan kotak ponsel di sebuah latar gelap -->
+
+    <!-- RANGKA PONSEL VIRTUAL -->
+    <div class="w-full max-w-[402px] bg-[#F1F1F1] h-full relative flex flex-col shadow-2xl overflow-hidden slide-in-right"> <!-- Ini batasan ruang nyata dimensi layar Aplikasi Parkirin -->
+        
+        <!-- BAGIAN 1: HEADER (Bar Atas) -->
+        <div class="bg-[#F5F5F5] w-full pt-10 pb-4 px-4 z-40 flex items-center justify-between"> <!-- Blok header statis berwarna abu muda -->
+            
+            <div class="flex items-center gap-3"> <!-- Ruang kiri header yang berisi Tombol dan Info Lokasi -->
+                <!-- TOMBOL PANAH KEMBALI MENU -->
+                <a href="/user-dashboard" class="text-[#0064F0] hover:opacity-80 active:scale-95 transition-all cursor-pointer"> <!-- Link berbalik kembali menuju Beranda (Dashboard) -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2.5"> <!-- Gambar ikon panah kiri -->
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+                    </svg>
+                </a>
+                
+                <!-- BLOK INDIKATOR LOKASI PENGGUNA TERKINI -->
+                <div class="flex flex-col max-w-[200px]"> <!-- Kolom baris tumpuk tulisan (Atas: Label, Bawah: Jalan) -->
+                    <span class="text-[#AAAAAA] font-bold text-[10px] leading-tight">Lokasi Kamu</span> <!-- Teks Statis abu-abu: 'Lokasi Kamu' -->
+                    <span id="user-address" class="text-black font-semibold text-[14px] leading-snug truncate">Mencari lokasi...</span> <!-- Teks Dinamis, mula-mula mencari lokasi, nanti akan diubah Script saat satelit GPS ketemu titiknya -->
+                </div>
+            </div>
+
+            <!-- TOMBOL IKON SETELAN (KANAN ATAS) -->
+            <button class="hover:opacity-70 active:scale-90 transition-transform p-1"> <!-- Tombol opsi tersembunyi (gear / radar) -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"> <!-- SVG Garis Ikon target radar -->
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /> <!-- Ikon Kaca Pembesar -->
+                </svg>
+            </button>
+
+        </div>
+
+        <!-- BAGIAN 2: AREA LIST (Daftar Menampilkan Titik Rekomendasi Lokasi Parkir) -->
+        <div class="flex-grow bg-[#F1F1F1] overflow-y-auto hide-scrollbar pt-2 z-10"> <!-- Wilayah gulir panjang di tengah tempat berjubelnya daftar lokasi yang ada -->
+            
+            <!-- LIST ITEM KARTU 1: RITA Supermall -->
+            <a href="/booking" class="w-full h-[45px] bg-[#F5F5F5] border-b border-gray-200 flex items-center justify-between px-4 cursor-pointer hover:bg-white transition-colors active:bg-gray-100 block"> <!-- Barisan per nama Mall yang bisa di tap dan mengarah ke form Booking -->
+                
+                <!-- Info Kiri (Menampilkan Nama Bangunan & Informasi Kalkulasi Jarak Geografis) -->
+                <div class="flex flex-col justify-center w-[120px]"> <!-- Kotak Teks -->
+                    <span class="text-[#0F172A] font-semibold text-[12px] leading-tight truncate">RITA Supermall</span> <!-- Nama tempat targetnya -->
+                    <div class="flex items-baseline mt-[2px]"> <!-- Wadah Jarak -->
+                        <!-- ID 'park-distance' sengaja disediakan agar sistem JavaScript GPS nanti bisa mengkalkulasi selisih jarak antara titik Pengguna dengan titik RITA ini -->
+                        <span id="park-distance" class="text-[#0F172A] font-semibold text-[11px] leading-none">...</span> <!-- Area angka kalkulasi jarak -->
+                        <span class="text-[#0F172A] font-semibold text-[5px] ml-[1px]">Km</span> <!-- Keterangan satuan ukur (Kilometer) -->
+                    </div>
+                </div>
+
+                <!-- Info Tengah (Informasi Harga Standar / Jam) -->
+                <div class="flex items-baseline flex-grow justify-center mt-3 mr-4"> <!-- Blok Perataan tengah memuat harga -->
+                    <span class="text-black font-semibold text-[7px] mr-1">IDR</span> <!-- Mata Uang Rupiah -->
+                    <span class="text-black font-semibold text-[11px] leading-none">2.000</span> <!-- Besaran Nomimal Estimasi Awal -->
+                </div>
+
+                <!-- Info Kanan (Status Kapasitas Real-time & Ikon Panah Lanjut) -->
+                <div class="flex items-center gap-3"> <!-- Kelompok info indikator kosong tidaknya gedung tersebut -->
+                    <div class="flex flex-col items-center justify-center"> <!-- Area Kuota Sisa -->
+                        <span id="list-slots" class="text-[#00D1FF] font-bold text-[20px] leading-[18px]">...</span> <!-- Angka Kapasitas (Akan di setel langsung oleh Script dari Server Backend Parkirin secara Real-time) -->
+                        <span class="text-[#00D7FF] font-semibold text-[12px] leading-tight">Tersedia</span> <!-- Teks penjelas bahwa itu menandakan jumlah slot yang siap ditempati -->
+                    </div>
+                    <!-- Ikon Panah Kanan Indikator Lanjut Tautan -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#0F172A]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /> <!-- Tanda chevron (>) -->
+                    </svg>
+                </div>
+            </a>
+
+            <!-- Kamu bisa menambahkan copy-paste LIST ITEM 1 di atas jika ada banyak lokasi parkir lainnya pada aplikasi ini (misal: Alun-alun, GOR, Kampus, dsb) -->
+
+        </div>
+
+        <!-- BAGIAN 3: BOTTOM BAR (Tombol Melayang Di Bawah untuk Kembali ke Peta Virtual/Map View) -->
+        <a href="/lokasi" class="h-[60px] w-full bg-[#0141A3] flex items-center justify-center gap-3 cursor-pointer hover:bg-blue-800 transition-colors z-40 active:scale-[0.98] relative"> <!-- Tombol besar biru solid yang menggantung paling bawah -->
+            <!-- Ikon Gambar Peta / Map Kustom (Dibuat dengan kode lekukan SVG murni agar warnanya bisa menyatu desain) -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" /> <!-- Lipatan Peta -->
+            </svg>
+            <span class="text-white font-semibold text-[13px] uppercase tracking-wide">Lihat Dalam Map</span> <!-- Instruksi Label Tombol untuk berpindah jenis tampilan antarmuka -->
+        </a>
+
+    </div>
+
+    <!-- SCRIPT RUANG KERJA JAVASCRIPT: GEOLOCATION & API JARAK -->
+    <script>
+        // Saat semua kode desain halaman HTML sudah tuntas dimuat mesin browser, barulah skrip berat ini diperbolehkan jalan.
+        document.addEventListener("DOMContentLoaded", function() {
+            // MENYIMPAN TITIK LOKASI KOORDINAT SASARAN (Tujuan tempat parkirnya di Dunia Nyata)
+            // Kasus di bawah merupakan titik mutlak dari Atap Gedung RITA Supermall Purwokerto
+            const ritaLat = -7.4255; // Garis Lintang (Latitude / Kordinat Sumbu Y)
+            const ritaLng = 109.2303; // Garis Bujur (Longitude / Kordinat Sumbu X)
+
+            // Menggenggam elemen tempat teks akan diubah di bagian atas layar
+            const addressTextElement = document.getElementById('user-address'); // Penampung "Lokasi Kamu"
+            const distanceTextElement = document.getElementById('park-distance'); // Penampung Angka Radius Km
+
+            // Mengecek spesifikasi dan hak otorisasi keamanan browser: "Apakah fitur pendeteksi tempat/GPS diperbolehkan oleh HP?"
+            if ("geolocation" in navigator) { 
+                // Ya! Fiturnya ada. Maka perintahkan satelit/sinyal GSM melacak titik akurat dari orang ini sekarang juga.
+                navigator.geolocation.getCurrentPosition(
+                    function(position) { // JIKA BERHASIL MENDAPATKAN LOKASI PENGGUNA
+                        const userLat = position.coords.latitude; // Ambil nilai Garis Lintang milik orang ini
+                        const userLng = position.coords.longitude; // Ambil nilai Garis Bujur milik orang ini
+
+                        // 1. MENGHITUNG JARAK RELATIF LURUS ANTARA TITIK USER SAAT INI DAN TARGET TEMPAT PARKIR
+                        const userLatLng = L.latLng(userLat, userLng); // Ubah bahasa kordinat ke aturan Library rumus Leaflet
+                        const destLatLng = L.latLng(ritaLat, ritaLng); // Sama
+                        
+                        // Menjalankan fungsi bawaan sakti dari sistem Leaflet untuk menghitung selisih meter.
+                        // (Lalu dibagi 1000 agar jadi sistem Kilometer, kemudian toFixed(2) agar angka tak berantakan cuma mentok 2 digit di belakang desimal)
+                        const distanceInKm = (userLatLng.distanceTo(destLatLng) / 1000).toFixed(2);
+                        // Cetak hasil komputasinya ke layar HP (Menggantikan titik-titik "...")
+                        distanceTextElement.textContent = distanceInKm; 
+
+                        // 2. REVERSE GEOCODING: MERUBAH ANGKA TITIK LOKASI USER MENJADI NAMA JALAN/KECAMATAN MANUSIA BISA BACA
+                        // "Halo Server OpenStreetMap, tolong terjemahkan Koordinat Lat dan Long ini, apa nama tempat resminya?"
+                        fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${userLat}&lon=${userLng}&zoom=18&addressdetails=1`)
+                            .then(response => response.json()) // Saat OpenStreet menjawab paket json
+                            .then(data => { // Bongkar bingkisan JSONnya
+                                if(data && data.address) { // Pastikan datanya berisi sesuatu (Bukan Error Hutan Belantara)
+                                    const addr = data.address; // Kelompokkan
+                                    
+                                    // Berusaha mengekstrak nama titik yang paling mewakili/akurat dari sekian banyak daftar hierarki tempat balasan server.
+                                    // Sistem akan memprioritaskan mendeteksi tempat keramaian umum/bangunan dulu, kalau tidak ada turun terus hingga ke level Nama Jalan atau Kelurahan saja.
+                                    const exactLocation = addr.amenity || addr.building || addr.shop || addr.leisure || addr.office || addr.tourism || addr.road || addr.neighbourhood || addr.suburb || addr.village || addr.city_district;
+                                    
+                                    if (exactLocation) {
+                                        addressTextElement.textContent = exactLocation; // Jika dapet nama yg spesifik, Cetak nama tersebut (Misal: "Jalan Jendral Sudirman")
+                                    } else {
+                                        // Pilihan terakhir / terburuk kalau gagal spesifik, ambil saja barisan terdepan nama regional/nama paling umum yang ditawarkan
+                                        const shortName = data.display_name ? data.display_name.split(',')[0] : "Area Tidak Dikenal";
+                                        addressTextElement.textContent = shortName; // Cetak (Misal: "Banyumas")
+                                    }
+                                } else {
+                                    addressTextElement.textContent = "Area Tidak Dikenal"; // Tidak ada jejak map digital atas tempat dia berdiri
+                                }
+                            })
+                            .catch(err => { // Apabila sistem OSM Map mati (Atau Pengguna Offline tidak pakai kuota)
+                                console.error("Gagal menarik nama jalan/bangunan:", err); // Rekam jejak errornya pada komputer programmer.
+                                addressTextElement.textContent = "Sinyal GPS Lemah"; // Kabari pengguna bahwa masalah ada pada pemrosesan internet/sinyal lokasinya.
+                            });
+                    },
+                    function(error) { // SKENARIO JIKA PENGGUNA MENEKAN "BLOCK/TOLAK" PERMINTAAN IZIN GPS LOKASI.
+                        console.warn("Error Geolocation:", error.message); // Rekam di log pengembang sistem
+                        addressTextElement.textContent = "Akses Lokasi Ditolak"; // Sindir halus bahwa dia menolak sistem bekerja optimal
+                        distanceTextElement.textContent = "-"; // Abaikan jarak perhitungan karena titik awal hilang
+                    },
+                    { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 } // Pengaturan paksaan agar GPS cari akurasi maksimal, menyerah jika tidak dapet dlm 10 detik.
+                );
+            } else { // Jika peramban atau HP tidak memiliki perangkat keras modul GPS sama sekali
+                addressTextElement.textContent = "Perangkat Tidak Mendukung"; // Tolak
+                distanceTextElement.textContent = "-"; // Hilangkan data jarak
+            }
+
+            // MENGAMBIL DATA KAPASITAS SISA AREA PARKIR SECARA REAL-TIME DARI SISTEM SERVER BACKEND KITA SENDIRI
+            fetch('/api/parkir/availability/1') // Memanggil endpoint ketersediaan parkir Area ID "1" (RITA) pada SpringBoot Backend
+                .then(res => res.json()) // Proses hasil JSON
+                .then(result => {
+                    if(result.status === 'success') { // Jika DB lancar & API sehat
+                        document.getElementById('list-slots').textContent = result.data.available_slots; // Ganti angka "..." (Sisa kuota) menjadi sisa parkiran aslinya menurut Database di Backend
+                    }
+                }).catch(err => console.error(err)); // Jika backend mati
+                
+        });
+    </script>
+</body>
+</html>

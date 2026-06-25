@@ -1,0 +1,304 @@
+<!DOCTYPE html> <!-- Deklarasi bahwa ini adalah dokumen HTML5 -->
+<html lang="id"> <!-- Elemen akar halaman, bahasa Indonesia -->
+<head> <!-- Bagian kepala halaman — berisi pengaturan dan sumber daya -->
+    <meta charset="UTF-8"> <!-- Mengatur karakter encoding ke UTF-8 agar teks bahasa Indonesia tampil benar -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"> <!-- Mengatur tampilan agar menyesuaikan layar HP, tanpa zoom -->
+    <meta name="theme-color" content="#F1F1F1"> <!-- Warna tema browser di HP Android -->
+    <meta name="apple-mobile-web-app-capable" content="yes"> <!-- Mengizinkan halaman ini digunakan sebagai web app di iPhone -->
+    
+    <title>Parkirin - Atur PIN</title> <!-- Judul tab browser -->
+    <link rel="icon" href="/img/favicon.png" type="image/png"> <!-- Ikon kecil yang muncul di tab browser -->
+
+    <script src="https://cdn.tailwindcss.com"></script> <!-- Mengimpor Tailwind CSS dari internet untuk membuat tampilan -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet"> <!-- Mengimpor font Montserrat dari Google Fonts -->
+    
+    <style> 
+        body { 
+            font-family: 'Montserrat', sans-serif; /* Gunakan font Montserrat untuk semua teks */
+            background-color: #F1F1F1; /* Warna latar belakang abu-abu muda */
+            margin: 0; /* Hapus margin bawaan browser */
+            overscroll-behavior-y: none; /* Mencegah halaman bergulir berlebih saat ditarik ke atas/bawah */
+            user-select: none; /* Mencegah teks terblok saat memencet keypad dengan cepat */
+        }
+        
+        .hide-scrollbar::-webkit-scrollbar { display: none; } /* Sembunyikan scrollbar di browser Chrome/Safari */
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; } /* Sembunyikan scrollbar di IE dan Firefox */
+        
+        .slide-in-right { animation: slideInRight 0.3s ease-out forwards; } /* Kelas animasi: geser masuk dari kanan */
+        @keyframes slideInRight { /* Definisi animasi masuk dari kanan */
+            from { opacity: 0; transform: translateX(20px); } /* Mulai dari posisi geser kanan dan transparan */
+            to { opacity: 1; transform: translateX(0); } /* Berakhir di posisi normal dan terlihat */
+        }
+
+        /* Efek saat tombol keypad ditekan */
+        .keypad-btn {
+            transition: background-color 0.1s, transform 0.1s; /* Animasi perubahan warna dan ukuran tombol */
+        }
+        .keypad-btn:active, .keypad-btn.keyboard-active {
+            background-color: #E5E5E5; /* Warna latar tombol saat ditekan */
+            transform: scale(0.9); /* Tombol mengecil 10% saat ditekan */
+        }
+
+        /* Transisi warna titik PIN */
+        .pin-dot {
+            transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out; /* Animasi perubahan warna dan ukuran titik */
+        }
+        .pin-dot.active {
+            background-color: #0064F0; /* Warna biru saat titik PIN terisi */
+            transform: scale(1.1); /* Titik sedikit membesar saat terisi */
+        }
+
+        /* Kelas kustom untuk menyembunyikan keypad ke bawah (menyisakan 30px) */
+        .keypad-hidden {
+            transform: translateY(calc(100% - 35px)); /* Geser keypad ke bawah hampir sepenuhnya, sisakan sedikit */
+        }
+    </style>
+</head>
+<body class="flex justify-center h-screen text-gray-800 antialiased bg-gray-200 overflow-hidden"> <!-- Badan halaman: tata letak tengah, tinggi penuh layar, tidak bisa digulir -->
+
+    <div class="w-full max-w-[402px] bg-[#F1F1F1] h-full relative flex flex-col shadow-2xl overflow-hidden slide-in-right"> <!-- Wadah utama: lebar maksimal 402px (ukuran HP), bayangan luar, animasi masuk -->
+        
+        <!-- HEADER: Tombol kembali dan judul halaman -->
+        <div class="w-full h-[120px] bg-[#F5F5F5] pt-12 px-4 flex items-center z-20 shrink-0"> <!-- Bar atas halaman dengan tinggi 120px -->
+            <a href="/profil" class="flex items-center text-[#0064F0] hover:opacity-80 active:scale-95 transition-all cursor-pointer"> <!-- Tautan kembali ke halaman profil -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-[31px] w-[31px] stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2.5"> <!-- Ikon panah kembali -->
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" /> <!-- Bentuk panah ke kiri -->
+                </svg>
+                <span class="ml-2 font-bold text-[20px] leading-[24px]">Atur PIN</span> <!-- Judul halaman -->
+            </a>
+        </div>
+
+        <!-- AREA KONTEN UTAMA -->
+        <div class="flex-grow flex flex-col justify-between relative z-10"> <!-- Wadah konten yang mengisi sisa ruang -->
+            
+            <!-- AREA TAMPILAN TITIK PIN (klik untuk tampilkan keypad) -->
+            <div onclick="showKeypad()" class="flex flex-col items-center w-full pt-16 pb-8 flex-grow cursor-pointer"> <!-- Area yang bisa diklik untuk memunculkan keypad -->
+                <h2 class="font-semibold text-[20px] leading-[24px] text-[#0F252A] mb-8">Buat Pin Baru</h2> <!-- Judul instruksi -->
+                
+                <!-- ENAM TITIK INDIKATOR PIN -->
+                <div class="flex gap-[20px]"> <!-- Wadah untuk 6 titik PIN dengan jarak antar titik -->
+                    <div id="dot-1" class="pin-dot w-[25px] h-[25px] rounded-full bg-[#D9D9D9]"></div> <!-- Titik ke-1: abu-abu saat kosong, biru saat terisi -->
+                    <div id="dot-2" class="pin-dot w-[25px] h-[25px] rounded-full bg-[#D9D9D9]"></div> <!-- Titik ke-2 -->
+                    <div id="dot-3" class="pin-dot w-[25px] h-[25px] rounded-full bg-[#D9D9D9]"></div> <!-- Titik ke-3 -->
+                    <div id="dot-4" class="pin-dot w-[25px] h-[25px] rounded-full bg-[#D9D9D9]"></div> <!-- Titik ke-4 -->
+                    <div id="dot-5" class="pin-dot w-[25px] h-[25px] rounded-full bg-[#D9D9D9]"></div> <!-- Titik ke-5 -->
+                    <div id="dot-6" class="pin-dot w-[25px] h-[25px] rounded-full bg-[#D9D9D9]"></div> <!-- Titik ke-6 -->
+                </div>
+                
+                <p id="hint-text" class="text-[10px] text-gray-400 mt-10 opacity-0 transition-opacity duration-300">Ketuk layar untuk memunculkan keypad</p> <!-- Teks bantuan, muncul saat keypad disembunyikan -->
+            </div>
+
+            <!-- KEYPAD ANGKA -->
+            <div id="keypad-container" class="w-full bg-white rounded-t-[32px] shadow-[0_-10px_40px_rgba(0,0,0,0.08)] px-8 pt-2 pb-10 flex-shrink-0 transition-transform duration-300 ease-in-out"> <!-- Wadah keypad dengan sudut atas membulat dan bayangan -->
+                
+                <!-- TOMBOL TARIK KEYPAD (toggle sembunyikan/tampilkan) -->
+                <div onclick="toggleKeypad(event)" class="w-full py-4 cursor-pointer flex justify-center group" title="Tarik ke bawah/atas"> <!-- Area yang bisa diklik untuk menyembunyikan/menampilkan keypad -->
+                    <div class="w-12 h-1.5 bg-gray-200 rounded-full group-hover:bg-gray-300 transition-colors"></div> <!-- Garis kecil sebagai indikator bisa ditarik -->
+                </div>
+
+                <!-- GRID TOMBOL ANGKA 3x4 -->
+                <div class="grid grid-cols-3 gap-y-6 gap-x-8 text-center place-items-center"> <!-- Tata letak grid 3 kolom untuk tombol angka -->
+                    
+                    <!-- BARIS 1: 1, 2, 3 -->
+                    <button data-key="1" onclick="addNumber('1')" class="keypad-btn w-16 h-16 rounded-full flex items-center justify-center text-[28px] font-medium text-black">1</button> <!-- Tombol angka 1 -->
+                    <button data-key="2" onclick="addNumber('2')" class="keypad-btn w-16 h-16 rounded-full flex items-center justify-center text-[28px] font-medium text-black">2</button> <!-- Tombol angka 2 -->
+                    <button data-key="3" onclick="addNumber('3')" class="keypad-btn w-16 h-16 rounded-full flex items-center justify-center text-[28px] font-medium text-black">3</button> <!-- Tombol angka 3 -->
+
+                    <!-- BARIS 2: 4, 5, 6 -->
+                    <button data-key="4" onclick="addNumber('4')" class="keypad-btn w-16 h-16 rounded-full flex items-center justify-center text-[28px] font-medium text-black">4</button> <!-- Tombol angka 4 -->
+                    <button data-key="5" onclick="addNumber('5')" class="keypad-btn w-16 h-16 rounded-full flex items-center justify-center text-[28px] font-medium text-black">5</button> <!-- Tombol angka 5 -->
+                    <button data-key="6" onclick="addNumber('6')" class="keypad-btn w-16 h-16 rounded-full flex items-center justify-center text-[28px] font-medium text-black">6</button> <!-- Tombol angka 6 -->
+
+                    <!-- BARIS 3: 7, 8, 9 -->
+                    <button data-key="7" onclick="addNumber('7')" class="keypad-btn w-16 h-16 rounded-full flex items-center justify-center text-[28px] font-medium text-black">7</button> <!-- Tombol angka 7 -->
+                    <button data-key="8" onclick="addNumber('8')" class="keypad-btn w-16 h-16 rounded-full flex items-center justify-center text-[28px] font-medium text-black">8</button> <!-- Tombol angka 8 -->
+                    <button data-key="9" onclick="addNumber('9')" class="keypad-btn w-16 h-16 rounded-full flex items-center justify-center text-[28px] font-medium text-black">9</button> <!-- Tombol angka 9 -->
+
+                    <!-- BARIS 4: [ikon sidik jari/kosong], 0, [hapus] -->
+                    <button class="keypad-btn w-16 h-16 rounded-full flex items-center justify-center"> <!-- Tombol ikon sidik jari (dekoratif) -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-[#1D1D1B]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"> <!-- Ikon sidik jari -->
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.132A8 8 0 008 4.07M3 15.364c.64-1.319 1-2.8 1-4.364 0-1.457.39-2.823 1.07-4" /> <!-- Jalur ikon sidik jari -->
+                        </svg>
+                    </button>
+                    <button data-key="0" onclick="addNumber('0')" class="keypad-btn w-16 h-16 rounded-full flex items-center justify-center text-[28px] font-medium text-black">0</button> <!-- Tombol angka 0 -->
+                    <button data-key="backspace" onclick="removeNumber()" class="keypad-btn w-16 h-16 rounded-full flex items-center justify-center"> <!-- Tombol hapus (backspace) -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-[#546A7B]" viewBox="0 0 20 20" fill="currentColor"> <!-- Ikon hapus -->
+                            <path fill-rule="evenodd" d="M6.707 4.879A3 3 0 018.828 4H15a3 3 0 013 3v6a3 3 0 01-3 3H8.828a3 3 0 01-2.12-.879l-4.415-4.414a1 1 0 010-1.414l4.414-4.414zm4 2.414a1 1 0 00-1.414 1.414L10.586 10l-1.293 1.293a1 1 0 101.414 1.414L12 11.414l1.293 1.293a1 1 0 001.414-1.414L13.414 10l1.293-1.293a1 1 0 00-1.414-1.414L12 8.586l-1.293-1.293z" clip-rule="evenodd" /> <!-- Bentuk ikon hapus -->
+                        </svg>
+                    </button>
+
+                </div>
+            </div>
+
+        </div>
+
+        <!-- MODAL SUKSES: Tampil setelah PIN berhasil disimpan -->
+        <div id="successModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black bg-opacity-40 backdrop-blur-sm transition-opacity opacity-0"> <!-- Latar semi-transparan yang menutup seluruh layar saat modal muncul -->
+            <div id="successModalContent" class="bg-white w-[280px] rounded-[20px] p-6 flex flex-col items-center shadow-2xl transform scale-90 transition-transform duration-300"> <!-- Kotak modal sukses -->
+                <div class="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mb-4"> <!-- Lingkaran ikon centang hijau -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"> <!-- Ikon centang -->
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /> <!-- Bentuk tanda centang -->
+                    </svg>
+                </div>
+                <h3 class="text-[18px] font-bold text-black mb-2 text-center">Berhasil!</h3> <!-- Judul modal -->
+                <p class="text-[12px] font-medium text-gray-500 text-center mb-6 leading-relaxed">PIN pengaman Anda berhasil disimpan.</p> <!-- Pesan sukses -->
+                <button onclick="finishSetup()" class="w-full bg-[#0064F0] hover:bg-blue-700 text-white font-bold py-2.5 rounded-[12px] text-[12px] transition-colors shadow-md active:scale-95"> <!-- Tombol selesai -->
+                    Selesai
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        let currentPin = ""; // Variabel untuk menyimpan angka PIN yang sudah dimasukkan pengguna
+        const MAX_PIN_LENGTH = 6; // PIN harus tepat 6 digit
+        let isKeypadVisible = true; // Penanda apakah keypad sedang ditampilkan atau disembunyikan
+
+        // ==========================================
+        // FUNGSI TOGGLE & HIDE/SHOW KEYPAD
+        // ==========================================
+        function toggleKeypad(event) { // Fungsi untuk berganti-ganti antara tampilkan dan sembunyikan keypad
+            if(event) event.stopPropagation(); // Mencegah klik tembus ke elemen belakangnya
+            const keypad = document.getElementById('keypad-container'); // Ambil elemen wadah keypad
+            const hint = document.getElementById('hint-text'); // Ambil elemen teks bantuan
+
+            if (isKeypadVisible) { // Jika keypad sedang tampil, sembunyikan
+                keypad.classList.add('keypad-hidden'); // Turunkan keypad ke bawah
+                hint.classList.remove('opacity-0');    // Tampilkan teks bantuan
+                hint.classList.add('opacity-100'); // Buat teks bantuan terlihat
+            } else { // Jika keypad sedang disembunyikan, tampilkan
+                keypad.classList.remove('keypad-hidden'); // Naikkan keypad kembali
+                hint.classList.add('opacity-0'); // Sembunyikan teks bantuan
+                hint.classList.remove('opacity-100'); // Hapus kelas opacity-100
+            }
+            isKeypadVisible = !isKeypadVisible; // Balik nilai penanda (true jadi false, atau sebaliknya)
+        }
+
+        function showKeypad() { // Fungsi untuk memastikan keypad selalu ditampilkan
+            if (!isKeypadVisible) { // Hanya lakukan jika keypad sedang disembunyikan
+                const keypad = document.getElementById('keypad-container'); // Ambil elemen keypad
+                const hint = document.getElementById('hint-text'); // Ambil elemen teks bantuan
+                keypad.classList.remove('keypad-hidden'); // Tampilkan keypad
+                hint.classList.add('opacity-0'); // Sembunyikan teks bantuan
+                hint.classList.remove('opacity-100'); // Hapus kelas opacity-100
+                isKeypadVisible = true; // Tandai keypad sedang ditampilkan
+            }
+        }
+
+        // ==========================================
+        // FUNGSI INPUT PIN
+        // ==========================================
+        function updateDots() { // Fungsi untuk memperbarui tampilan titik-titik PIN
+            for (let i = 1; i <= MAX_PIN_LENGTH; i++) { // Ulangi untuk setiap titik (1 sampai 6)
+                const dot = document.getElementById(`dot-${i}`); // Ambil elemen titik ke-i
+                if (i <= currentPin.length) { // Jika posisi ini sudah terisi angka
+                    dot.classList.add('active'); // Warnai titik menjadi biru
+                } else { // Jika posisi ini belum terisi
+                    dot.classList.remove('active'); // Kembalikan titik ke warna abu-abu
+                }
+            }
+        }
+
+        function addNumber(num) { // Fungsi yang dipanggil saat pengguna menekan tombol angka
+            showKeypad(); // Pastikan keypad tetap tampil
+            if (currentPin.length < MAX_PIN_LENGTH) { // Hanya tambahkan jika PIN belum 6 digit
+                currentPin += num; // Tambahkan angka ke PIN saat ini
+                updateDots(); // Perbarui tampilan titik-titik PIN
+
+                if (currentPin.length === MAX_PIN_LENGTH) { // Jika PIN sudah tepat 6 digit
+                    setTimeout(() => {
+                        simpanPinKeMemori(); // Tunggu 300ms lalu kirim PIN ke server
+                    }, 300);
+                }
+            }
+        }
+
+        async function simpanPinKeMemori() { // Fungsi async untuk menyimpan PIN ke database server
+            let user = JSON.parse(localStorage.getItem('user')); // Ambil data pengguna dari penyimpanan lokal browser
+            if (!user || !user.id) { // Jika data pengguna tidak ditemukan (belum login)
+                alert("Gagal: Anda belum Login!"); // Tampilkan peringatan
+                window.location.href = "/login"; // Arahkan ke halaman login
+                return; // Hentikan eksekusi fungsi
+            }
+
+            try {
+                // Mengirim ID User dan PIN baru ke Database MySQL
+                const response = await fetch('/api/auth/set-pin', { // Kirim permintaan PUT ke API
+                    method: 'PUT', // Gunakan metode PUT untuk memperbarui data
+                    headers: { 'Content-Type': 'application/json' }, // Beritahu server bahwa data dalam format JSON
+                    body: JSON.stringify({ id: user.id, pin: currentPin }) // Kirim ID pengguna dan PIN baru
+                });
+
+                if (response.ok) { // Jika server merespons dengan sukses
+                    // Update juga di localStorage sbg cadangan sementara
+                    user.pin = currentPin; // Simpan PIN baru di data pengguna lokal
+                    localStorage.setItem('user', JSON.stringify(user)); // Perbarui penyimpanan lokal
+                    
+                    showSuccessModal(); // Tampilkan modal sukses
+                } else { // Jika server merespons dengan error
+                    alert("Gagal menyimpan PIN ke server."); // Tampilkan pesan error
+                    currentPin = ""; updateDots(); // Reset PIN dan tampilan titik
+                }
+            } catch (err) { // Jika terjadi error koneksi
+                alert("Koneksi ke server gagal. Pastikan backend menyala."); // Tampilkan pesan error koneksi
+                currentPin = ""; updateDots(); // Reset PIN dan tampilan titik
+            }
+        }
+
+        function removeNumber() { // Fungsi yang dipanggil saat tombol hapus ditekan
+            showKeypad(); // Pastikan keypad tetap tampil
+            if (currentPin.length > 0) { // Hanya hapus jika PIN tidak kosong
+                currentPin = currentPin.slice(0, -1); // Hapus karakter terakhir dari PIN
+                updateDots(); // Perbarui tampilan titik-titik PIN
+            }
+        }
+
+        function showSuccessModal() { // Fungsi untuk menampilkan modal sukses dengan animasi
+            const modal = document.getElementById('successModal'); // Ambil elemen modal
+            const modalContent = document.getElementById('successModalContent'); // Ambil konten modal
+            
+            modal.classList.remove('hidden'); // Tampilkan modal (hapus kelas 'hidden')
+            modal.classList.add('flex'); // Gunakan flex layout agar konten di tengah
+            
+            setTimeout(() => { // Tunggu 10ms agar transisi CSS bisa berjalan
+                modal.classList.remove('opacity-0'); // Buat latar modal terlihat
+                modal.classList.add('opacity-100'); // Atur transparansi penuh
+                modalContent.classList.remove('scale-90'); // Hapus efek mengecil
+                modalContent.classList.add('scale-100'); // Kembalikan ke ukuran normal
+            }, 10);
+        }
+
+        function finishSetup() { // Fungsi yang dipanggil saat tombol "Selesai" di modal ditekan
+            window.location.href = "/profil"; // Arahkan pengguna kembali ke halaman profil
+        }
+
+        // ==========================================
+        // DUKUNGAN KEYBOARD FISIK (PC/LAPTOP)
+        // ==========================================
+        document.addEventListener('keydown', function(event) { // Dengarkan setiap tombol keyboard yang ditekan
+            const modal = document.getElementById('successModal'); // Ambil elemen modal
+            if (!modal.classList.contains('hidden')) return; // Abaikan input keyboard jika modal sukses sedang tampil
+
+            if (event.key >= '0' && event.key <= '9') { // Jika tombol yang ditekan adalah angka 0-9
+                addNumber(event.key); // Tambahkan angka ke PIN
+                triggerVisualKeystroke(event.key); // Tampilkan efek visual pada tombol yang ditekan
+            } 
+            else if (event.key === 'Backspace') { // Jika tombol yang ditekan adalah Backspace
+                removeNumber(); // Hapus angka terakhir dari PIN
+                triggerVisualKeystroke('backspace'); // Tampilkan efek visual pada tombol hapus
+            }
+        });
+
+        function triggerVisualKeystroke(key) { // Fungsi untuk memberikan efek visual saat tombol keyboard fisik ditekan
+            const btn = document.querySelector(`button[data-key="${key}"]`); // Cari tombol di keypad yang sesuai dengan tombol keyboard
+            if (btn) { // Jika tombol ditemukan
+                btn.classList.add('keyboard-active'); // Tambahkan kelas efek visual
+                setTimeout(() => {
+                    btn.classList.remove('keyboard-active'); // Hapus kelas efek visual setelah 100ms
+                }, 100);
+            }
+        }
+    </script>
+</body>
+</html>

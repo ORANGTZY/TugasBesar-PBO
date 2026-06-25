@@ -1,0 +1,165 @@
+<!DOCTYPE html> <!-- Deklarasi bahwa ini adalah dokumen HTML5 -->
+<html lang="id"> <!-- Elemen akar halaman, bahasa Indonesia -->
+<head> <!-- Bagian kepala halaman -->
+    <meta charset="UTF-8"> <!-- Encoding UTF-8 agar teks Indonesia tampil benar -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"> <!-- Tampilan responsif di HP -->
+    <meta name="theme-color" content="#F5F5F5"> <!-- Warna tema browser di Android -->
+    
+    <title>Parkirin - Notifikasi</title> <!-- Judul tab browser -->
+    <link rel="icon" href="/img/favicon.png" type="image/png"> <!-- Ikon tab browser -->
+
+    <script src="https://cdn.tailwindcss.com"></script> <!-- Tailwind CSS dari internet -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet"> <!-- Font Montserrat -->
+    
+    <style> 
+        body { font-family: 'Montserrat', sans-serif; background-color: #F1F1F1; overscroll-behavior-y: none;} /* Font dan latar */
+        .slide-in-right { animation: slideIn 0.3s ease-out forwards; } /* Animasi geser masuk dari kanan */
+        @keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } } /* Definisi animasi geser masuk */
+        .fade-content { animation: fadeEffect 0.3s ease-in-out; } /* Animasi muncul perlahan saat ganti tab */
+        @keyframes fadeEffect { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } } /* Definisi animasi muncul dari bawah */
+        .hide-scrollbar::-webkit-scrollbar { display: none; } /* Sembunyikan scrollbar Chrome/Safari */
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; } /* Sembunyikan scrollbar IE/Firefox */
+    </style>
+</head>
+<body class="flex justify-center h-screen text-gray-800 antialiased bg-gray-200 overflow-hidden"> <!-- Badan halaman: tengah, tinggi penuh -->
+
+    <!-- WADAH UTAMA HALAMAN NOTIFIKASI -->
+    <div class="w-full max-w-[402px] bg-[#F5F5F5] h-full relative flex flex-col shadow-2xl overflow-hidden slide-in-right"> <!-- Wadah utama dengan animasi geser masuk -->
+        
+        <!-- HEADER: Tombol kembali dan judul -->
+        <div class="w-full h-[120px] bg-[#F5F5F5] flex items-center px-4 pt-12 pb-4 relative z-10 shrink-0 border-b border-gray-200"> <!-- Bar atas halaman -->
+            <a href="/user-dashboard" class="text-[#0064F0] hover:opacity-80 active:scale-95 transition-all cursor-pointer mr-3"> <!-- Tautan kembali ke dashboard -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2.5"> <!-- Ikon panah kembali -->
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" /> <!-- Bentuk panah kiri -->
+                </svg>
+            </a>
+            <h1 class="text-[20px] font-bold text-[#0064F0]">Notifikasi</h1> <!-- Judul halaman -->
+        </div>
+
+        <!-- TAB NAVIGATOR: Transaksi | Inbox -->
+        <div class="w-full flex bg-[#F5F5F5] relative z-10 shadow-sm shrink-0"> <!-- Baris tab navigasi -->
+            <!-- TAB TRANSAKSI (aktif secara default) -->
+            <div onclick="switchTab('transaksi')" class="w-1/2 flex flex-col items-center justify-center pt-4 cursor-pointer"> <!-- Tombol tab Transaksi -->
+                <span id="txt-transaksi" class="text-[12px] font-semibold text-[#0068E6] mb-3">Transaksi</span> <!-- Teks tab — biru = aktif -->
+                <div id="line-transaksi" class="w-full h-[2px] bg-[#0068E6] transition-colors duration-300"></div> <!-- Garis bawah biru = tab aktif -->
+            </div>
+            <!-- TAB INBOX (tidak aktif secara default) -->
+            <div onclick="switchTab('inbox')" class="w-1/2 flex flex-col items-center justify-center pt-4 cursor-pointer"> <!-- Tombol tab Inbox -->
+                <span id="txt-inbox" class="text-[12px] font-semibold text-gray-400 mb-3">Inbox</span> <!-- Teks tab — abu = tidak aktif -->
+                <div id="line-inbox" class="w-full h-[2px] bg-[#A3ABC4] transition-colors duration-300"></div> <!-- Garis bawah abu = tab tidak aktif -->
+            </div>
+        </div>
+
+        <!-- AREA KONTEN TAB -->
+        <div class="flex-grow bg-[#F5F5F5] overflow-y-auto hide-scrollbar"> <!-- Wadah konten yang bisa digulir -->
+            <!-- KONTEN TAB TRANSAKSI (diisi oleh JavaScript) -->
+            <div id="content-transaksi" class="block fade-content space-y-0 pb-20"></div> <!-- Daftar notifikasi transaksi -->
+
+            <!-- KONTEN TAB INBOX (contoh statis) -->
+            <div id="content-inbox" class="hidden flex-col fade-content pb-20"> <!-- Daftar pesan inbox — tersembunyi secara default -->
+                <!-- CONTOH PESAN INBOX -->
+                <div class="flex items-start gap-4 py-4 px-5 border-b border-gray-200 cursor-pointer hover:bg-gray-100"> <!-- Baris pesan inbox -->
+                    <div class="mt-1 flex-shrink-0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#00D1FF" class="w-6 h-6"><path d="M13.447 4.195c-1.3-.52-2.73-.207-3.693.812L6.155 8H4a2 2 0 00-2 2v4a2 2 0 002 2h2.155l3.599 3.993c.963 1.019 2.393 1.332 3.693.812a3.001 3.001 0 001.909-2.793V6.988a3.001 3.001 0 00-1.909-2.793zM18.8 8.64a1 1 0 011.4 0 5.98 5.98 0 010 8.48 1 1 0 11-1.4-1.42 3.984 3.984 0 000-5.64 1 1 0 010-1.42z" /></svg></div> <!-- Ikon speaker/promosi -->
+                    <div class="flex flex-col"> <!-- Isi pesan -->
+                        <h3 class="text-[12px] font-semibold text-black mb-1">Sudah Aktifin KEMBAR Pay Kamu?</h3> <!-- Judul pesan promosi -->
+                        <p class="text-[12px] font-normal text-black leading-snug">Jangan lewatkan Cashback 50% di setiap transaksi Kamu</p> <!-- Isi pesan promosi -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const userData = JSON.parse(localStorage.getItem('user')); // Ambil data pengguna dari penyimpanan lokal browser
+
+        document.addEventListener("DOMContentLoaded", () => { // Jalankan setelah halaman siap
+            if (userData) { // Jika pengguna sudah login
+                fetchNotifikasiTransaksi(); // Ambil notifikasi transaksi dari server
+            }
+        });
+
+        async function fetchNotifikasiTransaksi() { // Fungsi untuk mengambil notifikasi dari database
+            const container = document.getElementById('content-transaksi'); // Ambil wadah konten Transaksi
+            try {
+                // Mengecek Ke Database
+                const response = await fetch(`/api/parkir/reservasi/user/${userData.id}`); // Kirim permintaan ke API reservasi pengguna
+                const result = await response.json(); // Ubah respons dari JSON ke objek JavaScript
+
+                if (result.status === 'success' && result.data.length > 0) { // Jika berhasil dan ada data
+                    container.innerHTML = ''; // Kosongkan konten lama
+                    result.data.forEach(item => { // Proses setiap data reservasi
+                        // LOGIKA PARSING TANGGAL & WAKTU
+                        const dateObj = new Date(item.waktu_pesan); // Ubah waktu pesan ke objek Date
+                        const timeStr = dateObj.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }); // Format waktu (jam:menit)
+                        const dateStr = dateObj.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }); // Format tanggal (hari bulan tahun)
+                        
+                        const infoSlot = item.blok === 'Mobil' ? `Slot ${item.no_slot}` : item.no_slot; // Format info slot
+
+                        // Konfigurasi Tampilan Notifikasi — sesuaikan berdasarkan status reservasi
+                        let titleText = 'Pemesanan Tiket Berhasil'; // Judul default
+                        let statusColor = 'text-blue-600'; // Warna teks status default (biru)
+                        let bgIconColor = 'bg-blue-100'; // Warna latar ikon default (biru muda)
+                        let iconSVG = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" /></svg>`; // Ikon clipboard dengan centang (default)
+
+                        if (item.status === 'Dibatalkan') { // Jika status reservasi dibatalkan
+                            titleText = 'Pemesanan Dibatalkan'; // Ubah judul ke "Dibatalkan"
+                            statusColor = 'text-red-600'; // Warna merah
+                            bgIconColor = 'bg-red-100'; // Latar merah muda
+                            iconSVG = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>`; // Ikon silang merah
+                        } else if (item.status === 'Selesai') { // Jika status reservasi selesai
+                            titleText = 'Parkir Telah Selesai'; // Ubah judul ke "Selesai"
+                            statusColor = 'text-green-600'; // Warna hijau
+                            bgIconColor = 'bg-green-100'; // Latar hijau muda
+                            iconSVG = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>`; // Ikon centang hijau
+                        }
+
+                        container.innerHTML += ` <!-- Tambahkan item notifikasi ke daftar -->
+                            <div class="flex items-start gap-4 py-4 px-5 border-b border-gray-200 bg-white hover:bg-gray-50 transition-colors">
+                                <div class="mt-1 flex-shrink-0 ${bgIconColor} p-2 rounded-full"> <!-- Lingkaran ikon status -->
+                                    ${iconSVG} <!-- Ikon sesuai status reservasi -->
+                                </div>
+                                <div class="flex flex-col w-full">
+                                    <h3 class="text-[12px] font-semibold text-black mb-0.5">${titleText}</h3> <!-- Judul notifikasi -->
+                                    <p class="text-[12px] font-normal text-gray-600 leading-snug">Tiket parkir Anda di ${item.nama_area} (${item.lantai}, ${infoSlot}) berstatus <span class="font-bold ${statusColor}">${item.status}</span>.</p> <!-- Deskripsi notifikasi dengan nama area, lantai, slot, dan status -->
+                                    <div class="flex w-full justify-between items-center mt-1">
+                                        <span class="text-[10px] text-gray-400 font-medium">${dateStr} • ${timeStr} WIB</span> <!-- Waktu notifikasi -->
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    });
+                } else { // Jika tidak ada data transaksi
+                    container.innerHTML = `<div class="text-center text-gray-400 mt-10 text-[12px] font-medium">Belum ada transaksi terbaru</div>`; // Tampilkan pesan kosong
+                }
+            } catch (err) {
+                console.error(err); // Catat error jika gagal mengambil data
+            }
+        }
+
+        function switchTab(tabName) { // Fungsi untuk beralih antara tab Transaksi dan Inbox
+            const lineTransaksi = document.getElementById('line-transaksi'); // Ambil garis tab Transaksi
+            const lineInbox = document.getElementById('line-inbox'); // Ambil garis tab Inbox
+            const txtTransaksi = document.getElementById('txt-transaksi'); // Ambil teks tab Transaksi
+            const txtInbox = document.getElementById('txt-inbox'); // Ambil teks tab Inbox
+            const contentTransaksi = document.getElementById('content-transaksi'); // Ambil konten Transaksi
+            const contentInbox = document.getElementById('content-inbox'); // Ambil konten Inbox
+
+            if (tabName === 'inbox') { // Jika beralih ke tab Inbox
+                lineTransaksi.classList.replace('bg-[#0068E6]', 'bg-[#A3ABC4]'); // Garis Transaksi jadi abu-abu
+                lineInbox.classList.replace('bg-[#A3ABC4]', 'bg-[#0068E6]'); // Garis Inbox jadi biru
+                txtTransaksi.classList.replace('text-[#0068E6]', 'text-gray-400'); // Teks Transaksi jadi abu-abu
+                txtInbox.classList.replace('text-gray-400', 'text-[#0068E6]'); // Teks Inbox jadi biru
+                contentTransaksi.classList.replace('block', 'hidden'); // Sembunyikan konten Transaksi
+                contentInbox.classList.replace('hidden', 'flex'); // Tampilkan konten Inbox
+            } else { // Jika beralih ke tab Transaksi
+                lineInbox.classList.replace('bg-[#0068E6]', 'bg-[#A3ABC4]'); // Garis Inbox jadi abu-abu
+                lineTransaksi.classList.replace('bg-[#A3ABC4]', 'bg-[#0068E6]'); // Garis Transaksi jadi biru
+                txtInbox.classList.replace('text-[#0068E6]', 'text-gray-400'); // Teks Inbox jadi abu-abu
+                txtTransaksi.classList.replace('text-gray-400', 'text-[#0068E6]'); // Teks Transaksi jadi biru
+                contentInbox.classList.replace('flex', 'hidden'); // Sembunyikan konten Inbox
+                contentTransaksi.classList.replace('hidden', 'block'); // Tampilkan konten Transaksi
+            }
+        }
+    </script>
+</body>
+</html>

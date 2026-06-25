@@ -1,0 +1,274 @@
+<!DOCTYPE html> <!-- Deklarasi bahwa ini adalah dokumen HTML5 -->
+<html lang="id"> <!-- Elemen akar halaman, bahasa Indonesia -->
+<head> <!-- Bagian kepala halaman -->
+    <meta charset="UTF-8"> <!-- Encoding karakter UTF-8 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"> <!-- Tampilan responsif di HP -->
+    <meta name="theme-color" content="#F5F5F5"> <!-- Warna tema browser Android -->
+    
+    <title>Parkirin - Edit Kendaraan</title> <!-- Judul tab browser -->
+    <link rel="icon" href="/img/favicon.png" type="image/png"> <!-- Ikon tab browser -->
+    
+    <script src="https://cdn.tailwindcss.com"></script> <!-- Menggunakan Tailwind CSS -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet"> <!-- Font Montserrat -->
+    
+    <style> 
+        body { font-family: 'Montserrat', sans-serif; background-color: #F1F1F1; margin: 0; overscroll-behavior-y: none; } /* Font default dan latar abu-abu */
+        .hide-scrollbar::-webkit-scrollbar { display: none; } /* Sembunyikan scrollbar di Chrome/Safari */
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; } /* Sembunyikan scrollbar di Firefox/IE */
+        .slide-in { animation: slideInRight 0.3s ease-out forwards; } /* Animasi masuk dari kanan */
+        @keyframes slideInRight { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } } /* Efek geser kanan */
+        input[type="radio"]:checked + div { background-color: #000; box-shadow: inset 0 0 0 4px #F5F5F5; } /* Gaya tombol radio (bulatan hitam) saat dipilih */
+    </style>
+</head>
+<body class="flex justify-center h-screen text-gray-800 antialiased bg-gray-200"> <!-- Badan halaman: tengah, tinggi penuh -->
+
+    <!-- WADAH UTAMA APLIKASI -->
+    <div class="w-full max-w-[402px] bg-[#F1F1F1] h-full relative flex flex-col shadow-2xl overflow-hidden slide-in"> <!-- Wadah bergaya ponsel -->
+        
+        <!-- HEADER (BAGIAN ATAS) -->
+        <div class="w-full h-[120px] bg-[#F5F5F5] pt-12 px-4 flex items-center shadow-sm z-20 shrink-0"> <!-- Kotak header -->
+            <a href="/kendaraan" class="text-[#0064F0] hover:opacity-80 active:scale-95 transition-all cursor-pointer mr-3"> <!-- Tombol kembali ke daftar kendaraan -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" /></svg> <!-- Ikon panah ke kiri -->
+            </a>
+            <h1 class="text-[20px] font-bold text-[#0064F0]">Edit kendaraan</h1> <!-- Judul Halaman -->
+        </div>
+
+        <!-- AREA KONTEN (BISA DI-SCROLL) -->
+        <div class="flex-grow overflow-y-auto hide-scrollbar z-10 flex flex-col pb-32"> <!-- Wadah form yang bisa digulir -->
+            
+            <!-- FORM DATA DASAR KENDARAAN -->
+            <div class="w-full bg-[#F5F5F5] px-4 pt-4 pb-6 mt-[11px]"> <!-- Kotak form pertama -->
+                <p class="text-[12px] font-medium text-[#A4A4A4] mb-4">Pilih Kendaraan</p> <!-- Label panduan -->
+                
+                <!-- PILIHAN JENIS KENDARAAN (MOTOR/MOBIL) -->
+                <div class="flex gap-8 mb-8"> <!-- Baris pilihan motor/mobil -->
+                    <!-- PILIHAN MOTOR -->
+                    <label class="flex items-center gap-3 cursor-pointer group select-none"> <!-- Label motor yang bisa diklik -->
+                        <div class="relative flex items-center justify-center"> <!-- Wadah tombol radio -->
+                            <input type="radio" id="radio-motor" name="jenis_kendaraan" value="motor" class="peer sr-only"> <!-- Input radio motor (disembunyikan) -->
+                            <div class="w-[25px] h-[25px] border-2 border-black rounded-full transition-all peer-checked:border-[6px]"></div> <!-- Bulatan hitam yang berubah saat dipilih -->
+                        </div>
+                        <img src="/img/elemenmotorcycle.png" alt="Motor" class="h-8 w-8 object-contain"> <!-- Gambar motor -->
+                        <span class="font-semibold text-[20px] text-black">Motor</span> <!-- Teks "Motor" -->
+                    </label>
+                    <!-- PILIHAN MOBIL -->
+                    <label class="flex items-center gap-3 cursor-pointer group select-none"> <!-- Label mobil yang bisa diklik -->
+                        <div class="relative flex items-center justify-center"> <!-- Wadah tombol radio -->
+                            <input type="radio" id="radio-mobil" name="jenis_kendaraan" value="mobil" class="peer sr-only"> <!-- Input radio mobil (disembunyikan) -->
+                            <div class="w-[25px] h-[25px] border-2 border-black rounded-full transition-all peer-checked:border-[6px]"></div> <!-- Bulatan hitam yang berubah saat dipilih -->
+                        </div>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-black" viewBox="0 0 24 24" fill="currentColor"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/></svg> <!-- Ikon mobil -->
+                        <span class="font-semibold text-[20px] text-black">Mobil</span> <!-- Teks "Mobil" -->
+                    </label>
+                </div>
+                
+                <!-- KOLOM-KOLOM ISIAN DATA -->
+                <div class="flex flex-col gap-4"> <!-- Tumpukan kolom isian vertikal -->
+                    <!-- PLAT NOMOR -->
+                    <div class="relative w-full h-[68px] bg-[#EDEDED] border-b border-black"> <!-- Kotak input Plat Nomor -->
+                        <label class="absolute left-5 top-2.5 text-[8px] font-semibold text-[#A4A4A4]">Plat Nomor Kendaraan</label> <!-- Teks label kecil di atas -->
+                        <input type="text" id="edit-plat" class="absolute left-5 bottom-2 w-[calc(100%-40px)] bg-transparent text-[15px] font-semibold text-black focus:outline-none"> <!-- Kolom ketik Plat Nomor -->
+                    </div>
+                    <!-- MEREK & MODEL -->
+                    <div class="grid grid-cols-2 gap-4"> <!-- Membagi layar jadi 2 kolom sejajar -->
+                        <!-- MEREK -->
+                        <div class="relative w-full h-[68px] bg-[#EDEDED] border-b border-black"> <!-- Kotak input Merek -->
+                            <label class="absolute left-5 top-2.5 text-[8px] font-semibold text-[#A4A4A4]">Merek</label> <!-- Label Merek -->
+                            <input type="text" id="edit-merek" class="absolute left-5 bottom-2 w-[calc(100%-30px)] bg-transparent text-[15px] font-semibold text-black focus:outline-none"> <!-- Kolom ketik Merek -->
+                        </div>
+                        <!-- MODEL -->
+                        <div class="relative w-full h-[68px] bg-[#EDEDED] border-b border-black"> <!-- Kotak input Model -->
+                            <label class="absolute left-5 top-2.5 text-[8px] font-semibold text-[#A4A4A4]">Model</label> <!-- Label Model -->
+                            <input type="text" id="edit-model" class="absolute left-5 bottom-2 w-[calc(100%-30px)] bg-transparent text-[15px] font-semibold text-black focus:outline-none"> <!-- Kolom ketik Model -->
+                        </div>
+                    </div>
+                    <!-- TAHUN & WARNA -->
+                    <div class="grid grid-cols-2 gap-4"> <!-- Membagi layar jadi 2 kolom sejajar -->
+                        <!-- TAHUN PRODUKSI -->
+                        <div class="relative w-full h-[68px] bg-[#EDEDED] border-b border-black"> <!-- Kotak input Tahun -->
+                            <label class="absolute left-5 top-2.5 text-[8px] font-semibold text-[#A4A4A4]">Tahun Produksi</label> <!-- Label Tahun -->
+                            <input type="number" id="edit-tahun" class="absolute left-5 bottom-2 w-[calc(100%-30px)] bg-transparent text-[15px] font-semibold text-black focus:outline-none"> <!-- Kolom ketik Tahun -->
+                        </div>
+                        <!-- WARNA -->
+                        <div class="relative w-full h-[68px] bg-[#EDEDED] border-b border-black"> <!-- Kotak input Warna -->
+                            <label class="absolute left-5 top-2.5 text-[8px] font-semibold text-[#A4A4A4]">Warna</label> <!-- Label Warna -->
+                            <input type="text" id="edit-warna" class="absolute left-5 bottom-2 w-[calc(100%-30px)] bg-transparent text-[15px] font-semibold text-black focus:outline-none"> <!-- Kolom ketik Warna -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FORM INFORMASI STNK -->
+            <div class="w-full bg-[#F5F5F5] px-4 py-6 mt-[11px]"> <!-- Kotak form STNK di bawahnya -->
+                <h2 class="text-[16px] font-semibold text-black mb-4">Informasi STNK</h2> <!-- Judul sub-form STNK -->
+                <div class="grid grid-cols-2 gap-4 mb-6"> <!-- Baris dibagi 2 kolom -->
+                    <!-- NOMOR MESIN -->
+                    <div class="relative w-full h-[68px] bg-[#EDEDED] border-b border-black"> <!-- Kotak input Nomor Mesin -->
+                        <label class="absolute left-5 top-2.5 text-[8px] font-semibold text-[#A4A4A4]">Nomor Mesin</label> <!-- Label Mesin -->
+                        <input type="text" id="edit-mesin" class="absolute left-5 bottom-2 w-[calc(100%-30px)] bg-transparent text-[15px] font-semibold text-black focus:outline-none"> <!-- Kolom ketik Mesin -->
+                    </div>
+                    <!-- NOMOR RANGKA -->
+                    <div class="relative w-full h-[68px] bg-[#EDEDED] border-b border-black"> <!-- Kotak input Nomor Rangka -->
+                        <label class="absolute left-5 top-2.5 text-[8px] font-semibold text-[#A4A4A4]">Nomor Rangka</label> <!-- Label Rangka -->
+                        <input type="text" id="edit-rangka" class="absolute left-5 bottom-2 w-[calc(100%-30px)] bg-transparent text-[15px] font-semibold text-black focus:outline-none"> <!-- Kolom ketik Rangka -->
+                    </div>
+                </div>
+                <!-- BAGIAN UPLOAD STNK -->
+                <h3 class="text-[10px] font-semibold text-black mb-3">Upload Dokumen Yang dibutuhkan</h3> <!-- Judul instruksi upload foto STNK -->
+                <div class="relative w-full mt-2"> <!-- Area wadah upload foto -->
+                    <!-- AREA KLIK UNTUK UPLOAD -->
+                    <label id="upload-box" class="w-full h-[70px] border border-dashed border-[#D9D9D9] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition-colors rounded"> <!-- Kotak putus-putus untuk diklik -->
+                        <span class="text-[13px] font-semibold text-[#A4A4A4]">STNK (Edit Ulang)</span> <!-- Teks dalam kotak upload -->
+                        <input type="file" id="stnk-input" class="hidden" accept="image/*" onchange="previewImage(event)"> <!-- Input file asli disembunyikan, jalan saat diklik -->
+                    </label>
+                    <!-- AREA PREVIEW FOTO JIKA SUDAH DIPILIH -->
+                    <div id="preview-box" class="hidden relative w-full h-[150px] bg-white border border-[#D9D9D9] rounded flex items-center justify-center p-2 shadow-sm"> <!-- Kotak penampil gambar (awalnya sembunyi) -->
+                        <img id="upload-preview" class="w-full h-full object-contain" alt="STNK Preview"> <!-- Gambar yang sudah dipilih akan muncul di sini -->
+                        <!-- TOMBOL HAPUS FOTO -->
+                        <button onclick="hapusGambar()" class="absolute -top-3 -right-2 w-7 h-7 bg-[#E53935] text-white rounded-full flex items-center justify-center shadow-lg hover:bg-red-700 active:scale-90 transition-transform"> <!-- Tombol X bulat merah -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg> <!-- Ikon X -->
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FOOTER BAWAH (TOMBOL HAPUS DAN SIMPAN) -->
+        <div class="absolute bottom-0 w-full h-[81px] bg-[#F5F5F5] z-20 flex flex-col items-center justify-center px-4 shadow-[0_-5px_15px_rgba(0,0,0,0.02)]"> <!-- Kotak tombol tindakan di bawah -->
+            <div class="flex w-full gap-3"> <!-- Baris menaruh tombol Hapus dan Simpan -->
+                <!-- TOMBOL HAPUS -->
+                <button onclick="hapusKendaraan()" class="w-[30%] h-[36px] bg-red-100 rounded-[10px] flex items-center justify-center hover:bg-red-200 active:scale-95 transition-all shadow-sm"> <!-- Tombol warna merah muda 30% lebar -->
+                    <span class="text-[12px] font-semibold text-red-600">Hapus</span> <!-- Teks Hapus warna merah -->
+                </button>
+                <!-- TOMBOL SIMPAN -->
+                <button onclick="simpanPerubahan()" class="flex-grow h-[36px] bg-[#0141A3] rounded-[10px] flex items-center justify-center hover:bg-blue-800 active:scale-95 transition-all shadow-sm"> <!-- Tombol warna biru dominan (70% sisa lebar) -->
+                    <span class="text-[12px] font-semibold text-white">Simpan Perubahan</span> <!-- Teks Simpan warna putih -->
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- SCRIPT LOGIKA PROGRAM (JAVASCRIPT) -->
+    <script>
+        let editId = null; // Menyimpan ID kendaraan yang sedang diedit (diambil dari link)
+
+        document.addEventListener("DOMContentLoaded", async () => { // Ketika halaman selesai dimuat
+            const urlParams = new URLSearchParams(window.location.search); // Mengambil tulisan pada URL (cth: ?id=1)
+            if (urlParams.has('id')) { // Jika ada 'id' di link tersebut
+                editId = urlParams.get('id'); // Ambil nilainya dan simpan di editId
+                await loadDetailKendaraan(editId); // Minta detail kendaraan tersebut ke server
+            }
+        });
+
+        // FUNGSI MEMINTA DATA DETAIL KENDARAAN LAMA
+        async function loadDetailKendaraan(id) { 
+            try {
+                const response = await fetch(`/api/kendaraan/detail/${id}`); // Panggil API untuk meminta data detail sesuai ID
+                const result = await response.json(); // Ubah format balasan ke format JSON
+                
+                if (result.data) { // Jika ada data balasan
+                    const k = result.data; // Simpan data ke variabel k
+                    // Pilih tombol radio Motor/Mobil sesuai data yang tersimpan
+                    if (k.jenis === 'motor') document.getElementById('radio-motor').checked = true;
+                    else document.getElementById('radio-mobil').checked = true;
+
+                    // Isi otomatis kolom-kolom inputan dengan data yang sudah ada sebelumnya
+                    document.getElementById('edit-plat').value = k.plat || "";
+                    document.getElementById('edit-merek').value = k.merek || "";
+                    document.getElementById('edit-model').value = k.model || "";
+                    document.getElementById('edit-tahun').value = k.tahun || "";
+                    document.getElementById('edit-warna').value = k.warna || "";
+                    document.getElementById('edit-mesin').value = k.mesin || "";
+                    document.getElementById('edit-rangka').value = k.rangka || "";
+                }
+            } catch(e) { // Jika gagal menarik data (seperti internet putus atau server mati)
+                console.error("Gagal menarik data."); // Munculkan peringatan ke console
+            }
+        }
+
+        // FUNGSI MENYIMPAN PERUBAHAN KE DATABASE
+        async function simpanPerubahan() {
+            // 1. Ambil semua nilai ketikan dari kotak isian form dan hilangkan spasi kosong di awal/akhir kata (.trim())
+            const jenisElement = document.querySelector('input[name="jenis_kendaraan"]:checked');
+            const platValue = document.getElementById('edit-plat').value.trim();
+            const merekValue = document.getElementById('edit-merek').value.trim();
+            const modelValue = document.getElementById('edit-model').value.trim();
+            const tahunValue = document.getElementById('edit-tahun').value.trim();
+            const warnaValue = document.getElementById('edit-warna').value.trim();
+            const mesinValue = document.getElementById('edit-mesin').value.trim();
+            const rangkaValue = document.getElementById('edit-rangka').value.trim();
+
+            // 2. PENGECEKAN (VALIDASI)
+            // Jika ada salah satu saja data yang kosong (tidak diisi), maka...
+            if (!jenisElement || !platValue || !merekValue || !modelValue || !tahunValue || !warnaValue || !mesinValue || !rangkaValue) {
+                // Tampilkan pesan peringatan ke layar HP pengguna
+                alert("Mohon lengkapi semua data kendaraan (kecuali foto STNK) sebelum menyimpan perubahan!");
+                return; // Hentikan proses program di sini, jangan lanjut kirim ke server
+            }
+
+            // 3. Jika semua sudah terisi, bungkus semua data ke dalam satu wadah payload
+            const payload = {
+                jenis: jenisElement.value, 
+                plat: platValue, 
+                merek: merekValue, 
+                model: modelValue, 
+                tahun: tahunValue, 
+                warna: warnaValue, 
+                mesin: mesinValue, 
+                rangka: rangkaValue 
+            };
+
+            try {
+                // Kirim data baru tersebut ke server lewat API method PUT (Artinya UPDATE)
+                const response = await fetch(`/api/kendaraan/${editId}`, {
+                    method: 'PUT', // Mode update/ubah data
+                    headers: { 'Content-Type': 'application/json' }, // Format yang dikirim adalah JSON
+                    body: JSON.stringify(payload) // Mengubah payload ke teks berformat JSON
+                });
+                
+                if(response.ok) {
+                    window.location.href = "/kendaraan"; // Jika berhasil, pindah ke halaman Daftar Kendaraan
+                } else {
+                    alert("Gagal mengupdate kendaraan. Silakan coba lagi."); // Jika gagal dari sisi server
+                }
+            } catch (err) { // Jika tidak bisa tersambung ke server (misal internet mati)
+                alert('Tidak dapat terhubung ke server. Periksa koneksi internet Anda.'); 
+            }
+        }
+
+        // FUNGSI MENGHAPUS KENDARAAN
+        async function hapusKendaraan() {
+            try {
+                // Panggil API penghapusan kendaraan lewat method DELETE
+                const response = await fetch(`/api/kendaraan/${editId}`, { method: 'DELETE' }); 
+                if(response.ok) window.location.href = "/kendaraan"; // Jika berhasil dihapus, pindah ke halaman Daftar Kendaraan
+            } catch (err) { // Jika ada error (jaringan/server)
+                alert('Server Error'); // Tampilkan peringatan
+            }
+        }
+
+        // FUNGSI MELIHAT PREVIEW GAMBAR SEBELUM DIUPLOAD
+        function previewImage(event) {
+            const input = event.target; // Ambil file dari tempat yang baru saja di-klik/dipilih
+            if (input.files && input.files[0]) { // Pastikan ada file yang dipilih
+                const reader = new FileReader(); // Buat alat pembaca file baru
+                reader.onload = function(e) { // Fungsi yang dipanggil ketika alat selesai membaca
+                    document.getElementById('upload-preview').src = e.target.result; // Tampilkan hasil baca (gambar) ke layar
+                    document.getElementById('upload-box').classList.add('hidden'); // Sembunyikan kotak tulisan "STNK (Edit Ulang)"
+                    document.getElementById('preview-box').classList.remove('hidden'); // Munculkan kotak yang menampilkan gambar
+                };
+                reader.readAsDataURL(input.files[0]); // Mulai membaca file sebagai URL khusus gambar
+            }
+        }
+        
+        // FUNGSI MENGHAPUS PREVIEW GAMBAR
+        function hapusGambar() {
+            document.getElementById('stnk-input').value = ""; // Kosongkan file memori agar bersih
+            document.getElementById('upload-preview').src = ""; // Kosongkan tampilan gambarnya
+            document.getElementById('preview-box').classList.add('hidden'); // Sembunyikan kotak gambar preview
+            document.getElementById('upload-box').classList.remove('hidden'); // Munculkan kembali kotak untuk upload
+        }
+    </script>
+</body>
+</html>
