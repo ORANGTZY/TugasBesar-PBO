@@ -1,4 +1,4 @@
-# 📋 Pembagian Tugas Proyek **Parkirin** — 6 Anggota
+# 📋 Pembagian Tugas Proyek **Parkirin**
 
 > Proyek ini adalah aplikasi parkir berbasis **Spring Boot** (Java) dengan frontend **Thymeleaf HTML** dan database **MySQL**.  
 > Pembagian didasarkan pada fitur fungsional agar setiap anggota memiliki beban kerja yang **setara dan saling melengkapi**.
@@ -220,10 +220,3 @@ graph TD
 > Anggota 1 (Autentikasi) harus **dikerjakan lebih dulu** karena hampir semua fitur lain bergantung pada sistem login/session user.
 
 ---
-
-## ✅ Tips Kolaborasi
-
-1. **Gunakan Git Branch** per fitur: `feature/auth`, `feature/booking`, `feature/payment`, dst.
-2. **Koordinasi** pada `ParkirApiController.java` karena file ini dipakai oleh Anggota 3, 4, 5, dan 6 — pisahkan per method dan komunikasikan pembagiannya.
-3. **Anggota 2** bertanggung jawab `PageController.java` (routing halaman), koordinasikan jika ada halaman baru yang perlu ditambahkan.
-4. **Review bersama** sebelum merge ke `main` branch.
