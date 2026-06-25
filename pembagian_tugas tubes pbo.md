@@ -187,7 +187,7 @@
 
 ---
 
-## 📊 Perbandingan Beban Kerja
+## 📊 Perbandingan Pembagian Tugas
 
 | Anggota | Domain | File Backend | File Frontend | Total File |
 |---|---|:---:|:---:|:---:|
