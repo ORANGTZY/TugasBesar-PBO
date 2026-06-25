@@ -372,7 +372,6 @@ graph LR
 ## 📌 Catatan
 
 > [!NOTE]
-> Semua diagram di atas dibuat berdasarkan kode sumber aktual yang ada di project. Atribut, tipe data, dan relasi diambil langsung dari file entity Java (`model/*.java`), dan use case diidentifikasi dari endpoint di controller (`controller/api/*.java`) serta template HTML (`templates/*.html`).
+> Semua diagram di atas dibuat berdasarkan kode sumber aktual yang ada di project. Atribut, tipe data, dan relasi diambil langsung dari file entity Java (`model/*.java`), dan use case diidentifikasi dari endpoint di controller (`controller/api/*.java`).
 
-> [!TIP]
-> Diagram Mermaid di atas dapat di-copy paste ke tools seperti [Mermaid Live Editor](https://mermaid.live) untuk menghasilkan gambar PNG/SVG yang bisa dimasukkan ke dalam laporan atau presentasi.
+> Diagram Mermaid di atas dapat di-copy paste ke tools seperti [Mermaid Live Editor](https://mermaid.live) untuk menghasilkan gambar PNG/SVG.
